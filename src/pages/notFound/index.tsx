@@ -4,7 +4,7 @@ import React from "react";
 export default function PageNotFound() {
   return (
     <>
-      <p>Page Not Found</p>
+      <p style={{ color: "white" }}>Page Not Found</p>
     </>
   );
 }

@@ -1,5 +1,4 @@
-/* src/components/Header/Header.css */
-*{
+/* *{
 background-color: black;
 }
 .header {
@@ -50,12 +49,10 @@ background-color: black;
     color: white;
   }
   
-  /* Smooth scroll */
   html {
     scroll-behavior: smooth;
   }
   
-  /* Style for the sections */
   .section {
     padding: 50px;
     margin: 20px;
@@ -71,4 +68,4 @@ background-color: black;
     font-size: 16px;
     color: #555;
   }
-  
+   */
