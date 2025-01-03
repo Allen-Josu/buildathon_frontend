@@ -1,5 +1,7 @@
-import {  RouterProvider } from "react-router-dom";
-import { router } from "./routes";
+
+import Home from "./pages/home";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App() {
   return (

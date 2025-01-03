@@ -1,7 +1,6 @@
-import GoogleLogin, { GoogleLogout } from "react-google-login"
-
-const clientId = "1067183531624-6fdo6qjmu4h748peb0asftdbk2ecvkit.apps.googleusercontent.com"
-
+import React from "react";
+import Header from '../../components/Header/header';
+import Dashboard from "../../components/dashboard/Dashboard";
 
 export default function Home() {
   const onSuccess = (response) => {
@@ -17,8 +16,8 @@ export default function Home() {
   };
   return (
     <>
-    <p>my Home</p>
-  
+      <Header/>
+      <Dashboard/>
     </>
   )
 }
