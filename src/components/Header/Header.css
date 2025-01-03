@@ -1,0 +1,74 @@
+/* src/components/Header/Header.css */
+*{
+background-color: black;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    padding: 10px 20px;
+    border-bottom: gray solid 2px;
+
+  }
+  
+  .header-logo h1 {
+    color: white;
+    font-size: 24px;
+  }
+  
+  .header-nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 90px;
+  }
+  
+  .header-nav ul li {
+    font-size: 18px;
+  }
+  
+  .header-nav ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .header-nav ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  .signin-btn {
+    background-color: #fff;
+    color:black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .signin-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Style for the sections */
+  .section {
+    padding: 50px;
+    margin: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+  }
+  
+  .section h2 {
+    font-size: 24px;
+  }
+  
+  .section p {
+    font-size: 16px;
+    color: #555;
+  }
+  
