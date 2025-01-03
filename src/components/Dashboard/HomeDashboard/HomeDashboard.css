@@ -1,0 +1,31 @@
+*{
+    overflow: hidden;
+}
+.outer{
+    color: white;
+    margin-left: 150px;
+    margin-top: 70px;
+}
+#details{
+
+}
+.outer{
+    display: flex;
+    width: 100%;
+   
+}
+.outer1{
+    width: 50%;
+
+}
+.outer2{
+    width: 30%;
+    margin-right: 100px;
+    height: 500px;
+}
+
+.outer2 img{
+    height: 100%;
+    width: 100%;
+   object-fit: cover;
+}
