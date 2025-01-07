@@ -1,4 +1,3 @@
-import React from 'react';
 import './HomeDashboard.css'; // Ensure your styles are imported
 import project_pic from "../../../assets/projectpic.png"; // Path to your image
 import Card1 from '../../MenuCards/Card1';
@@ -18,21 +17,21 @@ const HomeDashboard = () => {
   };
 
   return (
-    <div className="outer">
-      <div className="outer1">
+    <div className="outer w-full">
+      <div className="outer1 ">
         <h1>Edubuddy</h1>
-        <p id="details">
+        <p id="details " >
           Unlock your full academic potential with Edubuddy, a one-stop platform designed to make studying smarter, not harder. 
           Whether you are gearing up for exams or looking to stay on top of your coursework, Edubuddy has you covered.
         </p>
-        <div className="boxes">
+        <div className="boxes mt-10">
           <Card1 />
         </div>
       </div>
       <div className="outer2">
         <img
           src={project_pic}
-          height={200}
+          height={400}
           className="project-image"
           alt="Project"
           onMouseEnter={() => document.querySelector('.project-image').style.transition = "transform 0.1s ease-out"}

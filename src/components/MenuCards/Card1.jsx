@@ -40,9 +40,9 @@ function Card1() {
          <Col span={7} key={index}>
          {" "}
          {/* span={12} means each column takes up 1/2 of the row */}
-         <Card>
+         <Card className="bg-[#27272a] text-white">
            <div className="box">
-             <item.icon style={{ color: "white" }} />
+             <item.icon  />
              <h5>{item.title}</h5>
            </div>
          </Card>
@@ -54,7 +54,7 @@ function Card1() {
         <Col span={7} key={index}>
           {" "}
           {/* span={12} means each column takes up 1/2 of the row */}
-          <Card>
+          <Card className="bg-[#27272a] text-white">
             <div className="box">
               <item.icon style={{ color: "white" }} size={35} /> 
               <h5>{item.title}</h5>

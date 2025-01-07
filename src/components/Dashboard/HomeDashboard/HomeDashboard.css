@@ -3,8 +3,6 @@
 }
 .outer{
     color: rgb(205, 201, 201);
-    margin-left: 80px;
-    margin-top: 70px;
 }
 
 .boxes{
@@ -39,7 +37,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-right: 100px;
 }
 
 .outer2 img{
