@@ -1,18 +1,16 @@
-// src/components/Header/Header.jsx
-import React from 'react';
-import './Header.css'; // CSS for styling
+import './Header.css';
 
 const Header = () => {
   return (
     <div>
       {/* Header with Navigation Links */}
-      <header className="header">
+      <header className="header bg-[#27272a]">
         <div className="header-logo">
           <h1>Edubuddy</h1>
         </div>
         <nav className="header-nav">
           <ul>
-            <li><a href="#notes">Notes</a></li>
+            <li><a href="/notes">Notes</a></li>
             <li><a href="#grade-predictor">Grade Predictor</a></li>
             <li><a href="#model-question-paper">Model Question Paper</a></li>
             <li><a href="#pyq">PYQ</a></li>
@@ -23,7 +21,7 @@ const Header = () => {
       </header>
 
       {/* Sections that will be scrolled to */}
-      
+
     </div>
   );
 };
