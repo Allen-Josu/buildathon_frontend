@@ -1,6 +1,6 @@
-export const routePath =  {
-    home : "/",
-    notes : "notes",
-    dummy : "dummy"
-
+export const routePath = {
+    home: "/",
+    notes: "notes",
+    dummy: "dummy",
+    pyq: "pyq"
 }
