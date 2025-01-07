@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
         element : <PageLayout />
     },
     {
-        path : "*",
+        path : " ",
         element : <PageNotFound />
     }
 ])

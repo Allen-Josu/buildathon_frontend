@@ -1,0 +1,30 @@
+
+.box {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  gap: 10px;
+  height: 70px;
+  width: fit-content;
+}
+
+
+
+
+
+/* Apply hover effect for .ant-card */
+.ant-card:hover {
+  transform: scale(0.95, 0.95); /* Optional scaling effect */
+  border: 2px solid rgb(85, 85, 247); /* Border color change */
+  background-color: blue !important; /* Force the background color change on hover */
+  transition: transform 0.3s ease, border 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+  cursor: pointer; /* Change cursor */
+}
+
+/* Ensure the box inside the card inherits the correct background */
+.ant-card .box {
+  background-color: inherit !important; /* Inherit background color from parent */
+}
+
+
+

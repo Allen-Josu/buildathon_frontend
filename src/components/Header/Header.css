@@ -15,32 +15,41 @@
     list-style-type: none;
     display: flex;
     gap: 90px;
-}
-
-.header-nav ul li {
+  }
+  .header-nav a {
+    text-decoration: none;
+    color: white;  /* Initial color */
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;  /* Smooth transition */
+  }
+  
+  /* Hover effect for <a> tags */
+  .header-nav a:hover {
+    color: rgb(85, 85, 247); /* Change text color to purple */
+    transform: scale(1.1); /* Makes the text pop by scaling */
+  }
+  .header-nav ul li {
     font-size: 18px;
 }
 
 .header-nav ul li a {
     color: white;
     text-decoration: none;
-}
+  }
+  
 
-.header-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-.signin-btn {
+  
+  .signin-btn {
     background-color: #fff;
     color: black;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-}
-
-.signin-btn:hover {
-    background-color: #4caf50;
+  }
+  
+  .signin-btn:hover {
+    background-color: rgb(85, 85, 247);
     color: white;
 }
 
