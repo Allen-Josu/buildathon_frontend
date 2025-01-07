@@ -1,23 +1,17 @@
-/* src/components/Header/Header.css */
-*{
-background-color: #27262b;
-}
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
     padding: 10px 20px;
     border-bottom: gray solid 2px;
+}
 
-  }
-  
-  .header-logo h1 {
+.header-logo h1 {
     color: white;
     font-size: 24px;
-  }
-  
-  .header-nav ul {
+}
+
+.header-nav ul {
     list-style-type: none;
     display: flex;
     gap: 90px;
@@ -36,9 +30,9 @@ background-color: #27262b;
   }
   .header-nav ul li {
     font-size: 18px;
-  }
-  
-  .header-nav ul li a {
+}
+
+.header-nav ul li a {
     color: white;
     text-decoration: none;
   }
@@ -47,7 +41,7 @@ background-color: #27262b;
   
   .signin-btn {
     background-color: #fff;
-    color:black;
+    color: black;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -57,27 +51,24 @@ background-color: #27262b;
   .signin-btn:hover {
     background-color: rgb(85, 85, 247);
     color: white;
-  }
-  
-  /* Smooth scroll */
-  html {
+}
+
+html {
     scroll-behavior: smooth;
-  }
-  
-  /* Style for the sections */
-  .section {
+}
+
+.section {
     padding: 50px;
     margin: 20px;
     background-color: #f0f0f0;
     border-radius: 8px;
-  }
-  
-  .section h2 {
+}
+
+.section h2 {
     font-size: 24px;
-  }
-  
-  .section p {
+}
+
+.section p {
     font-size: 16px;
     color: #555;
-  }
-  
+}
