@@ -5,7 +5,7 @@ import './Header.css'; // CSS for styling
 const Header = () => {
   return (
     <div>
-      {/* Header with Navigation Links */}
+     
       <header className="header">
         <div className="header-logo">
           <h1>Edubuddy</h1>

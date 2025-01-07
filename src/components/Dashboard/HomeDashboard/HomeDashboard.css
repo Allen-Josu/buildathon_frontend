@@ -2,30 +2,54 @@
     overflow: hidden;
 }
 .outer{
-    color: white;
-    margin-left: 150px;
+    color: rgb(205, 201, 201);
+    margin-left: 80px;
     margin-top: 70px;
 }
-#details{
 
+.boxes{
+    display: flex;
+    gap: 10px;
 }
 .outer{
     display: flex;
     width: 100%;
+    display: flex;
+    gap: 50px;
    
 }
 .outer1{
     width: 50%;
 
+
+}
+.outer1 h1{
+    margin-bottom: 50px;
+    font-weight: bold;
+    color: white;
+}
+#details{
+    font-size:20px;
+    
 }
 .outer2{
-    width: 30%;
-    margin-right: 100px;
-    height: 500px;
+  /* Adjust the width of the container */
+    height: 500px; /* Set a fixed height or auto depending on your layout */
+    overflow: hidden; /* Prevents overflow if the image is larger */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 100px;
 }
 
 .outer2 img{
-    height: 100%;
-    width: 100%;
-   object-fit: cover;
+    width: auto; /* Automatically adjusts the width */
+    height: auto; /* Makes sure the image fits the height without cropping */
+    object-fit: contain;
+  
 }
+.project-image {
+    transition: transform 0.1s ease-out; /* Smooth transition */
+    position: relative; /* Required for smooth movement */
+  }
+  

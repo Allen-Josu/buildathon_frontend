@@ -1,6 +1,6 @@
 /* src/components/Header/Header.css */
 *{
-background-color: black;
+background-color: #27262b;
 }
 .header {
     display: flex;
@@ -22,7 +22,18 @@ background-color: black;
     display: flex;
     gap: 90px;
   }
+  .header-nav a {
+    text-decoration: none;
+    color: white;  /* Initial color */
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;  /* Smooth transition */
+  }
   
+  /* Hover effect for <a> tags */
+  .header-nav a:hover {
+    color: rgb(85, 85, 247); /* Change text color to purple */
+    transform: scale(1.1); /* Makes the text pop by scaling */
+  }
   .header-nav ul li {
     font-size: 18px;
   }
@@ -32,9 +43,7 @@ background-color: black;
     text-decoration: none;
   }
   
-  .header-nav ul li a:hover {
-    text-decoration: underline;
-  }
+
   
   .signin-btn {
     background-color: #fff;
@@ -46,7 +55,7 @@ background-color: black;
   }
   
   .signin-btn:hover {
-    background-color: #4CAF50;
+    background-color: rgb(85, 85, 247);
     color: white;
   }
   
