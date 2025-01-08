@@ -11,7 +11,7 @@ const Header = () => {
         <nav className="header-nav">
           <ul>
             <li><a href="/notes">Notes</a></li>
-            <li><a href="#grade-predictor">Grade Predictor</a></li>
+            <li><a href="/grade">Grade Predictor</a></li>
             <li><a href="#model-question-paper">Model Question Paper</a></li>
             <li><a href="#pyq">PYQ</a></li>
             <li><a href="#attendance-calculator">Attendance Calculator</a></li>

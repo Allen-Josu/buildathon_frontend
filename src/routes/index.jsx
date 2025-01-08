@@ -4,6 +4,8 @@ import Home from "../pages/home";
 import PageNotFound from "../pages/notFound";
 import Notes from "../pages/notes";
 import PageLayout from "../layouts";
+import GradePredictor from "../pages/gradePredictor/gradePredictor";
+
 
 export const router = createBrowserRouter([
     {
@@ -15,8 +17,8 @@ export const router = createBrowserRouter([
         element : <Notes />
     },
     {
-        path : routePath.dummy,
-        element : <PageLayout />
+        path:routePath.gradePredictor,
+        element:<GradePredictor/>
     },
     {
         path : " ",

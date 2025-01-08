@@ -1,6 +1,6 @@
 export const routePath =  {
     home : "/",
-    notes : "notes",
-    dummy : "dummy"
+    notes : "/notes",
+    gradePredictor : "/grade",
 
-}
+};
