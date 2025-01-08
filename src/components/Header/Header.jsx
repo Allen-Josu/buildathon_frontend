@@ -1,6 +1,6 @@
 import './Header.css';
 
-const Header = () => {
+export default function Header() {
   return (
     <div>
       {/* Header with Navigation Links */}
@@ -13,7 +13,7 @@ const Header = () => {
             <li><a href="/notes">Notes</a></li>
             <li><a href="/grade">Grade Predictor</a></li>
             <li><a href="#model-question-paper">Model Question Paper</a></li>
-            <li><a href="#pyq">PYQ</a></li>
+            <li><a href="/pyq">PYQ</a></li>
             <li><a href="#attendance-calculator">Attendance Calculator</a></li>
           </ul>
         </nav>
@@ -22,8 +22,8 @@ const Header = () => {
 
       {/* Sections that will be scrolled to */}
 
+
     </div>
   );
 };
 
-export default Header;
