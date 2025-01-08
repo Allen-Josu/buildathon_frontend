@@ -1,4 +1,4 @@
-import Header from "../../components/Header/header";
+import Header from "../../components/Header";
 import "../../css/homePage.css";
 import HomeDashboard from "../../components/Dashboard/HomeDashboard/HomeDashboard";
 
