@@ -1,6 +1,6 @@
 import './Header.css';
 
-const Header = () => {
+export default function Header() {
   return (
     <div>
       {/* Header with Navigation Links */}
@@ -26,4 +26,3 @@ const Header = () => {
   );
 };
 
-export default Header;
