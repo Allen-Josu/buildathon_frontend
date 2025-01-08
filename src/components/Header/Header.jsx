@@ -6,7 +6,7 @@ export default function Header() {
       {/* Header with Navigation Links */}
       <header className="header bg-[#27272a]">
         <div className="header-logo">
-          <h1>Edubuddy</h1>
+          <h1><a href="/">Edubuddy</a></h1>
         </div>
         <nav className="header-nav">
           <ul>

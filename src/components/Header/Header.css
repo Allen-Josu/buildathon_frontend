@@ -9,6 +9,7 @@
 .header-logo h1 {
     color: white;
     font-size: 24px;
+   
 }
 
 .header-nav ul {
@@ -18,12 +19,22 @@
   }
   .header-nav a {
     text-decoration: none;
-    color: white;  /* Initial color */
+    color: white; 
     font-weight: 500;
-    transition: color 0.3s ease, transform 0.3s ease;  /* Smooth transition */
+    transition: color 0.3s ease, transform 0.3s ease;  
+  }
+  .header-logo a {
+    text-decoration: none;
+    color: white; 
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease; 
   }
   
-  /* Hover effect for <a> tags */
+
+  .header-logo h1 a:hover {
+    color: rgb(85, 85, 247); /* Change text color to purple */
+    transform: scale(1.1); /* Makes the text pop by scaling */
+  }
   .header-nav a:hover {
     color: rgb(85, 85, 247); /* Change text color to purple */
     transform: scale(1.1); /* Makes the text pop by scaling */

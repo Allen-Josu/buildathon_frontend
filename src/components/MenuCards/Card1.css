@@ -16,7 +16,7 @@
 .ant-card:hover {
   transform: scale(0.95, 0.95); /* Optional scaling effect */
   border: 2px solid rgb(85, 85, 247); /* Border color change */
-  background-color: blue !important; /* Force the background color change on hover */
+  background-color:  rgb(85, 85, 247)!important; /* Force the background color change on hover */
   transition: transform 0.3s ease, border 0.3s ease, background-color 0.3s ease; /* Smooth transition */
   cursor: pointer; /* Change cursor */
 }
