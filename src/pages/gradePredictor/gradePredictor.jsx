@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; 
+import  { useState } from 'react';
 import Header from '../../components/Header/header';
 
 export default function GradePredictor() {
@@ -135,16 +134,14 @@ export default function GradePredictor() {
           )}
         </div>
 
-        <Link to="/" className="mt-4 text-blue-500 hover:underline">
-          Back to Home
-        </Link>
+       
       </div>
 
       {/* Modal for Grade Prediction */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#27272a] bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-black mt-14 text-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-semibold text-center">Grade Prediction</h3>
+          <div className="bg-black mt-44 text-white p-6 rounded-lg shadow-lg w-full max-w-md h-85">
+            <h3 className="text-xl font-semibol d text-center">Grade Prediction</h3>
             <table className="min-w-full table-auto">
             
               <thead>
@@ -165,8 +162,10 @@ export default function GradePredictor() {
 
 
             </table>    
-          
-            <div className="flex justify-end mt-4">
+            <div className='flex justify-center mt-4 text-red-600'>
+              <p>Note:Student should receive minimum 23 marks in external </p>
+            </div>
+            <div className="flex justify-end mt-2">
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                 onClick={closeModal}

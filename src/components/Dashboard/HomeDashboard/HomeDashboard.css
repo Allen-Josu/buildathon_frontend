@@ -1,5 +1,6 @@
 *{
-    overflow: hidden;
+    overflow-x: hidden;
+  
 }
 .outer{
     color: rgb(205, 201, 201);
@@ -31,22 +32,21 @@
     
 }
 .outer2{
-  /* Adjust the width of the container */
-    height: 500px; /* Set a fixed height or auto depending on your layout */
-    overflow: hidden; /* Prevents overflow if the image is larger */
+
+    height: 500px; 
+    overflow: hidden; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .outer2 img{
-    width: auto; /* Automatically adjusts the width */
-    height: auto; /* Makes sure the image fits the height without cropping */
+    width: auto; 
+    height: auto; 
     object-fit: contain;
   
 }
 .project-image {
-    transition: transform 0.1s ease-out; /* Smooth transition */
-    position: relative; /* Required for smooth movement */
-  }
-  
+    transition: transform 0.1s ease-out; 
+    position: relative; 
+}
