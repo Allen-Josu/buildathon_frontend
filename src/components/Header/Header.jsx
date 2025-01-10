@@ -17,6 +17,7 @@ const Header = () => {
             <li><a href="#model-question-paper">Model Question Paper</a></li>
             <li><a href="#pyq">PYQ</a></li>
             <li><a href="#attendance-calculator">Attendance Calculator</a></li>
+            <li><a href="#about">About</a></li>
           </ul>
         </nav>
         <button className="signin-btn">Sign In</button>
