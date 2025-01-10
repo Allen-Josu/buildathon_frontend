@@ -1,44 +1,47 @@
-/* src/components/Header/Header.css */
-*{
-background-color: black;
-}
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
     padding: 10px 20px;
     border-bottom: gray solid 2px;
+}
 
-  }
-  
-  .header-logo h1 {
+.header-logo h1 {
     color: white;
     font-size: 24px;
-  }
-  
-  .header-nav ul {
+}
+
+.header-nav ul {
     list-style-type: none;
     display: flex;
     gap: 90px;
   }
-  
-  .header-nav ul li {
-    font-size: 18px;
+  .header-nav a {
+    text-decoration: none;
+    color: white;  /* Initial color */
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;  /* Smooth transition */
   }
   
-  .header-nav ul li a {
+  /* Hover effect for <a> tags */
+  .header-nav a:hover {
+    color: rgb(85, 85, 247); /* Change text color to purple */
+    transform: scale(1.1); /* Makes the text pop by scaling */
+  }
+  .header-nav ul li {
+    font-size: 18px;
+}
+
+.header-nav ul li a {
     color: white;
     text-decoration: none;
   }
   
-  .header-nav ul li a:hover {
-    text-decoration: underline;
-  }
+
   
   .signin-btn {
     background-color: #fff;
-    color:black;
+    color: black;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -46,29 +49,26 @@ background-color: black;
   }
   
   .signin-btn:hover {
-    background-color: #4CAF50;
+    background-color: rgb(85, 85, 247);
     color: white;
-  }
-  
-  /* Smooth scroll */
-  html {
+}
+
+html {
     scroll-behavior: smooth;
-  }
-  
-  /* Style for the sections */
-  .section {
+}
+
+.section {
     padding: 50px;
     margin: 20px;
     background-color: #f0f0f0;
     border-radius: 8px;
-  }
-  
-  .section h2 {
+}
+
+.section h2 {
     font-size: 24px;
-  }
-  
-  .section p {
+}
+
+.section p {
     font-size: 16px;
     color: #555;
-  }
-  
+}
