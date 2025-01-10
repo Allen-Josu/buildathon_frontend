@@ -12,6 +12,8 @@ const layoutStyle = {
 	height: "100vh",
 };
 
+const BASE_URL = import.meta.env.VITE_URL;
+
 export default function PageLayout({ title, data }) {
 	const [menuData, setMenuData] = useState({
 		course: "MCA",
@@ -31,7 +33,7 @@ export default function PageLayout({ title, data }) {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios.get(`http://localhost:4000/departments?entity=departments`);
+				const response = await axios.get(`${BASE_URL}/departments?entity=departments`);
 				const results = response.data.results || [];
 				setResponseData(results);
 
