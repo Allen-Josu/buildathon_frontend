@@ -13,82 +13,83 @@ import ViewDepartment from "../admin/drawer/view-department";
 import AddDepartment from "../admin/drawer/add-department";
 import EditDepartment from "../admin/drawer/edit-department";
 import About from "../components/Dashboard/HomeDashboard/About/About";
-import ModelQuestionGenerator from "../pages/modelQuestionGenerator";
-import GradePredictor from "../pages/gradePredictor/gradePredictor";
-import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
 
+import GradePredictor from "../pages/gradePredictor/gradePredictor";
+
+import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
+import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
 
 export const router = createBrowserRouter([
-    {
-        path: routePath.home,
-        element: <Home />
-    },
-    {
-        path: routePath.notes,
-        element: <Notes />
-    },
-    {
-        path: routePath.dummy,
-        element: <AdminHomePage />
-    },
-    {
-        path: routePath.pyq,
-        element: <PreviousYear />
-    },
-    {
-        path:routePath.gradePredictor,
-        element:<GradePredictor/>
-    },
-    {
-        path:routePath.attendanceRegulator,
-        element:<AttendanceRegulator/>
-    },
-    {
-        path: routePath.admin,
-        element: <AdminHomePage />,
-    },
-    {
-        path: routePath.department,
-        element: <DepartmentPage />,
-        children: [
-            {
-                path: `${routePath.viewDepartment}/:entityId`,
-                element: <ViewDepartment />
-            },
-            {
-                path: routePath.addDepartment,
-                element: <AddDepartment />
-            },
-            {
-                path: `${routePath.editDepartment}/:entityId`,
-                element: <EditDepartment />
-            }
-        ]
-    },
-    {
-        path: routePath.department,
-        element: <DepartmentPage />
-    },
-    {
-        path: routePath.users,
-        element: <UsersPage />,
-        children: [
-            {
-                path: `${routePath.addUser}`,
-                element: <AddUserDrawer />
-            }
-        ]
-    },
-    {
-        path: routePath.about,
-        element: <About />,
+  {
+    path: routePath.home,
+    element: <Home />,
+  },
+  {
+    path: routePath.notes,
+    element: <Notes />,
+  },
+  {
+    path: routePath.dummy,
+    element: <AdminHomePage />,
+  },
+  {
+    path: routePath.pyq,
+    element: <PreviousYear />,
+  },
+  {
+    path: routePath.gradePredictor,
+    element: <GradePredictor />,
+  },
+  {
+    path: routePath.attendanceRegulator,
+    element: <AttendanceRegulator />,
+  },
+  {
+    path: routePath.admin,
+    element: <AdminHomePage />,
+  },
+  {
+    path: routePath.department,
+    element: <DepartmentPage />,
+    children: [
+      {
+        path: `${routePath.viewDepartment}/:entityId`,
+        element: <ViewDepartment />,
       },
       {
-        path: routePath.modelQuestionGenerator,
-        element: <ModelQuestionGenerator />,
+        path: routePath.addDepartment,
+        element: <AddDepartment />,
       },
-    {
-        path: "*",
-        element: <PageNotFound />
-    }
-])
+      {
+        path: `${routePath.editDepartment}/:entityId`,
+        element: <EditDepartment />,
+      },
+    ],
+  },
+  {
+    path: routePath.department,
+    element: <DepartmentPage />,
+  },
+  {
+    path: routePath.users,
+    element: <UsersPage />,
+    children: [
+      {
+        path: `${routePath.addUser}`,
+        element: <AddUserDrawer />,
+      },
+    ],
+  },
+  {
+    path: routePath.about,
+    element: <About />,
+  },
+  {
+    path: routePath.modelQuestionGenerator,
+    element: <QuestionPaperGenerator />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
+  },
+]);
