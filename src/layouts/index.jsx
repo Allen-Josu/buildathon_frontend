@@ -80,7 +80,7 @@ export default function PageLayout({ title, data }) {
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center w-full px-4 md:px-8 lg:px-20 py-4 md:h-20 text-white bg-[#27272a] border-b-2 border-[#393939] gap-4">
 						<h3 className="text-xl md:text-2xl lg:text-3xl font-bold">{title}</h3>
 						<div className="flex flex-col md:flex-row gap-4 md:w-auto w-full">
-							<Button type="primary" onClick={() => (setIsModalOpen(true))}>Add {title == "PYQ" ? "Previous Questions" : title}</Button>
+							<Button type="primary" style={{ background: "#6d28d9", width: "200px", border: "none" }} onClick={() => (setIsModalOpen(true))}>Add {title == "PYQ" ? "Previous Questions" : title}</Button>
 							<Select
 								className="w-full md:w-48"
 								value={menuData.course}
@@ -92,7 +92,7 @@ export default function PageLayout({ title, data }) {
 								<Select
 									className="w-full md:w-48"
 									options={semesterOptions}
-									value={menuData.semester}
+									value={"Allen"}
 									placeholder="Select Semester"
 									onChange={(value) => setMenuData({ ...menuData, semester: value })}
 								/>
@@ -146,12 +146,12 @@ export default function PageLayout({ title, data }) {
 						{/* Main Content */}
 						<Content className="bg-[#27272a] min-h-screen w-full md:w-3/4">
 							<div className="flex flex-col p-4 md:p-8 lg:px-16">
-								<div className="flex justify-between items-center w-full font-bold text-lg md:text-xl mt-6 text-[#c1c3c8]">
+								<div className="flex justify-between items-center w-full font-bold px-10 text-lg md:text-xl mt-6 text-[#c1c3c8]">
 									<p>{title}</p>
 									<p>Shared By</p>
 								</div>
 								{filteredData && filteredData.length > 0 ? (
-									<div className="space-y-4 mt-6">
+									<div className="space-y-4 mt-6 px-10  py-3">
 										{filteredData.map((item, index) => (
 											<div
 												key={index}
@@ -182,7 +182,7 @@ export default function PageLayout({ title, data }) {
 				</Layout>
 			</Flex>
 
-			<Modals isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+			<Modals title="notes" isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
 
 		</>
 	);
