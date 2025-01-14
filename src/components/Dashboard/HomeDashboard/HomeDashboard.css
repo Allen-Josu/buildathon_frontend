@@ -1,8 +1,5 @@
 *{
-    overflow-x: hidden;
-   
-    
-  
+    overflow: hidden;
 }
 .outer{
     color: rgb(205, 201, 201);
