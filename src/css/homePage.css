@@ -1,12 +1,10 @@
 * {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 .outer {
   color: white;
   margin-left: 150px;
   margin-top: 70px;
-}
-#details {
 }
 .outer {
   display: flex;
