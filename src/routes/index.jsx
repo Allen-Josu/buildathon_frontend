@@ -6,6 +6,7 @@ import Notes from "../pages/notes";
 
 import PreviousYear from "../pages/previousYearQuestions";
 import GradePredictor from "../pages/gradePredictor/gradePredictor";
+import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
     {
         path:routePath.gradePredictor,
         element:<GradePredictor/>
+    },
+    {
+        path:routePath.attendanceRegulator,
+        element:<AttendanceRegulator/>
     },
     {
         path: " ",

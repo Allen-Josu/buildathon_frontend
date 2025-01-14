@@ -2,5 +2,6 @@ export const routePath = {
     home: "/",
     notes: "notes",
     gradePredictor: "/grade",
-    pyq: "pyq"
+    pyq: "pyq",
+    attendanceRegulator: "/attendance"
 };
