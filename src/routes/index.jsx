@@ -11,6 +11,8 @@ import AddUserDrawer from "../admin/drawer/add-user";
 import ViewDepartment from "../admin/drawer/view-department";
 import AddDepartment from "../admin/drawer/add-department";
 import EditDepartment from "../admin/drawer/edit-department";
+import About from "../components/Dashboard/HomeDashboard/About/About";
+import ModelQuestionGenerator from "../pages/modelQuestionGenerator";
 
 export const router = createBrowserRouter([
     {
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
             }
         ]
     },
+    {
+        path: routePath.about,
+        element: <About />,
+      },
+      {
+        path: routePath.modelQuestionGenerator,
+        element: <ModelQuestionGenerator />,
+      },
     {
         path: "*",
         element: <PageNotFound />
