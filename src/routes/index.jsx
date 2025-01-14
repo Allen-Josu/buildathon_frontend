@@ -75,7 +75,6 @@ export const router = createBrowserRouter([
         path: routePath.modelQuestionGenerator,
         element: <ModelQuestionGenerator />,
       },
-    
     {
         path: "*",
         element: <PageNotFound />
