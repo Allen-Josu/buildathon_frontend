@@ -101,7 +101,7 @@ const Calendar = ({ onDateSelect, markedDates }) => {
   );
 };
 
-const AttendanceRegulator = () => {
+export default function AttendanceRegulator() {
   const semesterStartDate = new Date("2024-12-31");
   const currentDate = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -136,7 +136,7 @@ const AttendanceRegulator = () => {
 
     return (
       <>
-       
+
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full mx-4">
             <div className="flex justify-between items-center mb-4">
@@ -278,7 +278,7 @@ const AttendanceRegulator = () => {
           (status) => status === "no class"
         ).length;
 
-         totalHoursincluNoclass+= hoursincluNoclass;
+        totalHoursincluNoclass += hoursincluNoclass;
         totalHoursPresent += hours;
         totalHoursWithoutDL += hoursWithoutDL;
       }
@@ -293,7 +293,7 @@ const AttendanceRegulator = () => {
     const subtrahend3 = totalHoursWithoutDL - totalHolidays * 6 - 6;
     const subtrahend4 = totalHoursPresent - totalHolidays * 6 - 6;
     const minuend = (totalWeekdays - totalHolidays) * 6 - 6;
-    const minuend2 =(totalWeekdays - totalHolidays) * 6 - totalHoursincluNoclass - 6;
+    const minuend2 = (totalWeekdays - totalHolidays) * 6 - totalHoursincluNoclass - 6;
 
     console.log("sub1", subtrahend1);
     console.log("sub2", subtrahend2);
@@ -328,95 +328,94 @@ const AttendanceRegulator = () => {
       withoutDutyLeave: attendanceWithoutDLPercentage,
       withnoclasswithoutdl: attendancewithnoclass,
       withnoclasswithdl: attendancewithnoclasswithdl,
-      totalnumberofclasses:minuend2,
+      totalnumberofclasses: minuend2,
     });
   };
 
   return (
     <>
-    <Header/>
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          📅 Attendance Regulator
-        </h1>
+      <Header />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            📅 Attendance Regulator
+          </h1>
 
-        <div className="flex flex-row-reverse gap-8">
-          {/* Right side - Calendar */}
-          <div className="w-1/3">
-            <Calendar
-              onDateSelect={handleDateSelect}
-              markedDates={markedDates}
-            />
-          </div>
+          <div className="flex flex-row-reverse gap-8">
+            {/* Right side - Calendar */}
+            <div className="w-1/3">
+              <Calendar
+                onDateSelect={handleDateSelect}
+                markedDates={markedDates}
+              />
+            </div>
 
-          {/* Left side - Results and Controls */}
-          <div className="w-2/3">
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <button
-                onClick={handleCalculateAttendance}
-                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6"
-              >
-                Calculate Attendance
-              </button>
+            {/* Left side - Results and Controls */}
+            <div className="w-2/3">
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <button
+                  onClick={handleCalculateAttendance}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6"
+                >
+                  Calculate Attendance
+                </button>
 
-              {attendancePercentage && (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                          Type
-                        </th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                          Percentage
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                         Total number of working hours
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.totalnumberofclasses} Hours
-                        </td>
-                      </tr>
-                     
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          Attendance Percentage including duty leave
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.withnoclasswithdl.toFixed(2)}%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          Attendance Percentage excluding duty leave
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.withnoclasswithoutdl.toFixed(2)}%
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                {attendancePercentage && (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                            Type
+                          </th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                            Percentage
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Total number of working hours
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.totalnumberofclasses} Hours
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Attendance Percentage including duty leave
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.withnoclasswithdl.toFixed(2)}%
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Attendance Percentage excluding duty leave
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.withnoclasswithoutdl.toFixed(2)}%
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {showModal && (
-          <AttendanceForm
-            selectedDate={selectedDate}
-            onSubmit={handleAttendanceSubmit}
-          />
-        )}
+          {showModal && (
+            <AttendanceForm
+              selectedDate={selectedDate}
+              onSubmit={handleAttendanceSubmit}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };
 
-export default AttendanceRegulator;
