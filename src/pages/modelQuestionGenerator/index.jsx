@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AlertCircle, BookOpen, FileText } from "lucide-react";
 import Button from "../../components/ui/button";
 import Card from "antd/es/card/Card";
@@ -16,7 +16,7 @@ import {
 } from "../../components/ui/tabs";
 import Header from "../../components/Header/Header";
 
-const QuestionPaperGenerator = () => {
+export default function QuestionPaperGenerator() {
   const [files, setFiles] = useState({
     syllabus: null,
     pyq: null,
@@ -186,12 +186,11 @@ const QuestionPaperGenerator = () => {
 
                     {message && (
                       <div
-                        className={`flex items-center gap-2 ${
-                          message.includes("Error") ||
+                        className={`flex items-center gap-2 ${message.includes("Error") ||
                           message.includes("failed")
-                            ? "text-red-600"
-                            : "text-green-600"
-                        }`}
+                          ? "text-red-600"
+                          : "text-green-600"
+                          }`}
                       >
                         <AlertCircle className="h-4 w-4" />
                         <span className="text-sm">{message}</span>
@@ -260,7 +259,7 @@ const QuestionPaperGenerator = () => {
                   ))}
                 </div>
               </CardContent>
-              
+
             </Card>
           )}
 
@@ -315,5 +314,3 @@ const QuestionPaperGenerator = () => {
     </>
   );
 };
-
-export default QuestionPaperGenerator;
