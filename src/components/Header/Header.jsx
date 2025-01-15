@@ -48,7 +48,7 @@ export default function Header() {
             </li>
             <li>
               <a
-                href="/model-question-paper"
+                href="/model-question-generator"
                 className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Model Question Paper
