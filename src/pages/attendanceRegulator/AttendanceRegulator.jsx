@@ -1,4 +1,4 @@
-
+import axios from "axios";
 import { useState } from "react";
 import Header from "../../components/Header/Header";
 
@@ -100,23 +100,29 @@ const Calendar = ({ onDateSelect, markedDates }) => {
     </div>
   );
 };
-
 const AttendanceRegulator = () => {
   const semesterStartDate = new Date("2024-12-31");
   const currentDate = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
   const [attendanceData, setAttendanceData] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [attendancePercentage, setAttendancePercentage] = useState(null);
+  const [attendancePercentage, setAttendancePercentage] = useState({
+    withDutyLeave: 0,
+    withoutDutyLeave: 0,
+    withnoclasswithoutdl: 0,
+    withnoclasswithdl: 0,
+    totalnumberofclasses: 0,
+  });
+
 
   const AttendanceForm = ({ onSubmit, selectedDate }) => {
     const hours = [
-      "9 to 10",
-      "10 to 11",
-      "11 to 12",
-      "12 to 1",
-      "2 to 3",
-      "3 to 4",
+      "9a.m to 10a.m",
+      "10a.m to 11a.m",
+      "11a.m to 12p.m",
+      "12p.m to 1p.m",
+      "2p.m to 3p.m",
+      "3p.m to 4p.m",
     ];
     const dateKey = selectedDate.toISOString().split("T")[0];
 
@@ -200,13 +206,41 @@ const AttendanceRegulator = () => {
     setShowModal(true);
   };
 
-  const handleAttendanceSubmit = (updatedAttendance) => {
-    setAttendanceData((prevData) => ({
-      ...prevData,
-      [selectedDate.toISOString().split("T")[0]]: updatedAttendance,
-    }));
-    setShowModal(false);
+  
+const handleAttendanceSubmit = (updatedAttendance) => {
+
+  const dateKey = selectedDate.toISOString().split("T")[0]; 
+
+  // Create an object to send to the backend with the selected date and its attendance status for each hour.
+  const attendanceObject = {
+    date: dateKey,
+    attendance: updatedAttendance, // This is the attendance data for the selected date (present/absent/dutyLeave/no class).
   };
+
+
+  axios.post("YOUR_BACKEND_API_URL/attendance", attendanceObject, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+
+      if (response.status === 200) {
+        setAttendanceData((prevData) => ({
+          ...prevData,
+          [dateKey]: updatedAttendance,
+        }));
+        setShowModal(false); 
+      } else {
+        alert("Failed to submit attendance. Please try again.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error submitting attendance:", error);
+      alert("An error occurred while submitting the attendance.");
+    });
+};
+  
 
   // Get array of dates that have attendance marked
   const markedDates = Object.keys(attendanceData);
@@ -283,6 +317,7 @@ const AttendanceRegulator = () => {
         totalHoursWithoutDL += hoursWithoutDL;
       }
     }
+  
     console.log("total week days", totalWeekdays);
     console.log("hours without dutyleave", totalHoursPresent);
     console.log("hrs with no class", totalHoursincluNoclass);
