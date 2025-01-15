@@ -60,7 +60,6 @@ export default function AddDepartment() {
 
     const handleSubmit = async () => {
         setData({ ...data, subjects, entityId: uuid(), entity: "departments" })
-        console.log(data);
         if (isDuplicate(responseData)) {
             console.log("Error: Duplicate entry found");
             return;

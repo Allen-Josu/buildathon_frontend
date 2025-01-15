@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
-import { Button, Flex, Layout, Modal, Select } from "antd";
-import { Album, ChevronRight, User2 } from "lucide-react";
+import { Button, Flex, Layout, Select } from "antd";
+import { Album, ChevronRight, Heart, User2 } from "lucide-react";
 import Sider from "antd/es/layout/Sider";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Modals from "../modals/add-layoutdata";
+import { SemesterSelectOption } from "../admin/constants";
 
 const { Content } = Layout;
 const layoutStyle = {
@@ -20,11 +22,21 @@ export default function PageLayout({ title, data }) {
 		semester: "I_Semester",
 	});
 	const [courseOptions, setCourseOptions] = useState([]);
-	const [semesterOptions, setSemesterOptions] = useState([]);
 	const [responseData, setResponseData] = useState([]);
 	const [active, setActive] = useState("");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isLiked, setIsLiked] = useState(false);
+
+	const handleLikeClick = (e) => {
+		e.stopPropagation();
+
+		setIsLiked(!isLiked);
+
+
+
+	};
+
 
 	const handleSubjectClick = (subjectLabel) => {
 		setActive(subjectLabel);
@@ -35,23 +47,23 @@ export default function PageLayout({ title, data }) {
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(`${BASE_URL}/departments?entity=departments`);
-				const results = response.data.results || [];
-				setResponseData(results);
+				setResponseData(response.data.results || [])
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		fetchData()
+	}, [])
 
-				const courses = [...new Set(results.map((item) => item.course))].map((course) => ({
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const courses = [...new Set(responseData.map((item) => item.course))].map((course) => ({
 					label: course,
 					value: course,
 				}));
-				const semesters = [...new Set(results.map((item) => item.semester))].map((semester) => ({
-					label: semester,
-					value: semester,
-				}));
-
 				setCourseOptions(courses);
-				setSemesterOptions(semesters);
-
-				// Set the initial active subject
-				const firstItem = results.find(item =>
+				const firstItem = responseData.find(item =>
 					item.course === menuData.course &&
 					item.semester === menuData.semester
 				);
@@ -62,11 +74,11 @@ export default function PageLayout({ title, data }) {
 				console.error("Error fetching data:", error);
 			}
 		};
-
 		fetchData();
-	}, [menuData.course, menuData.semester]);
+	}, [menuData.course, menuData.semester, responseData]);
 
 	const filteredData = data?.filter((item) => item.subjectName === active);
+
 
 
 
@@ -78,6 +90,7 @@ export default function PageLayout({ title, data }) {
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center w-full px-4 md:px-8 lg:px-20 py-4 md:h-20 text-white bg-[#27272a] border-b-2 border-[#393939] gap-4">
 						<h3 className="text-xl md:text-2xl lg:text-3xl font-bold">{title}</h3>
 						<div className="flex flex-col md:flex-row gap-4 md:w-auto w-full">
+							<Button type="primary" style={{ background: "#6d28d9", width: "200px", border: "none" }} onClick={() => (setIsModalOpen(true))}>Add {title == "PYQ" ? "Previous Questions" : title}</Button>
 							<Select
 								className="w-full md:w-48"
 								value={menuData.course}
@@ -88,7 +101,7 @@ export default function PageLayout({ title, data }) {
 							{menuData.course && (
 								<Select
 									className="w-full md:w-48"
-									options={semesterOptions}
+									options={SemesterSelectOption}
 									value={menuData.semester}
 									placeholder="Select Semester"
 									onChange={(value) => setMenuData({ ...menuData, semester: value })}
@@ -143,29 +156,33 @@ export default function PageLayout({ title, data }) {
 						{/* Main Content */}
 						<Content className="bg-[#27272a] min-h-screen w-full md:w-3/4">
 							<div className="flex flex-col p-4 md:p-8 lg:px-16">
-								<div className="flex justify-between items-center w-full font-bold text-lg md:text-xl mt-6 text-[#c1c3c8]">
+								<div className="flex justify-between items-center w-full font-bold px-10 text-lg md:text-xl mt-6 text-[#c1c3c8]">
 									<p>{title}</p>
 									<p>Shared By</p>
 								</div>
 								{filteredData && filteredData.length > 0 ? (
-									<div className="space-y-4 mt-6">
+									<div className="space-y-4 mt-6 px-10  py-3">
 										{filteredData.map((item, index) => (
-											<div
-												key={index}
-												className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
+											<>
+												<div
+													key={index}
+													className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
                         border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
-                        cursor-pointer duration-300 ease-in gap-4 md:gap-0"
-												onClick={() => window.location.href = item.url}
-											>
-												<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
-													<Album className="flex-shrink-0" />
-													<span className="break-words">{item.description}</span>
+                        cursor-pointer duration-300 ease-in  md:gap-0"
+													onClick={() => window.location.href = item.url}												>
+													<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
+														<Album className="flex-shrink-0" />
+														<span className="break-words">{item.description}</span>
+													</div>
+													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
+														<div className="flex gap-2 items-center" onClick={handleLikeClick}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
+														<User2 className="flex-shrink-0" />
+														<span>{item.uploadedBy}</span>
+													</div>
+												</div >
+												<div className=" mt-2 w-6 pl-5">
 												</div>
-												<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-													<User2 className="flex-shrink-0" />
-													<span>{item.uploadedBy}</span>
-												</div>
-											</div>
+											</>
 										))}
 									</div>
 								) : (
@@ -177,9 +194,9 @@ export default function PageLayout({ title, data }) {
 						</Content>
 					</Layout>
 				</Layout>
-			</Flex>
+			</Flex >
 
-
+			<Modals title="notes" isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
 
 		</>
 	);
