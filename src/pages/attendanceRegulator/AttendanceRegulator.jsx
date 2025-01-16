@@ -1,9 +1,10 @@
-/* eslint-disable react/prop-types */
-import axios from "axios";
 import { useState } from "react";
 import Header from "../../components/Header/Header";
+import axios from "axios";
+import { v4 as uuid } from "uuid";
 
-// Calendar Component remains the same...
+const BASE_URL = import.meta.env.VITE_URL;
+
 const Calendar = ({ onDateSelect, markedDates }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
@@ -102,30 +103,24 @@ const Calendar = ({ onDateSelect, markedDates }) => {
   );
 };
 
-export default function AttendanceRegulator() {
-  //const semesterStartDate = new Date("2024-12-31");
+const AttendanceRegulator = () => {
+  const semesterStartDate = new Date("2024-12-31");
   const currentDate = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
   const [attendanceData, setAttendanceData] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [attendancePercentage, setAttendancePercentage] = useState({
-    withDutyLeave: 0,
-    withoutDutyLeave: 0,
-    withnoclasswithoutdl: 0,
-    withnoclasswithdl: 0,
-    totalnumberofclasses: 0,
-  });
-
+  const [attendancePercentage, setAttendancePercentage] = useState(null);
 
   const AttendanceForm = ({ onSubmit, selectedDate }) => {
-    const hours = [
-      "9a.m to 10a.m",
-      "10a.m to 11a.m",
-      "11a.m to 12p.m",
-      "12p.m to 1p.m",
-      "2p.m to 3p.m",
-      "3p.m to 4p.m",
+    const timeSlots = [
+      "9 to 10",
+      "10 to 11",
+      "11 to 12",
+      "12 to 1",
+      "2 to 3",
+      "3 to 4",
     ];
+
     const dateKey = selectedDate.toISOString().split("T")[0];
 
     // Initialize with existing data or defaults
@@ -133,65 +128,106 @@ export default function AttendanceRegulator() {
       if (attendanceData[dateKey]) {
         return attendanceData[dateKey];
       }
-      return hours.reduce(
-        (acc, hour) => ({
+      return timeSlots.reduce(
+        (acc, slot) => ({
           ...acc,
-          [hour]: "present",
+          [slot]: "present",
         }),
         {}
       );
     });
 
     return (
-      <>
-
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Mark Attendance for {selectedDate.toDateString()}
-              </h2>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-gray-700 text-xl font-bold"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-4">
-              {hours.map((hour) => (
-                <div key={hour} className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">
-                    {hour}
-                  </label>
-                  <select
-                    value={attendance[hour]}
-                    onChange={(e) =>
-                      setAttendance((prev) => ({
-                        ...prev,
-                        [hour]: e.target.value,
-                      }))
-                    }
-                    className="ml-4 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  >
-                    <option value="present">Present</option>
-                    <option value="absent">Absent</option>
-                    <option value="dutyLeave">Duty Leave</option>
-                    <option value="no class">No Class</option>
-                  </select>
-                </div>
-              ))}
-            </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full mx-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Mark Attendance for {selectedDate.toDateString()}
+            </h2>
             <button
-              onClick={() => onSubmit(attendance)}
-              className="mt-6 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              onClick={() => setShowModal(false)}
+              className="text-gray-500 hover:text-gray-700 text-xl font-bold"
             >
-              Submit Attendance
+              ×
             </button>
           </div>
+          <div className="space-y-4">
+            {timeSlots.map((slot) => (
+              <div key={slot} className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-700">
+                  {slot}
+                </label>
+                <select
+                  value={attendance[slot]}
+                  onChange={(e) =>
+                    setAttendance((prev) => ({
+                      ...prev,
+                      [slot]: e.target.value,
+                    }))
+                  }
+                  className="ml-4 block w-48 rounded-md border-gray-300 shadow-sm focus:border-[#6d28d9] focus:ring-[#6d28d9]"
+                >
+                  <option value="present">Present</option>
+                  <option value="absent">Absent</option>
+                  <option value="Duty Leave">Duty Leave</option>
+                  <option value="No Class">No Class</option>
+                </select>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => onSubmit(attendance)}
+            className="mt-6 w-full bg-[#6d28d9] text-white px-4 py-2 rounded-md hover:bg-[#6d28d9] transition-colors"
+          >
+            Submit Attendance
+          </button>
         </div>
-      </>
+      </div>
     );
+  };
+
+  // Update handleAttendanceSubmit function
+  const handleAttendanceSubmit = async (updatedAttendance) => {
+    const dateStr = selectedDate.toISOString().split("T")[0];
+
+    const leavePerDay = Object.entries(updatedAttendance)
+      .filter(([_, status]) => status !== "present")
+      .map(([time, reason]) => ({
+        time,
+        reason,
+      }));
+
+    const attendancePayload = {
+      entity: "attendance",
+      entityId: uuid(),
+      username: "Roshin",
+      studentId: "24100242",
+      leaveDate: dateStr,
+      leavePerDay: leavePerDay,
+      totalLeavePerDay: leavePerDay.length,
+    };
+
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/attendance`,
+        attendancePayload
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to submit attendance");
+      }
+
+      setAttendanceData((prevData) => ({
+        ...prevData,
+        [dateStr]: updatedAttendance,
+      }));
+
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error submitting attendance:", error);
+      alert("Failed to submit attendance. Please try again.");
+    }
   };
 
   const handleDateSelect = (date) => {
@@ -208,43 +244,6 @@ export default function AttendanceRegulator() {
     setShowModal(true);
   };
 
-  
-const handleAttendanceSubmit = (updatedAttendance) => {
-
-  const dateKey = selectedDate.toISOString().split("T")[0]; 
-
-  // Create an object to send to the backend with the selected date and its attendance status for each hour.
-  const attendanceObject = {
-    date: dateKey,
-    attendance: updatedAttendance, // This is the attendance data for the selected date (present/absent/dutyLeave/no class).
-  };
-
-
-  axios.post("YOUR_BACKEND_API_URL/attendance", attendanceObject, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-
-      if (response.status === 200) {
-        setAttendanceData((prevData) => ({
-          ...prevData,
-          [dateKey]: updatedAttendance,
-        }));
-        setShowModal(false); 
-      } else {
-        alert("Failed to submit attendance. Please try again.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error submitting attendance:", error);
-      alert("An error occurred while submitting the attendance.");
-    });
-};
-  
-
-  // Get array of dates that have attendance marked
   const markedDates = Object.keys(attendanceData);
 
   const calculateAttendance = (
@@ -265,42 +264,32 @@ const handleAttendanceSubmit = (updatedAttendance) => {
     let totalWeekdays = 0;
     let totalHoursincluNoclass = 0;
 
-    // Create holidays array with all Saturdays and Sundays between start and current date
     const holidays = [];
 
     for (let i = 0; i < totalDays; i++) {
       const currentDay = new Date(start);
       currentDay.setDate(currentDay.getDate() + i);
-      const dayOfWeek = currentDay.getDay(); // 0 = Sunday, 6 = Saturday
+      const dayOfWeek = currentDay.getDay();
       if (dayOfWeek === 6) {
-        holidays.push(currentDay.toISOString().split("T")[0]); // Add the holiday date (YYYY-MM-DD)
+        holidays.push(currentDay.toISOString().split("T")[0]);
       }
     }
-
-    console.log("Holidays Array:", holidays); // Debug log
 
     for (let i = 0; i < totalDays; i++) {
       const currentDate = new Date(start);
       currentDate.setDate(currentDate.getDate() + i);
-      const dateString = currentDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      const dateString = currentDate.toISOString().split("T")[0];
 
-      // Debugging: log the current date being processed
-      console.log("Processing date:", dateString);
-
-      // Skip holidays (weekends)
       if (holidays.includes(dateString)) continue;
 
       const dayAttendance = attendance[dateString];
 
-      // Increment totalWeekdays for weekdays (not holidays)
       totalWeekdays++;
 
-      // If no attendance data is present for this day, consider it "present" for all 6 hours
       if (!dayAttendance || Object.keys(dayAttendance).length === 0) {
-        totalHoursPresent += 6; // 6 hours marked as "present"
-        totalHoursWithoutDL += 6; // 6 hours marked as "present" (without duty leave)
+        totalHoursPresent += 6;
+        totalHoursWithoutDL += 6;
       } else {
-        // Otherwise, calculate hours based on the status (present, duty leave, etc.)
         const hours = Object.values(dayAttendance).filter(
           (status) =>
             status === "present" || (includeDutyLeave && status === "dutyLeave")
@@ -319,25 +308,16 @@ const handleAttendanceSubmit = (updatedAttendance) => {
         totalHoursWithoutDL += hoursWithoutDL;
       }
     }
-  
-    console.log("total week days", totalWeekdays);
-    console.log("hours without dutyleave", totalHoursPresent);
-    console.log("hrs with no class", totalHoursincluNoclass);
+
     const totalHolidays = holidays.length;
-    console.log("holidays", totalHolidays);
     const subtrahend1 = totalHoursPresent - totalHolidays * 6 - 6;
     const subtrahend2 = totalHoursWithoutDL - totalHolidays * 6 - 6;
     const subtrahend3 = totalHoursWithoutDL - totalHolidays * 6 - 6;
     const subtrahend4 = totalHoursPresent - totalHolidays * 6 - 6;
     const minuend = (totalWeekdays - totalHolidays) * 6 - 6;
-    const minuend2 = (totalWeekdays - totalHolidays) * 6 - totalHoursincluNoclass - 6;
+    const minuend2 =
+      (totalWeekdays - totalHolidays) * 6 - totalHoursincluNoclass - 6;
 
-    console.log("sub1", subtrahend1);
-    console.log("sub2", subtrahend2);
-    console.log("sub3", subtrahend3);
-    console.log("min", minuend);
-    console.log("min2", minuend2);
-    // Calculate attendance percentages based on total weekdays
     const attendancePercentage = (subtrahend1 / minuend) * 100;
     const attendanceWithoutDLPercentage = (subtrahend2 / minuend) * 100;
     const attendancewithnoclass = (subtrahend3 / minuend2) * 100;
@@ -379,7 +359,6 @@ const handleAttendanceSubmit = (updatedAttendance) => {
           </h1>
 
           <div className="flex flex-row-reverse gap-8">
-            {/* Right side - Calendar */}
             <div className="w-1/3">
               <Calendar
                 onDateSelect={handleDateSelect}
@@ -387,12 +366,11 @@ const handleAttendanceSubmit = (updatedAttendance) => {
               />
             </div>
 
-            {/* Left side - Results and Controls */}
             <div className="w-2/3">
               <div className="bg-white rounded-lg shadow p-6 mb-6">
                 <button
                   onClick={handleCalculateAttendance}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6"
+                  className="bg-[#6d28d9] text-white px-6 py-2 rounded-md hover:bg-[#6d28d9] transition-colors mb-6"
                 >
                   Calculate Attendance
                 </button>
@@ -419,7 +397,6 @@ const handleAttendanceSubmit = (updatedAttendance) => {
                             {attendancePercentage.totalnumberofclasses} Hours
                           </td>
                         </tr>
-
                         <tr>
                           <td className="px-6 py-4 text-sm text-gray-700">
                             Attendance Percentage including duty leave
@@ -433,7 +410,10 @@ const handleAttendanceSubmit = (updatedAttendance) => {
                             Attendance Percentage excluding duty leave
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-700">
-                            {attendancePercentage.withnoclasswithoutdl.toFixed(2)}%
+                            {attendancePercentage.withnoclasswithoutdl.toFixed(
+                              2
+                            )}
+                            %
                           </td>
                         </tr>
                       </tbody>
@@ -456,3 +436,4 @@ const handleAttendanceSubmit = (updatedAttendance) => {
   );
 };
 
+export default AttendanceRegulator;

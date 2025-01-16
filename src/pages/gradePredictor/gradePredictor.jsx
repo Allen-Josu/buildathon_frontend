@@ -120,7 +120,7 @@ export default function GradePredictor() {
             <div className="mt-6">
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                className="w-full py-2 px-4  bg-[#6d28d9] text-white font-semibold rounded-md hover: bg-[#6d28d9]"
               >
                 Submit
               </button>
@@ -140,7 +140,7 @@ export default function GradePredictor() {
       {/* Modal for Grade Prediction */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#27272a] bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-black mt-44 text-white p-6 rounded-lg shadow-lg w-full max-w-md h-85">
+          <div className="bg-white  text-black p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-xl font-semibol d text-center">Grade Prediction</h3>
             <table className="min-w-full table-auto">
             

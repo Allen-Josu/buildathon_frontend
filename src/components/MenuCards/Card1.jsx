@@ -50,7 +50,7 @@ function Card1() {
           .card:hover {
             transform: scale(0.95, 0.95); 
             border: 2px solid rgb(85, 85, 247); 
-            background-color: rgb(30 64 175 / var(--tw-text-opacity, 1)) !important; /* Force background color change on hover */
+            background-color: #6d28d9; /* Force background color change on hover */
             transition: transform 0.3s ease, border 0.3s ease, background-color 0.3s ease; 
             cursor: pointer; 
           }
