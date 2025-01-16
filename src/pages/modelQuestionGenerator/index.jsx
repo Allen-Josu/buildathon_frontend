@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AlertCircle, BookOpen, FileText } from "lucide-react";
 import Button from "../../components/ui/button";
 import Card from "antd/es/card/Card";
+import { Download } from "lucide-react"; // Icon for the download button
+import jsPDF from "jspdf";
 import {
   CardContent,
   CardFooter,
@@ -110,6 +112,62 @@ const QuestionPaperGenerator = () => {
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach((input) => (input.value = ""));
   };
+ 
+
+const downloadPDF = () => {
+  if (questionPaper) {
+    const doc = new jsPDF({
+      unit: "pt", // Using points for better alignment
+      format: "a4", // Standard page size
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 40; // Margin for both sides
+    const contentWidth = pageWidth - margin * 2; // Content width
+
+    let yPosition = 60; // Initial Y position for text
+
+    doc.setFontSize(16);
+    doc.text(questionPaper.title, margin, yPosition, { maxWidth: contentWidth });
+    yPosition += 20;
+
+    doc.setFontSize(12);
+    doc.text(`Duration: ${questionPaper.duration}`, margin, yPosition, {
+      maxWidth: contentWidth,
+    });
+    yPosition += 20;
+
+    doc.text(`Maximum Marks: ${questionPaper.max_marks}`, margin, yPosition, {
+      maxWidth: contentWidth,
+    });
+    yPosition += 40;
+
+    questionPaper.sections.forEach((section, sectionIndex) => {
+      doc.setFontSize(14);
+      doc.text(
+        `${sectionIndex + 1}. ${section.name} (${section.marks_per_question} marks each)`,
+        margin,
+        yPosition,
+        { maxWidth: contentWidth }
+      );
+      yPosition += 20;
+
+      doc.setFontSize(12);
+      section.questions.forEach((question, questionIndex) => {
+        const text = `${questionIndex + 1}. ${question}`;
+        const lines = doc.splitTextToSize(text, contentWidth); // Split text into multiple lines
+        doc.text(lines, margin + 10, yPosition);
+        yPosition += lines.length * 14; // Increment Y position for each line
+      });
+
+      yPosition += 20; // Space between sections
+    });
+
+    // Save the PDF
+    doc.save(`${questionPaper.title}.pdf`);
+  }
+};
+
 
   return (
     <>
@@ -144,11 +202,11 @@ const QuestionPaperGenerator = () => {
                                file:mr-4 file:py-2 file:px-4
                                file:rounded-md file:border-0
                                file:text-sm file:font-semibold
-                               file:bg-blue-50 file:text-blue-700
+                               file:bg-blue-50 file:text-[#020617]
                                hover:file:bg-blue-100"
                           />
                           {fileNames.syllabus && (
-                            <span className="text-sm text-green-600">
+                            <span className="text-sm text-[#020617]">
                               Selected: {fileNames.syllabus}
                             </span>
                           )}
@@ -172,11 +230,11 @@ const QuestionPaperGenerator = () => {
                                file:mr-4 file:py-2 file:px-4
                                file:rounded-md file:border-0
                                file:text-sm file:font-semibold
-                               file:bg-blue-50 file:text-blue-700
+                               file:bg-blue-50 file:text-[#020617]
                                hover:file:bg-blue-100"
                           />
                           {fileNames.pyq && (
-                            <span className="text-sm text-green-600">
+                            <span className="text-sm text-[#020617]">
                               Selected: {fileNames.pyq}
                             </span>
                           )}
@@ -189,8 +247,8 @@ const QuestionPaperGenerator = () => {
                         className={`flex items-center gap-2 ${
                           message.includes("Error") ||
                           message.includes("failed")
-                            ? "text-red-600"
-                            : "text-green-600"
+                            ? "text-green-600"
+                            : "text-red-600"
                         }`}
                       >
                         <AlertCircle className="h-4 w-4" />
@@ -204,7 +262,8 @@ const QuestionPaperGenerator = () => {
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-[#6d28d9] hover:bg-[#6d28d9]"
+                    style={{background : "#6d28d9"}}
                   >
                     {loading ? "Processing..." : "Generate Question Paper"}
                   </Button>
@@ -213,7 +272,8 @@ const QuestionPaperGenerator = () => {
                     onClick={handleReset}
                     disabled={loading}
                     variant="outline"
-                    className="w-full"
+                    className="w-full bg-[#6d28d9]"
+                    style={{background : "#6d28d9"}}
                   >
                     Reset
                   </Button>
@@ -224,41 +284,49 @@ const QuestionPaperGenerator = () => {
 
           {questionPaper && isGenerated && (
             <Card>
-              <CardHeader>
+              <CardHeader className= "flex justify-between items-cente">
                 <CardTitle className="text-xl font-bold">
                   Generated Question Paper
                 </CardTitle>
+                <Button
+                  onClick={downloadPDF}
+                  className="bg-[#6d28d9] hover:bg-[#5b21b6] text-white"
+                  style={{background : "#6d28d9"}}
+                >
+                   <Download className="h-4 w-4 mr-2" /> 
+                  Download PDF
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <div className="text-center space-y-2">
-                    <h2 className="text-2xl font-bold">
-                      {questionPaper.title}
-                    </h2>
-                    <p className="text-gray-600">
-                      Duration: {questionPaper.duration}
-                    </p>
-                    <p className="text-gray-600">
-                      Maximum Marks: {questionPaper.max_marks}
-                    </p>
-                  </div>
-
-                  {questionPaper.sections.map((section, sectionIndex) => (
-                    <div key={sectionIndex} className="space-y-4">
-                      <h3 className="text-lg font-semibold">{section.name}</h3>
-                      <p className="text-sm text-gray-600">
-                        ({section.marks_per_question} marks each)
-                      </p>
-                      <ol className="list-decimal list-inside space-y-2">
-                        {section.questions.map((question, questionIndex) => (
-                          <li key={questionIndex} className="text-gray-800">
-                            {question}
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  ))}
+                <div className="text-center space-y-2">
+                  <h2 className="text-2xl font-bold">
+                    {questionPaper.title}
+                  </h2>
+                  <p className="text-gray-600">
+                    Duration: {questionPaper.duration}
+                  </p>
+                  <p className="text-gray-600">
+                    Maximum Marks: {questionPaper.max_marks}
+                  </p>
                 </div>
+
+                {questionPaper.sections.map((section, sectionIndex) => (
+                  <div key={sectionIndex} className="space-y-4">
+                    <h3 className="text-lg font-semibold">{section.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      ({section.marks_per_question} marks each)
+                    </p>
+                    <div className="space-y-2">
+                      {section.questions.map((question, questionIndex) => (
+                        <div key={questionIndex} className="text-gray-800">
+                          {question}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
               </CardContent>
               
             </Card>
@@ -303,7 +371,9 @@ const QuestionPaperGenerator = () => {
                   onClick={() => {
                     setIsGenerated(false);
                   }}
-                  className="w-full bg-black-50 hover:bg-[#6d28d9]-500"
+                  className="w-full bg-[#6d28d9] hover:bg-[#6d28d9]"
+                  style={{background : "#6d28d9"}}
+
                 >
                   Back
                 </Button>

@@ -1,12 +1,12 @@
 
-import Header from "../../../Header/Header";
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import { Card } from "react-bootstrap";
 import "./About.css";
-import sid from "../../../../assets/sid.jpg"
-import pavi from "../../../../assets/pavi.jpg"
-import roshin from "../../../../assets/roshin.jpg"
-import allen from "../../../../assets/allen.jpg"
+import sid from "../../assets/sid.jpg" 
+import pavi from "../../assets/pavi.jpg"
+import roshin from "../../assets/roshin.jpg"
+import allen from "../../assets/allen.jpg"
+import Header from "../../components/Header/header";
 
 const content = {
   title: "EduBuddy",
@@ -71,9 +71,9 @@ export default function About() {
       name: "Roshin Sleeba C",
       role: "Developer",
       image: roshin,
-      email:"",
-      linkedin:"",
-      github:"https://github.com/Sidharthpr",
+      email:"roshinsleebac2002@gmail.com",
+      linkedin:"https://www.linkedin.com/in/roshin-sleeba-c-112466320",
+      github:"https://github.com/Roshinsleeba",
     },
     {
       name: "Sidharth P R",
@@ -98,58 +98,68 @@ export default function About() {
     <div style={{backgroundColor: "#27272a", minHeight: "100vh" }}>
       <Header />
       <div className="container mt-5">
-        <h3 className="mb-4 text-white">Core Team</h3>
-        <hr className="text-secondary style mb-5" />
-        <div className="row row-cols-1 row-cols-md-4 g-4">
-          {teamMembers.map((member, index) => (
+    <h3 className="mb-4 text-white">Core Team</h3>
+    <hr className="text-secondary style mb-5" />
+    <div className="row row-cols-1 row-cols-md-4 g-4">
+        {teamMembers.map((member, index) => (
             <div className="col" key={index}>
-              <Card
-                className="h-100 d-flex flex-column text-center card-custom"
-                style={{
-                  height: "250px",
-                  width:"270px",
-                  borderRadius: "10px",
-                  overflow: "hidden", // Ensures no overflow from internal elements
-                  background: "linear-gradient(135deg, #6a11cb 0%,rgb(45, 21, 81) 100%)", // Gradient background
-                }}
-              >
-                <Card.Img
-                  variant="top"
-                  src={member.image}
-                  alt={`${member.name}'s profile`}
-                  className="rounded-circle mx-auto mt-3"
-                  style={{
-                    width: "150px",
-                    height: "150px",
-                    objectFit: "cover",
-                    border: "5px solid white",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)",
-                  }}
-                />
-                <Card.Body
-                  className="d-flex flex-column"
-                  style={{
-                    backgroundColor: "transparent", // Inherits the card's background color
-                    flexGrow: 1, // Ensures it fills available space
-                  }}
+                <Card
+                    className="h-100 d-flex flex-column text-center card-custom"
+                    style={{
+                        height: "250px",
+                        width: "270px",
+                        borderRadius: "10px",
+                        overflow: "hidden", // Ensures no overflow from internal elements
+                        backgroundColor: "#27272a", // Default background color
+                        transition: "background 5s cubic-bezier(0.4,0,1,1)", // Smooth transition for background change
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "linear-gradient(135deg, #6a11cb 0%, rgb(45, 21, 81) 100%)"; // Gradient on hover
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "#27272a"; // Revert to default color
+                    }}
                 >
-                  <Card.Title className="text-white">{member.name}</Card.Title>
-                  <Card.Subtitle className="mb-4 text-white">{member.role}</Card.Subtitle>
-                  <div className="mt-auto d-flex justify-content-center gap-5 m-3">
-                    <a href={`mailto:${member.email}`} target="_blank" rel="noopener noreferrer">
-                      <i className="fas fa-envelope text-white" style={{ fontSize: "24px" }}></i>
-                    </a>
-                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-                      <i className="fab fa-linkedin text-white" style={{ fontSize: "24px" }}></i>
-                    </a>
-                    <a href={member.github} target="_blank" rel="noopener noreferrer">
-                      <i className="fab fa-github text-white" style={{ fontSize: "24px" }}></i>
-                    </a>
-                  </div>
-                </Card.Body>
-              </Card>
+                    <Card.Img
+                        variant="top"
+                        src={member.image}
+                        alt={`${member.name}'s profile`}
+                        className="rounded-circle mx-auto mt-3"
+                        style={{
+                            width: "150px",
+                            height: "150px",
+                            objectFit: "cover",
+                            border: "5px solid white",
+                            boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)",
+                        }}
+                    />
+                    <Card.Body
+                        className="d-flex flex-column"
+                        style={{
+                            backgroundColor: "transparent", // Inherits the card's background color
+                            flexGrow: 1, // Ensures it fills available space
+                        }}
+                    >
+                        <Card.Title className="text-white">{member.name}</Card.Title>
+                        <Card.Subtitle className="mb-4 text-white">{member.role}</Card.Subtitle>
+                        <div className="mt-auto d-flex justify-content-center gap-5 m-3">
+                            <a href={`mailto:${member.email}`} target="_blank" rel="noopener noreferrer">
+                                <i className="fas fa-envelope text-white" style={{ fontSize: "24px" }}></i>
+                            </a>
+                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                                <i className="fab fa-linkedin text-white" style={{ fontSize: "24px" }}></i>
+                            </a>
+                            <a href={member.github} target="_blank" rel="noopener noreferrer">
+                                <i className="fab fa-github text-white" style={{ fontSize: "24px" }}></i>
+                            </a>
+                        </div>
+                    </Card.Body>
+                </Card>
             </div>
-          ))}
+        ))}
+    </div>
+    
+          
         <div className="mt-5 w-96 text-white" style={{ padding: "20px", borderRadius: "10px", background: "linear-gradient(135deg, #3a3a3a, #27272a)", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)", minWidth:"1200px",
     margin: "0 auto"  }}>
           <h2 style={{ 
@@ -262,7 +272,6 @@ export default function About() {
           </div>
         </div>
         </div>
-    </div>
     </div>
   );
 }
