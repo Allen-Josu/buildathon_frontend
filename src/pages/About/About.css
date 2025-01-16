@@ -1,0 +1,37 @@
+@font-face {
+  font-family: 'CustomFont'; /* A name you choose for the font */
+  src: url('../../../../fonts/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to the font file */
+  font-weight: normal; /* Optional: Can be 'bold', 'normal', etc. */
+  font-style: normal; /* Optional: Can be 'italic', 'normal', etc. */
+}
+.card-custom {
+    background-color: #7951b8 !important; /* Forces purple background */
+    color: white !important; /* Forces white text */
+  }
+.container mt-5 {
+    font-family: 'CustomFont', sans-serif; /* Apply the font to the entire body */
+}
+
+h1, h2, h3, p {
+    font-family: 'Roboto', sans-serif; /* Apply the font to headings and paragraphs */
+}
+.card-custom {
+  transition: transform 0.3s ease, 
+  box-shadow 0.3s ease,
+  border-radius 100px; /* Smooth transition for transform and shadow */
+}
+
+.card-custom:hover {
+  transform: scale(1.05); /* Scale the card slightly */
+  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Add a stronger shadow on hover */
+}
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px); /* Optional: adds a slight upward movement */
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
