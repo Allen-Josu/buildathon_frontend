@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-export default function Modals({ isModalOpen, setIsModalOpen, title }) {
+export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }) {
   const [responseData, setResponseData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -133,12 +133,10 @@ export default function Modals({ isModalOpen, setIsModalOpen, title }) {
 
     try {
       const response = await axios.post(`${BASE_URL}/newEntity`, submissionData);
-      console.log('====================================');
-      console.log(response);
-      console.log('====================================');
       if (response.status === 200) {
         setIsModalOpen(false);
         resetDependentFields();
+        onSuccess?.();
       }
     } catch (error) {
       console.error("Error submitting document:", error);

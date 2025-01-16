@@ -27,13 +27,15 @@ export default function PageLayout({ title, data }) {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isLiked, setIsLiked] = useState(false);
+	const [refresh, setRefresh] = useState(0);
 
-	const handleLikeClick = (e) => {
-		e.stopPropagation();
+	const handleRefresh = () => {
+		setRefresh(prev => prev + 1);
+	};
 
+	const handleLikeClick = (entityId) => {
 		setIsLiked(!isLiked);
-
-
+		console.log(entityId);
 
 	};
 
@@ -53,7 +55,7 @@ export default function PageLayout({ title, data }) {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [refresh])
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -169,13 +171,14 @@ export default function PageLayout({ title, data }) {
 													className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
                         border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
                         cursor-pointer duration-300 ease-in  md:gap-0"
-													onClick={() => window.location.href = item.url}												>
+												// onClick={() => window.location.href = item.url}
+												>
 													<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
 														<Album className="flex-shrink-0" />
 														<span className="break-words">{item.description}</span>
 													</div>
 													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-														<div className="flex gap-2 items-center" onClick={handleLikeClick}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
+														<div className="flex gap-2 items-center" onClick={() => handleLikeClick(item.entityId)}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
 														<User2 className="flex-shrink-0" />
 														<span>{item.uploadedBy}</span>
 													</div>
@@ -196,7 +199,7 @@ export default function PageLayout({ title, data }) {
 				</Layout>
 			</Flex >
 
-			<Modals title="notes" isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+			<Modals title="notes" isModalOpen={isModalOpen} onSuccess={handleRefresh} setIsModalOpen={setIsModalOpen} />
 
 		</>
 	);
