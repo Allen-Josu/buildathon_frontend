@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AlertCircle, BookOpen, FileText } from "lucide-react";
 import Button from "../../components/ui/button";
 import Card from "antd/es/card/Card";
@@ -18,7 +18,7 @@ import {
 } from "../../components/ui/tabs";
 import Header from "../../components/Header/Header";
 
-const QuestionPaperGenerator = () => {
+export default function QuestionPaperGenerator() {
   const [files, setFiles] = useState({
     syllabus: null,
     pyq: null,
@@ -244,8 +244,7 @@ const downloadPDF = () => {
 
                     {message && (
                       <div
-                        className={`flex items-center gap-2 ${
-                          message.includes("Error") ||
+                        className={`flex items-center gap-2 ${message.includes("Error") ||
                           message.includes("failed")
                             ? "text-green-600"
                             : "text-red-600"
@@ -328,7 +327,7 @@ const downloadPDF = () => {
                 ))}
               </div>
               </CardContent>
-              
+
             </Card>
           )}
 
@@ -385,5 +384,3 @@ const downloadPDF = () => {
     </>
   );
 };
-
-export default QuestionPaperGenerator;
