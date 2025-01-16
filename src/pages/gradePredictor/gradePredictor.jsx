@@ -1,5 +1,6 @@
 import  { useState } from 'react';
 import Header from '../../components/Header/header';
+import { Modal } from 'antd';
 
 export default function GradePredictor() {
   const [internalMarks1, setInternalMarks1] = useState('');
@@ -15,7 +16,7 @@ export default function GradePredictor() {
 
   const calculateRequiredExternalMarks = (totalInternalMarks) => {
     const requiredMarks = {
-      O: 90 - totalInternalMarks, 
+      S: 90 - totalInternalMarks, 
       A: 80 - totalInternalMarks,
       B: 70 - totalInternalMarks, 
       C: 60 - totalInternalMarks,
@@ -73,6 +74,14 @@ export default function GradePredictor() {
   const closeModal = () => {
     setIsModalOpen(false); // Close the modal
   };
+  const handleOk = () => {
+    setIsModalOpen(false); // Close the modal
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false); // Close the modal
+  };
+  
+  
 
   return (
     <>
@@ -120,7 +129,7 @@ export default function GradePredictor() {
             <div className="mt-6">
               <button
                 type="submit"
-                className="w-full py-2 px-4  bg-[#6d28d9] text-white font-semibold rounded-md hover: bg-[#6d28d9]"
+                className="w-full py-2 px-4 bg-[#6d28d9] text-white font-semibold rounded-md hover:bg-[#6d28d9]"
               >
                 Submit
               </button>
@@ -138,44 +147,54 @@ export default function GradePredictor() {
       </div>
 
       {/* Modal for Grade Prediction */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-[#27272a] bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white  text-black p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-semibol d text-center">Grade Prediction</h3>
+      <Modal
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          centered
+          footer={[
+            <button
+              key="close"
+              className="px-4 py-2 bg-[#6d28d9] text-white rounded-md hover:bg-[#6d28d9]"
+              onClick={handleCancel}
+            >
+              Close
+            </button>,
+          ]}
+        >
+          {/* Table Content */}
+          {gradePrediction ?(
+          <div >
+            <h3 className="text-xl font-semibold text-center">Grade Prediction</h3>
             <table className="min-w-full table-auto">
-            
               <thead>
                 <tr>
-                  <th className="px-6 py-2 text-left">Grade</th>
-                  <th className="px-6 py-2 text-left">Minimum marks</th>
-                  
+                  <th className="px-6 py-2 text-center">Grade</th>
+                  <th className="px-6 py-2 text-center">Minimum Marks</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.keys(gradePrediction).map((grade) => (
-                  <tr key={grade}> 
-                    <td className="px-6 py-2 text-left">{grade}</td>
+                  <tr key={grade}>
+                    <td className="px-6 py-2 text-center">{grade}</td>
                     <td className="text-center mb-2">{gradePrediction[grade]}</td>
                   </tr>
                 ))}
               </tbody>
-
-
-            </table>    
-            <div className='flex justify-center mt-4 text-red-600'>
-              <p>Note:Student should receive minimum 23 marks in external </p>
-            </div>
-            <div className="flex justify-end mt-2">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                onClick={closeModal}
-              >
-                Close
-              </button>
+            </table>
+            <div className="flex justify-center mt-4 text-red-600">
+              <p>Note: Student should receive a minimum of 23 marks in external.</p>
             </div>
           </div>
-        </div>
-      )}
+          ) : (
+            <div className="text-center text-red-600">
+              <p>Grade Prediction Data is not available.</p>
+            </div>
+          )}
+        </Modal>
+
+        
+      
     </>
   );
 }

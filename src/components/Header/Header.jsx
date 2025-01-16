@@ -70,6 +70,14 @@ export default function Header() {
                 Attendance Calculator
               </a>
             </li>
+            <li>
+              <a
+                href="/about"
+                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
+              >
+                About
+              </a>
+            </li>
           </ul>
         </nav>
 

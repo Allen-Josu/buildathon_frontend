@@ -1,4 +1,6 @@
+import React from "react";
 import { Card, Col, Row } from "antd";
+import { Link } from "react-router-dom";
 import {
   Book,
   BookCheckIcon,
@@ -12,22 +14,27 @@ function Card1() {
     {
       title: "Notes",
       icon: NotebookIcon,
+      path: "/notes",
     },
     {
       title: "PYQ",
       icon: Paperclip,
+      path: "/pyq"
     },
     {
       title: "Attendance",
       icon: BookCheckIcon,
+      path:"/attendance",
     },
     {
       title: "Model Questions",
       icon: Book,
+      path:"/model-question-generator",
     },
     {
       title: "Grade Predictor",
       icon: Calculator,
+      path:"/grade",
     },
   ];
 
@@ -127,6 +134,7 @@ function Card1() {
         {/* Render the first row with 3 cards */}
         {cardMenu.slice(0, 3).map((item, index) => (
           <Col xs={24} sm={12} md={8} key={index}>
+            <Link to={item.path} style={{ textDecoration: 'none' }}>
             {/* Using responsive grid system for flexibility */}
             <Card className="card text-white border-white">
               <div className="box">
@@ -134,21 +142,24 @@ function Card1() {
                 <h6 style={{ color: 'white' }}>{item.title}</h6>
               </div>
             </Card>
+            </Link>
           </Col>
+
         ))}
 
 
         {/* Render the second row with 2 cards */}
         {cardMenu.slice(3).map((item, index) => (
           <Col xs={24} sm={12} md={8} key={index}>
+            <Link to={item.path} style={{ textDecoration: 'none' }}>
             {/* Using responsive grid system for flexibility */}
             <Card className="card bg-[#27272a] text-white border-white ">
               <div className="box">
               <item.icon style={{ color: "white" }} size={28} />
                 <h6 style={{ color: 'white' }}>{item.title}</h6>
-
               </div>
             </Card>
+            </Link>
           </Col>
         ))}
       </Row>
