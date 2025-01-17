@@ -11,5 +11,10 @@ export const routePath = {
     addUser: 'add-users',
     viewDepartment: 'view-department',
     addDepartment: 'add-department',
-    editDepartment: "edit-department"
+    editDepartment: "edit-department",
+    about: "about",
+    modelQuestionGenerator: "model-question-generator",
+    gradePredictor: "/grade",
+    attendanceRegulator: "/attendance"
+
 }

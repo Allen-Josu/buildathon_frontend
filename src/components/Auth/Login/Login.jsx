@@ -1,14 +1,53 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+const BASE_URL = import.meta.env.VITE_URL;
 
 function Login() {
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/');
+    setLoading(true); // Show loading state
+    setError(''); // Clear previous errors
+
+    try {
+      // Replace with your backend login API endpoint
+console.log(studentId,password);
+
+const response = await axios.get(`${BASE_URL}/users?entity=users`, {
+  params: {
+    studentId: studentId,
+    password: password,
+  },
+});
+
+      console.log(response.status);
+      
+
+      // Assuming the API returns a success message and token
+      // const { token } = response.data;
+
+      // Save token in localStorage or context
+      // localStorage.setItem('authToken', token);
+
+      // Redirect to the home page
+      alert('Login successful!');
+      navigate('/');
+    } catch (err) {
+      // Handle errors and set error messages
+      setError(
+        err.response?.data?.message ||
+        'Login failed. Please check your credentials and try again.'
+      );
+    } finally {
+      setLoading(false); // Hide loading state
+    }
   };
 
   return (
@@ -35,6 +74,7 @@ function Login() {
             >
               <div className="card-body">
                 <h2 className="card-title text-center pb-4">Login</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label htmlFor="studentId" className="form-label">
@@ -80,8 +120,9 @@ function Login() {
                       color: 'white',
                       fontWeight: 'bold',
                     }}
+                    disabled={loading}
                   >
-                    Login
+                    {loading ? 'Logging in...' : 'Login'}
                   </button>
                 </form>
                 <div className="mt-3 text-center">
