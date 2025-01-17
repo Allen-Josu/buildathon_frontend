@@ -1,22 +1,35 @@
 /* eslint-disable react/jsx-key */
-import { Button, Table } from "antd";
+import { Button, Dropdown } from "antd";
 import AdminPageLayout from "../../layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { routePath } from "../../../config";
 import { MoreOutlined } from "@ant-design/icons";
+import EduBuddyTable from "../../layout/table";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
 export default function UsersPage() {
     const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
+
     const fetchData = async () => {
-        const response = await axios.get(`${BASE_URL}/users?entityType=all&entity=users`);
-        setData(response.data.results);
+        setLoading(true)
+        try {
+            const response = await axios.get(`${BASE_URL}/users?entityType=all&entity=users`);
+            setData(response.data.results);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            setLoading(false)
+        }
+
     };
 
     const columns = [
@@ -31,8 +44,33 @@ export default function UsersPage() {
         {
             title: 'Action',
             key: 'action',
-            render: () => (
-                <MoreOutlined />
+            align: "center",
+            width: 80,
+            render: (_, record) => (
+                <Dropdown
+
+                    menu={{
+                        items: [
+                            {
+                                key: '1',
+                                label: 'View',
+                                onClick: () => navigate(`${routePath.viewUser}/${record.entityId}`)
+                            },
+                            {
+                                key: '2',
+                                label: 'Edit',
+                                onClick: () => navigate(`${routePath.editUser}/${record.entityId}`)
+                            }
+                        ],
+                        style: { width: "100px", textAlign: "center" }
+                    }
+
+                    }
+                    trigger={['click']}
+
+                >
+                    <MoreOutlined className="cursor-pointer text-lg" />
+                </Dropdown >
             ),
         },
         {
@@ -46,11 +84,6 @@ export default function UsersPage() {
             dataIndex: 'studentId',
             key: 'studentId',
             render: (text) => text || "NIL"
-        },
-        {
-            title: 'Enitity ID',
-            dataIndex: 'entityId',
-            key: 'entityId',
         },
         {
             title: 'Department',
@@ -79,17 +112,16 @@ export default function UsersPage() {
         <AdminPageLayout
             title="Users"
             actions={[
-                <Button onClick={() => navigate(routePath.addUser)} type="primary">
+                <Button onClick={() => navigate(routePath.addUser)} style={{ background: "#6d28d9", border: "none" }} type="primary">
                     Add User
                 </Button>
             ]}
         >
             <div className="h-full flex flex-col">
-                <Table
-                    dataSource={data}
+                <EduBuddyTable
+                    data={data}
                     columns={columns}
-                    scroll={{ y: 'calc(100vh - 250px)' }}
-                    className="flex-1"
+                    loading={loading}
                 />
                 <Outlet context={{ refreshData: fetchData }} />
             </div>

@@ -19,6 +19,7 @@ import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
 import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
 import Signup from "../components/Auth/Signup/Signup";
 import Login from "../components/Auth/Login/Login";
+import ViewUser from "../admin/drawer/view-user";
 
 export const router = createBrowserRouter([
   {
@@ -28,10 +29,6 @@ export const router = createBrowserRouter([
   {
     path: routePath.notes,
     element: <Notes />,
-  },
-  {
-    path: routePath.dummy,
-    element: <AdminHomePage />,
   },
   {
     path: routePath.pyq,
@@ -52,11 +49,11 @@ export const router = createBrowserRouter([
   {
     path: routePath.login,
     element: <Login />
-},
-{
-  path: routePath.signup,
-  element: <Signup />
-},
+  },
+  {
+    path: routePath.signup,
+    element: <Signup />
+  },
   {
     path: routePath.department,
     element: <DepartmentPage />,
@@ -87,6 +84,14 @@ export const router = createBrowserRouter([
         path: `${routePath.addUser}`,
         element: <AddUserDrawer />,
       },
+      {
+        path: `${routePath.viewUser}/:entityId`,
+        element: <ViewUser />
+      },
+      // {
+      //   path: `${routePath.editUser}/:entityId`,
+      //   element: <ViewUser />
+      // }
     ],
   },
   {
