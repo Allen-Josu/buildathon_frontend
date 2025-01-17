@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Header from '../../Header/Header';
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -51,7 +52,9 @@ const response = await axios.get(`${BASE_URL}/users?entity=users`, {
   };
 
   return (
-    <div
+    <div>
+      <Header />
+      <div
       style={{
         backgroundColor: 'black',
         minHeight: '100vh',
@@ -139,6 +142,7 @@ const response = await axios.get(`${BASE_URL}/users?entity=users`, {
         </div>
       </div>
     </div>
+    </div>   
   );
 }
 

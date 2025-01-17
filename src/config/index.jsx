@@ -16,5 +16,4 @@ export const routePath = {
     modelQuestionGenerator: "model-question-paper",
     gradePredictor: "grade-predictor",
     attendanceRegulator: "attendance-calculator"
-
 }
