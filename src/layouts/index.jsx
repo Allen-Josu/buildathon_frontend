@@ -28,16 +28,51 @@ export default function PageLayout({ title, data }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isLiked, setIsLiked] = useState(false);
 	const [refresh, setRefresh] = useState(0);
-
+	const [updatingData, setUpdatingData] = useState({})
+	const [likedEntity, setLikedEntity] = useState("")
 	const handleRefresh = () => {
 		setRefresh(prev => prev + 1);
 	};
 
 	const handleLikeClick = (entityId) => {
 		setIsLiked(!isLiked);
-		console.log(entityId);
-
+		setLikedEntity(entityId)
 	};
+
+	const updateLikes = (likes) => {
+		if (isLiked) {
+			setUpdatingData({
+				entity: "notes",
+				entityId: likedEntity,
+				attributesToUpdate: {
+					likes: likes + 1
+				}
+			})
+		}
+		else {
+			setUpdatingData({
+				entity: "notes",
+				entityId: likedEntity,
+				attributesToUpdate: {
+					likes: likes - 1
+				}
+			})
+		}
+
+
+		try {
+			const response = axios.patch(`${BASE_URL}/update-entity`, updatingData)
+			console.log(response);
+
+		}
+		catch (error) {
+			console.log(error);
+
+		}
+	}
+
+	useEffect(() => {
+	}, [isLiked])
 
 
 	const handleSubjectClick = (subjectLabel) => {
@@ -178,7 +213,7 @@ export default function PageLayout({ title, data }) {
 														<span className="break-words">{item.description}</span>
 													</div>
 													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-														<div className="flex gap-2 items-center" onClick={() => handleLikeClick(item.entityId)}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
+														<div className="flex gap-2 items-center" onClick={() => handleLikeClick(item.entityId, item.likes)}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
 														<User2 className="flex-shrink-0" />
 														<span>{item.uploadedBy}</span>
 													</div>

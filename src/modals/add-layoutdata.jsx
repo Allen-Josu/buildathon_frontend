@@ -55,7 +55,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   const handleDepartmentChange = (value) => {
     resetDependentFields();
