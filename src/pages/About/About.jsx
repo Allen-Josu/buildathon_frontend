@@ -26,8 +26,8 @@ const content = {
           the best study materials. Share your own notes and contribute to the learning community!`
       },
       {
-          title: "Grade Predictor",
-          details: `Worried about your academic performance? Our grade predictor uses your 
+          title: "Grade Calculator",
+          details: `Worried about your academic performance? Our grade calculator uses your 
           inputs to estimate your potential grades. Identify areas of improvement and stay ahead in your studies.`
       },
       {

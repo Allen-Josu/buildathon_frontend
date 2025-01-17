@@ -32,7 +32,7 @@ function Card1() {
       path:"/model-question-generator",
     },
     {
-      title: "Grade Predictor",
+      title: "Grade Calculator",
       icon: Calculator,
       path:"/grade",
     },
