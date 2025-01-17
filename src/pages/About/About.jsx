@@ -1,13 +1,14 @@
-
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
-import { Card } from "react-bootstrap";
-import "./About.css";
+import React from 'react';
+import Header from "../../components/Header/header";
+// Import Font Awesome CSS - make sure this path matches your project structure
+import "@fortawesome/fontawesome-free/css/all.min.css";
+// Import team member images
 import sid from "../../assets/sid.jpg" 
 import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
-import Header from "../../components/Header/header";
 
+// Content object containing all the text content
 const content = {
   title: "EduBuddy",
   introduction: `Welcome to EduBuddy, your ultimate companion in academic success! 
@@ -15,8 +16,8 @@ const content = {
   resources that make learning more accessible, efficient, and engaging.
 
   At EduBuddy, we understand the challenges students face in managing their academic journey. 
-  That’s why we’ve built a platform that combines essential features to streamline your study 
-  routine, improve productivity, and ensure you’re always on track.`,
+  That's why we've built a platform that combines essential features to streamline your study 
+  routine, improve productivity, and ensure you're always on track.`,
   features: [
       {
           title: "A Repository of User-Uploaded Notes",
@@ -37,7 +38,7 @@ const content = {
       {
           title: "Attendance Calculator",
           details: `Keep track of your attendance effortlessly. Calculate your total attendance and ensure 
-          you maintain the required minimum to stay compliant with your institution’s policies.`
+          you maintain the required minimum to stay compliant with your institution's policies.`
       },
       {
           title: "Access to Previous Year Question Papers",
@@ -46,38 +47,39 @@ const content = {
       }
   ],
   benefits: [
-      "Student-Centric Design: Every feature is built with students’ needs in mind.",
+      "Student-Centric Design: Every feature is built with students' needs in mind.",
       "Community-Driven: Contribute, collaborate, and learn from a thriving community of students.",
       "Efficiency at Its Best: From predicting grades to managing attendance, EduBuddy saves you time and helps you focus on what truly matters—learning.",
       "Reliable Resources: All content is vetted by community voting to ensure quality and relevance."
   ],
-  callToAction: `Whether you’re looking to ace your exams, stay on top of your attendance, or share 
-  and discover valuable notes, EduBuddy is here to support your academic journey. Together, let’s 
+  callToAction: `Whether you're looking to ace your exams, stay on top of your attendance, or share 
+  and discover valuable notes, EduBuddy is here to support your academic journey. Together, let's 
   make learning more effective and enjoyable!`,
   slogan: "Your education, your buddy—EduBuddy"
 };
 
 export default function About() {
+  // Team members data array
   const teamMembers = [
     {
       name: "Allen Joseph Joy",
-      role: "Developer", // Corrected spelling from "Devoloper" to "Developer"
+      role: "Developer",
       image: allen,
       email: "allenalackaparambil@gmail.com",
       linkedin: "http://www.linkedin.com/in/allen-joseph-joy",
-      github:"https://github.com/Allen-Josu",
+      github: "https://github.com/Allen-Josu",
     },
     {
       name: "Roshin Sleeba C",
       role: "Developer",
       image: roshin,
-      email:"roshinsleebac2002@gmail.com",
-      linkedin:"https://www.linkedin.com/in/roshin-sleeba-c-112466320",
-      github:"https://github.com/Roshinsleeba",
+      email: "roshinsleebac2002@gmail.com",
+      linkedin: "https://www.linkedin.com/in/roshin-sleeba-c-112466320",
+      github: "https://github.com/Roshinsleeba",
     },
     {
       name: "Sidharth P R",
-      role: "Developer", // Corrected spelling from "Devoloper" to "Developer"
+      role: "Developer",
       image: sid,
       email: "sidharthprsidhu@gmail.com",
       linkedin: "https://www.linkedin.com/in/sidharth-p-r-8088a0327",
@@ -85,193 +87,152 @@ export default function About() {
     },
     {
       name: "Pavi Sankar N P",
-      role: "Developer", // Corrected spelling from "Devoloper" to "Developer"
+      role: "Developer",
       image: pavi,
-      email:"pavisankarneelamana@gmail.com",
-      linkedin:"https://www.linkedin.com/in/pavi-sankar-n-p-492518290",
-      github:"https://github.com/pavi-sankar",
+      email: "pavisankarneelamana@gmail.com",
+      linkedin: "https://www.linkedin.com/in/pavi-sankar-n-p-492518290",
+      github: "https://github.com/pavi-sankar",
     },
   ];
 
   return (
-
-    <div style={{backgroundColor: "#27272a", minHeight: "100vh" }}>
+    <div className="min-h-screen bg-zinc-800 font-montserrat">
       <Header />
-      <div className="container mt-5">
-    <h3 className="mb-4 text-white">Core Team</h3>
-    <hr className="text-secondary style mb-5" />
-    <div className="row row-cols-1 row-cols-md-4 g-4">
-        {teamMembers.map((member, index) => (
-            <div className="col" key={index}>
-                <Card
-                    className="h-100 d-flex flex-column text-center card-custom"
-                    style={{
-                        height: "250px",
-                        width: "270px",
-                        borderRadius: "10px",
-                        overflow: "hidden", // Ensures no overflow from internal elements
-                        backgroundColor: "#27272a", // Default background color
-                        transition: "background 5s cubic-bezier(0.4,0,1,1)", // Smooth transition for background change
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "linear-gradient(135deg, #6a11cb 0%, rgb(45, 21, 81) 100%)"; // Gradient on hover
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "#27272a"; // Revert to default color
-                    }}
-                >
-                    <Card.Img
-                        variant="top"
-                        src={member.image}
-                        alt={`${member.name}'s profile`}
-                        className="rounded-circle mx-auto mt-3"
-                        style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "cover",
-                            border: "5px solid white",
-                            boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)",
-                        }}
-                    />
-                    <Card.Body
-                        className="d-flex flex-column"
-                        style={{
-                            backgroundColor: "transparent", // Inherits the card's background color
-                            flexGrow: 1, // Ensures it fills available space
-                        }}
-                    >
-                        <Card.Title className="text-white">{member.name}</Card.Title>
-                        <Card.Subtitle className="mb-4 text-white">{member.role}</Card.Subtitle>
-                        <div className="mt-auto d-flex justify-content-center gap-5 m-3">
-                            <a href={`mailto:${member.email}`} target="_blank" rel="noopener noreferrer">
-                                <i className="fas fa-envelope text-white" style={{ fontSize: "24px" }}></i>
-                            </a>
-                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-                                <i className="fab fa-linkedin text-white" style={{ fontSize: "24px" }}></i>
-                            </a>
-                            <a href={member.github} target="_blank" rel="noopener noreferrer">
-                                <i className="fab fa-github text-white" style={{ fontSize: "24px" }}></i>
-                            </a>
-                        </div>
-                    </Card.Body>
-                </Card>
-            </div>
-        ))}
-    </div>
-    
-          
-        <div className="mt-5 w-96 text-white" style={{ padding: "20px", borderRadius: "10px", background: "linear-gradient(135deg, #3a3a3a, #27272a)", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)", minWidth:"1200px",
-    margin: "0 auto"  }}>
-          <h2 style={{ 
-              marginBottom: "2rem", 
-              fontSize: "2.5rem", 
-              textAlign: "center", 
-              fontWeight: "bold", 
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.7)", 
-              animation: "fadeIn 1s ease-in-out" 
-          }}>{content.title}</h2>
-          
-          <p style={{ 
-              lineHeight: "1.8", 
-              marginBottom: "1.5rem", 
-              fontSize: "1.2rem", 
-              textAlign: "center", 
-              animation: "fadeIn 1.5s ease-in-out" 
-          }}>{content.introduction}</p>
-
-          <h2 style={{ 
-              marginBottom: "1.5rem", 
-              fontSize: "2rem",  
-              textAlign: "center", 
-              color: "white", 
-              animation: "fadeIn 2s ease-in-out" 
-          }}>What We Offer</h2>
-          
-          <ul style={{ marginBottom: "1.5rem", paddingLeft: "20px", listStyleType: "none" }}>
-            {content.features.map((feature, index) => (
-              <li key={index} style={{ 
-                  marginBottom: "1rem", 
-                  fontSize: "1.1rem", 
-                  transition: "transform 0.2s, color 0.2s", 
-                  cursor: "pointer", 
-                  animation: "fadeIn 2.5s ease-in-out" 
-              }} 
-              onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.02)";
-                  e.currentTarget.style.color = "white";
-              }} 
-              onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.color = "white";
-              }}>
-                <strong style={{ color: "white" }}>{feature.title}:</strong> {feature.details}
-              </li>
-            ))}
-          </ul>
-
-          <h2 style={{ 
-              marginBottom: "1.5rem", 
-              fontSize: "2rem", 
-              textAlign: "center", 
-              color: "white", 
-              animation: "fadeIn 3s ease-in-out" 
-          }}>Why Choose EduBuddy?</h2>
-          
-          <ul style={{ marginBottom: "1.5rem", paddingLeft: "20px", listStyleType: "none" }}>
-            {content.benefits.map((benefit, index) => (
-              <li key={index} style={{ 
-                  marginBottom: "1rem", 
-                  fontSize: "1.1rem", 
-                  transition: "transform 0.2s, color 0.2s", 
-                  cursor: "pointer", 
-                  animation: "fadeIn 3.5s ease-in-out" 
-              }} 
-              onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.02)";
-                  e.currentTarget.style.color = "rwhite";
-              }} 
-              onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.color = "white";
-              }}>
-                <strong style={{ color: "white" }}>{benefit}</strong>
-              </li>
-            ))}
-          </ul>
-
-          <h2 style={{ 
-              marginBottom: "1.5rem", 
-              fontSize: "2rem", 
-              textAlign: "center", 
-              animation: "fadeIn 4s ease-in-out" 
-          }}>Join Us Today!</h2>
-          
-          <p style={{ 
-              lineHeight: "1.8", 
-              marginBottom: "1.5rem", 
-              fontSize: "1.2rem", 
-              textAlign: "center", 
-              animation: "fadeIn 4.5s ease-in-out" 
-          }}>{content.callToAction}</p>
-          
-          <p style={{ 
-              fontStyle: "italic", 
-              fontSize: "1.2rem", 
-              textAlign: "center", 
-              animation: "fadeIn 5s ease-in-out" 
-          }}><em>{content.slogan}</em></p>
-          
-          <div className="footer" style={{ 
-              marginTop: "2rem", 
-              textAlign: "center", 
-              fontSize: "1rem", 
-              color: "#ccc", 
-              animation: "fadeIn 5.5s ease-in-out" 
-          }}>
-              &copy; 2025 EduBuddy. All rights reserved.
+      {/* Main container */}
+      <div className="container mx-auto px-4 mt-5">
+        {/* Team section */}
+        <h3 className="mb-4 text-white text-2xl">Core Team</h3>
+        <hr className="border-gray-600 mb-5" />
+        
+{/* Team members grid */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+  {teamMembers.map((member, index) => (
+    <div key={index} className="flex justify-center">
+      {/* Team member card */}
+      <div 
+        className="w-[17rem] h-[17.5rem] rounded-lg bg-zinc-800 
+        transition-all duration-500 hover:bg-gradient-to-br hover:from-purple-700 
+        hover:to-purple-900 flex flex-col items-center p-3 transform hover:scale-105"
+      >
+        <div className="w-[10rem] h-[10rem] rounded-full overflow-hidden border-3 border-white shadow-lg mb-3">
+  <img
+    src={member.image}
+    alt={`${member.name}'s profile`}
+    className="w-full h-full object-cover"
+  />
+</div>
+        {/* Member details */}
+        <div className="flex flex-col items-center flex-grow">
+          <h5 className="text-white text-lg font-semibold">{member.name}</h5>
+          <p className="text-white text-sm mb-2">{member.role}</p>
+          {/* Social links */}
+          <div className="flex justify-center gap-5 mt-auto">
+            <a 
+              href={`mailto:${member.email}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-white hover:text-gray-300 transition-colors duration-300"
+            >
+              <i className="fas fa-envelope text-2xl"></i>
+            </a>
+            <a 
+              href={member.linkedin} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-white hover:text-gray-300 transition-colors duration-300"
+            >
+              <i className="fab fa-linkedin text-2xl"></i>
+            </a>
+            <a 
+              href={member.github} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-white hover:text-gray-300 transition-colors duration-300"
+            >
+              <i className="fab fa-github text-2xl"></i>
+            </a>
           </div>
         </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
+
+        {/* About content section */}
+        <div className="mt-20 mx-auto max-w-6xl bg-gradient-to-br from-neutral-700 
+        to-zinc-800 rounded-lg shadow-2xl p-8 text-white">
+          {/* Title */}
+          <h2 className="mb-8 text-4xl text-center font-bold animate-fade-in">
+            {content.title}
+          </h2>
+          
+          {/* Introduction */}
+          <p className="leading-relaxed mb-6 text-lg text-center animate-fade-in 
+          whitespace-pre-line">
+            {content.introduction}
+          </p>
+
+          {/* Features section */}
+          <h2 className="mb-6 text-3xl text-center text-white animate-fade-in">
+            What We Offer
+          </h2>
+          
+          {/* Features list */}
+          <ul className="mb-6 space-y-4">
+            {content.features.map((feature, index) => (
+              <li 
+                key={index}
+                className="text-lg transition-transform duration-200 hover:scale-102 
+                cursor-pointer animate-fade-in"
+              >
+                <strong className="text-white">{feature.title}:</strong>{' '}
+                <span className="whitespace-pre-line">{feature.details}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Benefits section */}
+          <h2 className="mb-6 text-3xl text-center text-white animate-fade-in">
+            Why Choose EduBuddy?
+          </h2>
+          
+          {/* Benefits list */}
+          <ul className="mb-6 space-y-4">
+            {content.benefits.map((benefit, index) => (
+              <li
+                key={index}
+                className="text-lg transition-transform duration-200 hover:scale-102 
+                cursor-pointer animate-fade-in"
+              >
+                <strong className="text-white">{benefit}</strong>
+              </li>
+            ))}
+          </ul>
+
+          {/* Call to action section */}
+          <h2 className="mb-6 text-3xl text-center animate-fade-in">
+            Join Us Today!
+          </h2>
+          
+          <p className="leading-relaxed mb-6 text-lg text-center animate-fade-in 
+          whitespace-pre-line">
+            {content.callToAction}
+          </p>
+          
+          {/* Slogan */}
+          <p className="italic text-lg text-center animate-fade-in">
+            <em>{content.slogan}</em>
+          </p>
+          
+          {/* Footer */}
+          <div className="mt-8 text-center text-gray-400 text-sm animate-fade-in">
+            &copy; 2025 EduBuddy. All rights reserved.
+          </div>
         </div>
+      </div>
     </div>
   );
 }

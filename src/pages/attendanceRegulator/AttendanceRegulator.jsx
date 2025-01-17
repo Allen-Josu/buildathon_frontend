@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
@@ -111,6 +111,33 @@ const AttendanceRegulator = () => {
   const [showModal, setShowModal] = useState(false);
   const [attendancePercentage, setAttendancePercentage] = useState(null);
 
+  useEffect(() => {
+    const fetchAttendanceData = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/attendance?entityType=all&studentId=24030482`
+        );
+        const attendanceResults = response.data.results;
+        const fetchedData = {};
+
+        attendanceResults.forEach((item) => {
+          const dateKey = item.leaveDate.split("T")[0];
+          fetchedData[dateKey] = {};
+          item.leavePerDay.forEach((leave) => {
+            fetchedData[dateKey][leave.time] = leave.reason;
+          });
+        });
+
+        setAttendanceData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching attendance data:", error);
+        alert("Failed to load attendance data.");
+      }
+    };
+
+    fetchAttendanceData();
+  }, []);
+
   const AttendanceForm = ({ onSubmit, selectedDate }) => {
     const timeSlots = [
       "9 to 10",
@@ -123,7 +150,6 @@ const AttendanceRegulator = () => {
 
     const dateKey = selectedDate.toISOString().split("T")[0];
 
-    // Initialize with existing data or defaults
     const [attendance, setAttendance] = useState(() => {
       if (attendanceData[dateKey]) {
         return attendanceData[dateKey];
@@ -158,7 +184,7 @@ const AttendanceRegulator = () => {
                   {slot}
                 </label>
                 <select
-                  value={attendance[slot]}
+                  value={attendance[slot] || "present"}
                   onChange={(e) =>
                     setAttendance((prev) => ({
                       ...prev,
@@ -186,7 +212,6 @@ const AttendanceRegulator = () => {
     );
   };
 
-  // Update handleAttendanceSubmit function
   const handleAttendanceSubmit = async (updatedAttendance) => {
     const dateStr = selectedDate.toISOString().split("T")[0];
 
@@ -199,23 +224,21 @@ const AttendanceRegulator = () => {
 
     const attendancePayload = {
       entity: "attendance",
-      entityId: uuid(),
-      username: "Roshin",
-      studentId: "24100242",
+      entityId: "24100242", // Replace this with the appropriate entityId
       leaveDate: dateStr,
-      leavePerDay: leavePerDay,
-      totalLeavePerDay: leavePerDay.length,
+      attributesToUpdate: {
+        leavePerDay: leavePerDay,
+      },
     };
 
-
     try {
-      const response = await axios.post(
-        `${BASE_URL}/attendance`,
+      const patchResponse = await axios.patch(
+        `${BASE_URL}/update-entity`,
         attendancePayload
       );
 
-      if (response.status !== 200) {
-        throw new Error("Failed to submit attendance");
+      if (patchResponse.status !== 200) {
+        throw new Error("Failed to update attendance");
       }
 
       setAttendanceData((prevData) => ({
@@ -224,9 +247,10 @@ const AttendanceRegulator = () => {
       }));
 
       setShowModal(false);
+      alert("Attendance successfully updated!");
     } catch (error) {
-      console.error("Error submitting attendance:", error);
-      alert("Failed to submit attendance. Please try again.");
+      console.error("Error updating attendance:", error);
+      alert("Failed to update attendance. Please try again.");
     }
   };
 
