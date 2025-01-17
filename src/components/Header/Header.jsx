@@ -1,91 +1,90 @@
-import { useState } from 'react'; // Import useState for handling menu toggle
+import React from 'react';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for toggling the menu on small screens
-
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen); // Toggle the menu open/close state
-  };
-
+function Header() {
   return (
-    <div>
-      <header className=" flex justify-between items-center p-4 border-b-2 border-gray-400 bg-[#27272a]">
-        <h1 className="text-white text-2xl font-medium">
-          <a
-            href="/"
-            className="text-gray-300 no-underline hover:text-blue-800 transition-all duration-300 ease-in-out transform hover:scale-105"
-          >
-            Edubuddy
-          </a>
-        </h1>
-
-        {/* Mobile Hamburger Menu Icon */}
-        <button
-          onClick={handleMenuToggle}
-          className="block lg:hidden text-white text-3xl"
+    <Navbar 
+      expand="lg" 
+      className="bg-zinc-800 border-b-2 border-gray-600 py-2"
+    >
+      <Container className="px-2">
+        <Navbar.Brand 
+          as={Link} 
+          to="/" 
+          style={{
+            fontFamily: 'sans-serif',
+            fontSize: '1.8rem',
+            fontWeight: 'bold',
+            color: 'white',
+            letterSpacing: '0.15rem',
+          }}
         >
-          &#9776;
-        </button>
+          EduBuddy
+        </Navbar.Brand>
+        
+        {/* Fix for the toggle icon */}
+        <Navbar.Toggle 
+          aria-controls="basic-navbar-nav"
+          className="border-white"
+          style={{
+            color: 'white',
+            borderColor: 'white', // Ensure border is visible
+          }}
+        >
+          <span className="navbar-toggler-icon"><i className="fas fa-bars" style={{ color: 'white', fontSize: '1.5rem' }}></i></span>
+        </Navbar.Toggle>
+        
+        <Navbar.Collapse id="basic-navbar-nav" className="pl-4 sm:pl-4">
+  <Nav 
+    className="mx-auto space-y-2 lg:space-y-0 lg:gap-6 md:gap-4 sm:gap-2" // Adjust gap dynamically
+  >
+    {['Notes', 'Grade Predictor', 'Model Question Paper', 'PYQ', 'Attendance Calculator', 'About'].map((item, index) => (
+      <Nav.Link 
+        key={index}
+        as={Link} 
+        to={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
+        className="text-white transition-all font-medium text-xl relative group py-2"
+        style={{
+          '--hover-color': '#6a0dad', // Default hover color
+          transition: 'all 0.3s ease',
+        }}
+      >
+        {item}
+        <span 
+          className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-500 transition-all group-hover:w-full"
+          style={{ backgroundColor: 'var(--hover-color)' }}
+        ></span>
+      </Nav.Link>
+    ))}
+  </Nav>
 
-        {/* Navigation Menu */}
-        <nav className={`lg:block ${isMenuOpen ? "block" : "hidden"} lg:flex`}>
-          <ul className="flex flex-col lg:flex-row gap-6 lg:gap-24">
-            <li>
-              <a
-                href="/notes"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Notes
-              </a>
-            </li>
-            <li>
-              <a
-                href="/grade"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Grade Predictor
-              </a>
-            </li>
-            <li>
-              <a
-                href="/model-question-generator"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Model Question Paper
-              </a>
-            </li>
-            <li>
-              <a
-                href="/pyq"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                PYQ
-              </a>
-            </li>
-            <li>
-              <a
-                href="/attendance"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Attendance Calculator
-              </a>
-            </li>
-            <li>
-              <a
-                href="/about"
-                className="no-underline text-gray-300 hover:text-blue-800 font-medium transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                About
-              </a>
-            </li>
-          </ul>
-        </nav>
+  <Link to="/login">
+    <Button
+      className="btn px-3 py-1"
+      style={{
+        backgroundColor: '#6a0dad', // Replace this with the user-defined color
+        color: '#ffffff', // White text color
+        border: 'none',
+        transition: 'all 0.3s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.backgroundColor = '#ffffff'; // Slightly darker on hover
+        e.target.style.color = '#000000'; // Keep text color white
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.backgroundColor = '#6a0dad'; // Revert to user-defined color
+        e.target.style.color = '#ffffff'; // Ensure text stays white
+      }}
+    >
+      Login
+    </Button>
+  </Link>
+</Navbar.Collapse>
 
-        {/* Sign In Button */}
-        <button className="px-4 py-2 text-gray-300 font-medium text-lg border border-gray-300 rounded-md cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-800 hover:border-blue-800 transform hover:scale-105">
-          Sign In
-        </button>
-      </header>
-    </div>
+      </Container>
+    </Navbar>
   );
 }
+
+export default Header;
