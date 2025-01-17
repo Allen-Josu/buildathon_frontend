@@ -12,8 +12,7 @@ import AddUserDrawer from "../admin/drawer/add-user";
 import ViewDepartment from "../admin/drawer/view-department";
 import AddDepartment from "../admin/drawer/add-department";
 import EditDepartment from "../admin/drawer/edit-department";
-import About from "../components/Dashboard/HomeDashboard/About/About";
-
+import About from "../pages/About/About"
 import GradePredictor from "../pages/gradePredictor/gradePredictor";
 
 import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
