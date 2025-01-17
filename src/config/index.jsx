@@ -14,6 +14,6 @@ export const routePath = {
     editDepartment: "edit-department",
     about: "about",
     modelQuestionGenerator: "model-question-paper",
-    gradePredictor: "grade-predictor",
+    gradePredictor: "grade-Calculator",
     attendanceRegulator: "attendance-calculator"
 }
