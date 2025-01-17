@@ -9,11 +9,12 @@ import { v4 as uuid } from "uuid";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }) {
+export default function Modals({ isModalOpen, setIsModalOpen, title, setRefresh }) {
   const [responseData, setResponseData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
+
   const [data, setData] = useState({
     department: "",
     course: "",
@@ -24,6 +25,10 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }
     url: ""
   });
 
+  const handleRefresh = () => {
+    setRefresh(prev => prev + 1);
+  };
+
   const resetDependentFields = () => {
     setCourses([]);
     setSubjects([]);
@@ -32,7 +37,10 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }
       course: "",
       semester: "",
       subjectName: "",
-      subjectCode: "" // Reset subjectCode as well
+      subjectCode: "",
+      department: "",
+      description: "",
+      url: ""
     }));
   };
 
@@ -136,7 +144,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }
       if (response.status === 200) {
         setIsModalOpen(false);
         resetDependentFields();
-        onSuccess?.();
+        handleRefresh()
       }
     } catch (error) {
       console.error("Error submitting document:", error);
@@ -216,7 +224,6 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, onSuccess }
               type="primary"
               style={{ background: "#6d28d9", width: "100%" }}
               onClick={handleSubmit}
-              disabled={!data.department || !data.course || !data.semester || !data.subjectName}
             >
               Submit
             </Button>

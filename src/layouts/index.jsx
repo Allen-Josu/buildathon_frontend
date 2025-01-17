@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, Flex, Layout, Select } from "antd";
+import { Button, Flex, Layout, Select, Spin } from "antd";
 import { Album, ChevronRight, Heart, User2 } from "lucide-react";
 import Sider from "antd/es/layout/Sider";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ const layoutStyle = {
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-export default function PageLayout({ title, data }) {
+export default function PageLayout({ title, entity }) {
 	const [menuData, setMenuData] = useState({
 		course: "MCA",
 		semester: "I_Semester",
@@ -26,54 +26,10 @@ export default function PageLayout({ title, data }) {
 	const [active, setActive] = useState("");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isLiked, setIsLiked] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const [data, setData] = useState(null);
 	const [refresh, setRefresh] = useState(0);
-	const [updatingData, setUpdatingData] = useState({})
-	const [likedEntity, setLikedEntity] = useState("")
-	const handleRefresh = () => {
-		setRefresh(prev => prev + 1);
-	};
-
-	const handleLikeClick = (entityId) => {
-		setIsLiked(!isLiked);
-		setLikedEntity(entityId)
-	};
-
-	const updateLikes = (likes) => {
-		if (isLiked) {
-			setUpdatingData({
-				entity: "notes",
-				entityId: likedEntity,
-				attributesToUpdate: {
-					likes: likes + 1
-				}
-			})
-		}
-		else {
-			setUpdatingData({
-				entity: "notes",
-				entityId: likedEntity,
-				attributesToUpdate: {
-					likes: likes - 1
-				}
-			})
-		}
-
-
-		try {
-			const response = axios.patch(`${BASE_URL}/update-entity`, updatingData)
-			console.log(response);
-
-		}
-		catch (error) {
-			console.log(error);
-
-		}
-	}
-
-	useEffect(() => {
-	}, [isLiked])
-
 
 	const handleSubjectClick = (subjectLabel) => {
 		setActive(subjectLabel);
@@ -90,7 +46,22 @@ export default function PageLayout({ title, data }) {
 			}
 		}
 		fetchData()
-	}, [refresh])
+	}, [])
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setLoading(true);
+				const response = await axios.get(`${BASE_URL}/newEntity?entity=${entity}&entityType=all`);
+				setData(response.data.results);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchData();
+	}, [refresh, entity]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -108,16 +79,13 @@ export default function PageLayout({ title, data }) {
 					setActive(firstItem.subjects[0].subjectName);
 				}
 			} catch (error) {
-				console.error("Error fetching data:", error);
+				setError(error)
 			}
 		};
 		fetchData();
 	}, [menuData.course, menuData.semester, responseData]);
 
 	const filteredData = data?.filter((item) => item.subjectName === active);
-
-
-
 
 	return (
 		<>
@@ -197,30 +165,33 @@ export default function PageLayout({ title, data }) {
 									<p>{title}</p>
 									<p>Shared By</p>
 								</div>
-								{filteredData && filteredData.length > 0 ? (
-									<div className="space-y-4 mt-6 px-10  py-3">
+								{loading ? (
+									<div className="flex justify-center items-center h-64">
+										<Spin size="large" />
+									</div>
+								) : error ? (
+									<div className="flex justify-center items-center h-64 text-red-900 font-bold text-xl">
+										{error}
+									</div>
+								) : filteredData && filteredData.length > 0 ? (
+									<div className="space-y-4 mt-6 px-10 py-3">
 										{filteredData.map((item, index) => (
-											<>
-												<div
-													key={index}
-													className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
-                        border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
-                        cursor-pointer duration-300 ease-in  md:gap-0"
-												// onClick={() => window.location.href = item.url}
-												>
-													<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
-														<Album className="flex-shrink-0" />
-														<span className="break-words">{item.description}</span>
-													</div>
-													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-														<div className="flex gap-2 items-center" onClick={() => handleLikeClick(item.entityId, item.likes)}> {item.likes}<Heart fill={isLiked ? "#c1c3c8" : "none"} /></div>
-														<User2 className="flex-shrink-0" />
-														<span>{item.uploadedBy}</span>
-													</div>
-												</div >
-												<div className=" mt-2 w-6 pl-5">
+											<div
+												key={index}
+												className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
+												border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
+												cursor-pointer duration-300 ease-in md:gap-0"
+												onClick={() => window.location.href = item.url}
+											>
+												<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
+													<Album className="flex-shrink-0" />
+													<span className="break-words">{item.description}</span>
 												</div>
-											</>
+												<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
+													<User2 className="flex-shrink-0" />
+													<span>{item.uploadedBy}</span>
+												</div>
+											</div>
 										))}
 									</div>
 								) : (
@@ -232,10 +203,9 @@ export default function PageLayout({ title, data }) {
 						</Content>
 					</Layout>
 				</Layout>
-			</Flex >
+			</Flex>
 
-			<Modals title="notes" isModalOpen={isModalOpen} onSuccess={handleRefresh} setIsModalOpen={setIsModalOpen} />
-
+			<Modals title="notes" isModalOpen={isModalOpen} setRefresh={setRefresh} setIsModalOpen={setIsModalOpen} />
 		</>
 	);
 }

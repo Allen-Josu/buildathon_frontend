@@ -77,9 +77,8 @@ export default function AddDepartment() {
                 title="Add Department"
                 onClose={onClose}
                 open
-                headerStyle={{ padding: "30px 24px" }}
                 extra={
-                    <Space className="h-24">
+                    <Space >
                         <Button type="primary" onClick={handleSubmit} >
                             Submit
                         </Button>
