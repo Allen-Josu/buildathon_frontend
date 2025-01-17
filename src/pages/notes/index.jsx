@@ -2,6 +2,7 @@ import axios from 'axios';
 import PageLayout from '../../layouts';
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
+import { Spin } from 'antd';
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -26,7 +27,7 @@ export default function Notes() {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <div className='h-full bg-[28282a] flex justify-center items-center'><Spin /></div>;
   if (error) return <p>{error}</p>;
 
   return (
