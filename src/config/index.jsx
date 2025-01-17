@@ -3,6 +3,8 @@ export const routePath = {
     notes: "notes",
     dummy: "dummy",
     pyq: "pyq",
+    login: "login",
+    signup: "signup",
     admin: "admin",
     department: "department",
     users: "users",
