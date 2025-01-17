@@ -17,6 +17,8 @@ import GradePredictor from "../pages/gradePredictor/gradePredictor";
 
 import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
 import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
+import Signup from "../components/Auth/Signup/Signup";
+import Login from "../components/Auth/Login/Login";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +49,14 @@ export const router = createBrowserRouter([
     path: routePath.admin,
     element: <AdminHomePage />,
   },
+  {
+    path: routePath.login,
+    element: <Login />
+},
+{
+  path: routePath.signup,
+  element: <Signup />
+},
   {
     path: routePath.department,
     element: <DepartmentPage />,
