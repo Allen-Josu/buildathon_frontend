@@ -114,59 +114,72 @@ export default function QuestionPaperGenerator() {
   };
  
 
-const downloadPDF = () => {
-  if (questionPaper) {
-    const doc = new jsPDF({
-      unit: "pt", // Using points for better alignment
-      format: "a4", // Standard page size
-    });
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 40; // Margin for both sides
-    const contentWidth = pageWidth - margin * 2; // Content width
-
-    let yPosition = 60; // Initial Y position for text
-
-    doc.setFontSize(16);
-    doc.text(questionPaper.title, margin, yPosition, { maxWidth: contentWidth });
-    yPosition += 20;
-
-    doc.setFontSize(12);
-    doc.text(`Duration: ${questionPaper.duration}`, margin, yPosition, {
-      maxWidth: contentWidth,
-    });
-    yPosition += 20;
-
-    doc.text(`Maximum Marks: ${questionPaper.max_marks}`, margin, yPosition, {
-      maxWidth: contentWidth,
-    });
-    yPosition += 40;
-
-    questionPaper.sections.forEach((section, sectionIndex) => {
-      doc.setFontSize(14);
-      doc.text(
-        `${sectionIndex + 1}. ${section.name} (${section.marks_per_question} marks each)`,
-        margin,
-        yPosition,
-        { maxWidth: contentWidth }
-      );
-      yPosition += 20;
-
-      doc.setFontSize(12);
-      section.questions.forEach((question, questionIndex) => {
-        const text = `${questionIndex + 1}. ${question}`;
-        const lines = doc.splitTextToSize(text, contentWidth); // Split text into multiple lines
-        doc.text(lines, margin + 10, yPosition);
-        yPosition += lines.length * 14; // Increment Y position for each line
+  const downloadPDF = () => {
+    if (questionPaper) {
+      const doc = new jsPDF({
+        unit: "pt",
+        format: "a4",
       });
-
-      yPosition += 20; // Space between sections
-    });
-
-    // Save the PDF
-    doc.save(`${questionPaper.title}.pdf`);
-  }
-};
+  
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 40;
+      const contentWidth = pageWidth - margin * 2;
+  
+      let yPosition = 60;
+  
+      // Title
+      doc.setFontSize(16);
+      doc.text(questionPaper.title, pageWidth / 2, yPosition, { 
+        maxWidth: contentWidth,
+        align: "center"
+      });
+      yPosition += 30;
+  
+      // Duration and Marks
+      doc.setFontSize(12);
+      doc.text(`Duration: ${questionPaper.duration}`, pageWidth / 2, yPosition, {
+        maxWidth: contentWidth,
+        align: "center"
+      });
+      yPosition += 20;
+  
+      doc.text(`Maximum Marks: ${questionPaper.max_marks}`, pageWidth / 2, yPosition, {
+        maxWidth: contentWidth,
+        align: "center"
+      });
+      yPosition += 40;
+  
+      // Sections and Questions
+      questionPaper.sections.forEach((section) => {
+        // Section Header
+        doc.setFontSize(14);
+        doc.text(`${section.name}`, margin, yPosition, {
+          maxWidth: contentWidth
+        });
+        yPosition += 20;
+  
+        // Marks per question
+        doc.setFontSize(12);
+        doc.text(`(${section.marks_per_question} marks each)`, margin, yPosition, {
+          maxWidth: contentWidth
+        });
+        yPosition += 25;
+  
+        // Questions
+        doc.setFontSize(12);
+        section.questions.forEach((question) => {
+          const lines = doc.splitTextToSize(question, contentWidth - 20);
+          doc.text(lines, margin, yPosition);
+          yPosition += lines.length * 15; // Adjust line spacing
+        });
+  
+        yPosition += 20; // Space between sections
+      });
+  
+      // Save the PDF
+      doc.save(`${questionPaper.title}.pdf`);
+    }
+  };
 
 
   return (
@@ -287,14 +300,27 @@ const downloadPDF = () => {
                 <CardTitle className="text-xl font-bold">
                   Generated Question Paper
                 </CardTitle>
+                <div className="flex gap-4 ml-auto">
                 <Button
                   onClick={downloadPDF}
                   className="bg-[#6d28d9] hover:bg-[#5b21b6] text-white"
                   style={{background : "#6d28d9"}}
                 >
-                   <Download className="h-4 w-4 mr-2" /> 
+                   
                   Download PDF
                 </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setIsGenerated(false);
+                  }}
+                  className=" bg-[#6d28d9] hover:bg-[#6d28d9]"
+                  style={{background : "#6d28d9"}}
+
+                >
+                  Back
+                </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
@@ -327,11 +353,11 @@ const downloadPDF = () => {
                 ))}
               </div>
               </CardContent>
-
+              
             </Card>
           )}
 
-          {(extractedText.syllabus || extractedText.pyq) && isGenerated && (
+          {/* {(extractedText.syllabus || extractedText.pyq) && isGenerated && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl font-bold">
@@ -363,22 +389,8 @@ const downloadPDF = () => {
                     </Card>
                   </TabsContent>
                 </Tabs>
-              </CardContent>
-              <CardFooter className="flex justify-between gap-4">
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setIsGenerated(false);
-                  }}
-                  className="w-full bg-[#6d28d9] hover:bg-[#6d28d9]"
-                  style={{background : "#6d28d9"}}
-
-                >
-                  Back
-                </Button>
-              </CardFooter>
-            </Card>
-          )}
+              </CardContent> */}
+           
         </div>
       </div>
     </>
