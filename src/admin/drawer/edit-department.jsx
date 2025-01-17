@@ -1,12 +1,11 @@
 import { Button, Drawer, Form, Input, Select, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import Title from "antd/es/skeleton/Title";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { SemesterSelectOption } from "../constants";
 import { useEffect, useState } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
+import Title from "antd/es/typography/Title";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -14,16 +13,17 @@ export default function EditDepartment() {
     const navigate = useNavigate()
     const [data, setData] = useState(null)
     const [subjects, setSubjects] = useState([]);
-
+    const [form] = Form.useForm();
     const { entityId } = useParams()
-
-
-    console.log(entityId);
 
     const fetchData = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/departments?entity=departments&entityId=${entityId}`)
             setData(response.data.results)
+            setSubjects(response.data.results.subjects || [])
+            form.setFieldsValue({
+                subjects: response.data.results.subjects || []
+            });
         }
         catch (error) {
             console.log(error);
@@ -33,10 +33,6 @@ export default function EditDepartment() {
     useEffect(() => {
         fetchData()
     }, [])
-
-
-    console.log(data);
-
 
     const onClose = () => {
         navigate(-1);
@@ -56,23 +52,26 @@ export default function EditDepartment() {
         setSubjects(newSubjects);
     };
 
-    const isDuplicate = (responseData) => {
-        return responseData.some(item =>
-            item.semester === data.semester &&
-            item.department === data.department &&
-            item.course === data.course
-        );
+
+
+    const handleSubmit = async () => {
+        const updatingData = {
+            entity: "departments",
+            entityId,
+            attributesToUpdate: {
+                subjects: subjects
+            }
+        }
+        try {
+            const response = await axios.patch(`${BASE_URL}/update-entity`, updatingData)
+            response.status == 200 && onClose()
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
-    // const handleSubmit = async () => {
-    //     setData({ ...data, subjects, entityId: uuid(), entity: "departments" })
-    //     if (isDuplicate(responseData)) {
-    //         console.log("Error: Duplicate entry found");
-    //         return;
-    //     }
-    //     const response = await axios.post(`${BASE_URL}/departments`, data)
-    //     response.status == 200 && onClose()
-    // };
+
 
     return (
         <>
@@ -82,30 +81,52 @@ export default function EditDepartment() {
                 onClose={onClose}
                 open
                 extra={
-                    <Space >
-                        <Button type="primary"  >
+                    <Space>
+                        <Button onClick={handleSubmit} type="primary" style={{ background: "#6d28d9", border: "none" }}>
                             Submit
                         </Button>
                     </Space>
                 }
             >
-                <Space direction="vertical" className="w-full" >
-                    <Form layout="vertical" className="w-full">
+                <Space direction="vertical" className="w-full">
+                    <Form
+                        layout="vertical"
+                        className="w-full"
+                        form={form}
+                        initialValues={{
+                            subjects: subjects
+                        }}
+                    >
                         <FormItem label="Department">
-                            <Input value={data?.department} onChange={(e) => { setData({ ...data, department: e.target.value }) }} />
+                            <Input
+                                value={data?.department}
+                                disabled
+                            // onChange={(e) => { setData({ ...data, department: e.target.value }) }}
+                            />
                         </FormItem>
 
                         <FormItem label="Course">
-                            <Input value={data?.course} onChange={(e) => { setData({ ...data, course: e.target.value }) }} />
+                            <Input
+                                value={data?.course}
+                                disabled
+                            // onChange={(e) => { setData({ ...data, course: e.target.value }) }}
+                            />
                         </FormItem>
 
                         <FormItem label="Semester">
-                            <Select value={data?.semester} options={SemesterSelectOption} onChange={(value) => { setData({ ...data, semester: value }) }} />
+                            <Select
+                                value={data?.semester}
+                                disabled
+                                options={SemesterSelectOption}
+                            // onChange={(value) => { setData({ ...data, semester: value }) }}
+                            />
                         </FormItem>
 
                         <Title level={5}>Subjects</Title>
+
                         <Form.List
                             name="subjects"
+                            initialValue={subjects}
                         >
                             {(fields, { add, remove }, { errors }) => (
                                 <>
@@ -119,7 +140,7 @@ export default function EditDepartment() {
                                                 {...field}
                                                 validateTrigger={['onChange', 'onBlur']}
                                             >
-                                                <Space direction='horizontal' >
+                                                <Space direction='horizontal'>
                                                     <Input
                                                         placeholder="Subject Name"
                                                         onChange={(e) => handleFieldChange(index, 'subjectName', e.target.value)}
@@ -130,14 +151,12 @@ export default function EditDepartment() {
                                                         onChange={(e) => handleFieldChange(index, 'subjectCode', e.target.value)}
                                                         value={subjects[index]?.subjectCode || ''}
                                                     />
-                                                    {fields.length > 1 && (
-                                                        <MinusCircleOutlined
-                                                            onClick={() => {
-                                                                remove(field.name);
-                                                                handleRemove(index);
-                                                            }}
-                                                        />
-                                                    )}
+                                                    <MinusCircleOutlined
+                                                        onClick={() => {
+                                                            remove(field.name);
+                                                            handleRemove(index);
+                                                        }}
+                                                    />
                                                 </Space>
                                             </Form.Item>
                                         </Form.Item>
@@ -145,7 +164,10 @@ export default function EditDepartment() {
                                     <Form.Item>
                                         <Button
                                             type="dashed"
-                                            onClick={() => add()}
+                                            onClick={() => {
+                                                add();
+                                                setSubjects([...subjects, { subjectName: '', subjectCode: '' }]);
+                                            }}
                                             style={{
                                                 width: '100%',
                                             }}
@@ -160,7 +182,7 @@ export default function EditDepartment() {
                         </Form.List>
                     </Form>
                 </Space>
-            </Drawer >
+            </Drawer>
         </>
     )
 }

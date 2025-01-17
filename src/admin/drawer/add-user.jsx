@@ -41,7 +41,7 @@ export default function AddUserDrawer() {
             open
             extra={
                 <Space>
-                    <Button type="primary" onClick={onSubmit}>
+                    <Button type="primary" onClick={onSubmit} style={{ background: "#6d28d9", border: "none" }}>
                         Submit
                     </Button>
                 </Space>

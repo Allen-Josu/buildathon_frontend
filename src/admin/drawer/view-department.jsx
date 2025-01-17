@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Drawer, Space, Table } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -16,21 +15,18 @@ export default function ViewDepartment() {
         navigate(-1);
     };
 
-
-
-    const fetchData = async () => {
-
-        try {
-            const response = await axios.get(`${BASE_URL}/departments?entity=departments&entityId=${entityId}`)
-            setData(response.data.results)
-        }
-        catch (error) {
-            console.log(error);
-
-        }
-    }
-
     useEffect(() => {
+        const fetchData = async () => {
+
+            try {
+                const response = await axios.get(`${BASE_URL}/departments?entity=departments&entityId=${entityId}`)
+                setData(response.data.results)
+            }
+            catch (error) {
+                console.log(error);
+
+            }
+        }
         fetchData()
     }, [entityId])
 

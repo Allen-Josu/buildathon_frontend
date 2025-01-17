@@ -79,7 +79,7 @@ export default function AddDepartment() {
                 open
                 extra={
                     <Space >
-                        <Button type="primary" onClick={handleSubmit} >
+                        <Button type="primary" onClick={handleSubmit} style={{ background: "#6d28d9", border: "none" }}>
                             Submit
                         </Button>
                     </Space>

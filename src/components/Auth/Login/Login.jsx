@@ -14,40 +14,30 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show loading state
-    setError(''); // Clear previous errors
+    setLoading(true);
+    setError('');
 
     try {
-      // Replace with your backend login API endpoint
-console.log(studentId,password);
+      console.log(studentId, password);
 
-const response = await axios.get(`${BASE_URL}/users?entity=users`, {
-  params: {
-    studentId: studentId,
-    password: password,
-  },
-});
+      const response = await axios.get(`${BASE_URL}/users?entity=users`, {
+        params: {
+          studentId: studentId,
+          password: password,
+        },
+      });
 
       console.log(response.status);
-      
 
-      // Assuming the API returns a success message and token
-      // const { token } = response.data;
-
-      // Save token in localStorage or context
-      // localStorage.setItem('authToken', token);
-
-      // Redirect to the home page
       alert('Login successful!');
       navigate('/');
     } catch (err) {
-      // Handle errors and set error messages
       setError(
         err.response?.data?.message ||
         'Login failed. Please check your credentials and try again.'
       );
     } finally {
-      setLoading(false); // Hide loading state
+      setLoading(false);
     }
   };
 
@@ -55,94 +45,138 @@ const response = await axios.get(`${BASE_URL}/users?entity=users`, {
     <div>
       <Header />
       <div
-      style={{
-        backgroundColor: 'black',
-        minHeight: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '2rem',
-      }}
-    >
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-6 col-lg-4">
+        style={{
+          backgroundColor: '#27272A',
+          minHeight: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2rem',
+        }}
+      >
+        <div
+          className="card shadow-lg"
+          style={{
+            maxWidth: '400px',
+            width: '100%',
+            backgroundColor: '#ffffff',
+            borderRadius: '15px',
+            padding: '2rem',
+          }}
+        >
+          <h2
+            className="text-center pb-4"
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 'bold',
+              color: '#6d28d9',
+            }}
+          >
+            Login
+          </h2>
+          {error && (
             <div
-              className="card"
+              className="alert alert-danger"
               style={{
-                backgroundColor: 'white',
-                color: 'black',
-                borderRadius: '10px',
+                fontSize: '0.875rem',
+                marginBottom: '1rem',
+                borderRadius: '8px',
+                padding: '0.75rem',
               }}
             >
-              <div className="card-body">
-                <h2 className="card-title text-center pb-4">Login</h2>
-                {error && <div className="alert alert-danger">{error}</div>}
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="studentId" className="form-label">
-                      Student ID
-                    </label>
-                    <input
-                      type="text"
-                      autoComplete="off"
-                      className="form-control"
-                      value={studentId}
-                      id="studentId"
-                      onChange={(e) => setStudentId(e.target.value)}
-                      style={{
-                        backgroundColor: '#f1f1f1',
-                        border: '1px solid #6a0dad', // Added border
-                        borderRadius: '5px', // Optional: adds rounded corners
-                      }}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      autoComplete="current-password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      style={{
-                        backgroundColor: '#f1f1f1',
-                        border: '1px solid #6a0dad', // Added border
-                        borderRadius: '5px', // Optional: adds rounded corners
-                      }}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn w-100 mt-4"
-                    style={{
-                      backgroundColor: '#6a0dad',
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}
-                    disabled={loading}
-                  >
-                    {loading ? 'Logging in...' : 'Login'}
-                  </button>
-                </form>
-                <div className="mt-3 text-center">
-                  <p>
-                    Don't have an account? Register your account{' '}
-                    <Link to="/signup" style={{ color: '#6a0dad', fontWeight: 'bold' }}>
-                      here
-                    </Link>
-                  </p>
-                </div>
-              </div>
+              {error}
             </div>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label
+                htmlFor="studentId"
+                className="form-label"
+                style={{ fontWeight: '500', color: '#333' }}
+              >
+                Student ID
+              </label>
+              <input
+                type="text"
+                autoComplete="off"
+                className="form-control"
+                value={studentId}
+                id="studentId"
+                onChange={(e) => setStudentId(e.target.value)}
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  border: '2px solid #6d28d9',
+                  borderRadius: '8px',
+                  padding: '0.75rem',
+                  fontSize: '1rem',
+                }}
+              />
+            </div>
+            <div className="mb-3">
+              <label
+                htmlFor="password"
+                className="form-label"
+                style={{ fontWeight: '500', color: '#333' }}
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                autoComplete="current-password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  border: '2px solid #6d28d9',
+                  borderRadius: '8px',
+                  padding: '0.75rem',
+                  fontSize: '1rem',
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn w-100 mt-4"
+              style={{
+                backgroundColor: '#6d28d9',
+                color: '#fff',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                padding: '0.75rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+              }}
+              disabled={loading}
+            >
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+          <div
+            className="mt-3 text-center"
+            style={{
+              fontSize: '0.9rem',
+              marginTop: '1.5rem',
+            }}
+          >
+            <p>
+              Don't have an account?{' '}
+              <Link
+                to="/signup"
+                style={{
+                  color: '#6d28d9',
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
+                }}
+              >
+                Register here
+              </Link>
+            </p>
           </div>
         </div>
       </div>
     </div>
-    </div>   
   );
 }
 

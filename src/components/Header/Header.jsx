@@ -41,7 +41,7 @@ function Header() {
         <Nav 
   className="mx-auto space-y-2 lg:space-y-0 lg:gap-6 md:gap-4 sm:gap-2"
 >
-  {['Notes', 'Grade Predictor', 'Model Question Paper', 'PYQ', 'Attendance Calculator', 'About'].map((item, index) => (
+  {['Notes', 'Grade Calculator', 'Model Question Paper', 'PYQ', 'Attendance Calculator', 'About'].map((item, index) => (
     <Nav.Link 
       key={index}
       as={Link} 
