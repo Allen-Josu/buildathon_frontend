@@ -1,7 +1,17 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUserStore } from '../../store/userStore';
 
 export default function Header() {
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    clearUser();
+    navigate("/")
+  }
+
   return (
     <Navbar
       expand="lg"
@@ -62,30 +72,55 @@ export default function Header() {
               </Nav.Link>
             ))}
           </Nav>
-          <Link to="/login">
-            <Button
-              className="btn px-3 py-1"
-              style={{
-                backgroundColor: '#6d28d9', // Replace this with the user-defined color
-                color: '#ffffff', // White text color
-                border: 'none',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#ffffff'; // Slightly darker on hover
-                e.target.style.color = '#000000'; // Keep text color white
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#6d28d9'; // Revert to user-defined color
-                e.target.style.color = '#ffffff'; // Ensure text stays white
-              }}
-            >
-              Login
-            </Button>
-          </Link>
-        </Navbar.Collapse>
+          {
+            user ? <>
 
+              <Button
+                className="btn px-3 py-1"
+                style={{
+                  backgroundColor: '#6d28d9', // Replace this with the user-defined color
+                  color: '#ffffff', // White text color
+                  border: 'none',
+                  transition: 'all 0.3s ease',
+                }}
+                onClick={handleLogout}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#ffffff'; // Slightly darker on hover
+                  e.target.style.color = '#000000'; // Keep text color white
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#6d28d9'; // Revert to user-defined color
+                  e.target.style.color = '#ffffff'; // Ensure text stays white
+                }}
+              >
+                Logout
+              </Button>
+            </> : <>
+              <Link to="/login">
+                <Button
+                  className="btn px-3 py-1"
+                  style={{
+                    backgroundColor: '#6d28d9', // Replace this with the user-defined color
+                    color: '#ffffff', // White text color
+                    border: 'none',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#ffffff'; // Slightly darker on hover
+                    e.target.style.color = '#000000'; // Keep text color white
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = '#6d28d9'; // Revert to user-defined color
+                    e.target.style.color = '#ffffff'; // Ensure text stays white
+                  }}
+                >
+                  Login
+                </Button>
+              </Link>
+            </>
+          }
+        </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </Navbar >
   );
 }
