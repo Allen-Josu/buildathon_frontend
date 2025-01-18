@@ -28,12 +28,12 @@ export default function Card1() {
     {
       title: "Model Questions",
       icon: Book,
-      path: "/model-question-generator",
+      path: "/model-question-paper",
     },
     {
       title: "Grade Calculator",
       icon: Calculator,
-      path: "/grade",
+      path: "/grade-calculator",
     },
   ];
 
