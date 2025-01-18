@@ -1,6 +1,6 @@
 import "../../css/homePage.css";
-import HomeDashboard from "../../components/Dashboard/HomeDashboard/HomeDashboard";
 import Header from "../../components/Header/Header";
+import HomeDashboard from "../../components/Dashboard";
 
 export default function Home() {
   return (

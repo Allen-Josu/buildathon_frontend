@@ -9,7 +9,7 @@ import {
   Paperclip,
 } from "lucide-react";
 
-function Card1() {
+export default function Card1() {
   const cardMenu = [
     {
       title: "Notes",
@@ -24,17 +24,17 @@ function Card1() {
     {
       title: "Attendance",
       icon: BookCheckIcon,
-      path:"/attendance",
+      path: "/attendance",
     },
     {
       title: "Model Questions",
       icon: Book,
-      path:"/model-question-generator",
+      path: "/model-question-generator",
     },
     {
       title: "Grade Calculator",
       icon: Calculator,
-      path:"/grade",
+      path: "/grade",
     },
   ];
 
@@ -135,13 +135,13 @@ function Card1() {
         {cardMenu.slice(0, 3).map((item, index) => (
           <Col xs={24} sm={12} md={8} key={index}>
             <Link to={item.path} style={{ textDecoration: 'none' }}>
-            {/* Using responsive grid system for flexibility */}
-            <Card className="card text-white border-white">
-              <div className="box">
-                <item.icon style={{ color: "white" }} size={28} />
-                <h6 style={{ color: 'white' }}>{item.title}</h6>
-              </div>
-            </Card>
+              {/* Using responsive grid system for flexibility */}
+              <Card className="card text-white border-white">
+                <div className="box">
+                  <item.icon style={{ color: "white" }} size={28} />
+                  <h6 style={{ color: 'white' }}>{item.title}</h6>
+                </div>
+              </Card>
             </Link>
           </Col>
 
@@ -152,13 +152,13 @@ function Card1() {
         {cardMenu.slice(3).map((item, index) => (
           <Col xs={24} sm={12} md={8} key={index}>
             <Link to={item.path} style={{ textDecoration: 'none' }}>
-            {/* Using responsive grid system for flexibility */}
-            <Card className="card bg-[#27272a] text-white border-white ">
-              <div className="box">
-              <item.icon style={{ color: "white" }} size={28} />
-                <h6 style={{ color: 'white' }}>{item.title}</h6>
-              </div>
-            </Card>
+              {/* Using responsive grid system for flexibility */}
+              <Card className="card bg-[#27272a] text-white border-white ">
+                <div className="box">
+                  <item.icon style={{ color: "white" }} size={28} />
+                  <h6 style={{ color: 'white' }}>{item.title}</h6>
+                </div>
+              </Card>
             </Link>
           </Col>
         ))}
@@ -166,5 +166,3 @@ function Card1() {
     </div>
   );
 }
-
-export default Card1;
