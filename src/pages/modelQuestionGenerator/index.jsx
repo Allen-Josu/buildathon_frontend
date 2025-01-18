@@ -11,7 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
+
 
 export default function QuestionPaperGenerator() {
   const [files, setFiles] = useState({ syllabus: null, pyq: null });
@@ -110,7 +111,7 @@ export default function QuestionPaperGenerator() {
       doc.text(`Duration: ${questionPaper.duration}`, margin, yPosition);
       doc.text(`Maximum Marks: ${questionPaper.max_marks}`, pageWidth - margin, yPosition, { align: "right" });
       yPosition += 40;
-  
+
       // Sections and Questions
       questionPaper.sections.forEach((section) => {
         if (yPosition + 60 > pageHeight) {
@@ -139,7 +140,7 @@ export default function QuestionPaperGenerator() {
           doc.text(lines, margin, yPosition);
           yPosition += lines.length * 15 + 10; // Line height + spacing
         });
-  
+
         yPosition += 20; // Space between sections
       });
   
@@ -298,6 +299,7 @@ export default function QuestionPaperGenerator() {
           )}
         </div>
       </div>
+
     </>
   );
 }

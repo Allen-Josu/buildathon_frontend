@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-key */
-import { Button, Dropdown, Table } from "antd";
+import { Button, Dropdown } from "antd";
 import AdminPageLayout from "../../layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MoreOutlined } from '@ant-design/icons';
 import { routePath } from "../../../config";
+import EduBuddyTable from "../../layout/table";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -60,7 +61,8 @@ export default function DepartmentPage() {
                                 label: 'Edit',
                                 onClick: () => navigate(`${routePath.editDepartment}/${record.entityId}`)
                             }
-                        ]
+                        ],
+                        style: { width: "100px", textAlign: "center" }
                     }}
                     trigger={['click']}
                 >
@@ -92,6 +94,7 @@ export default function DepartmentPage() {
             actions={[
                 <Button
                     type="primary"
+                    style={{ background: "#6d28d9", border: "none" }}
                     onClick={() => navigate(routePath.addDepartment)}
                 >
                     Add Department
@@ -99,12 +102,10 @@ export default function DepartmentPage() {
             ]}
         >
             <div className="h-full flex flex-col">
-                <Table
-                    dataSource={data}
+                <EduBuddyTable
+                    data={data}
                     columns={columns}
                     loading={loading}
-                    rowKey="entityId"
-                    scroll={{ y: 'calc(100vh - 250px)' }}
                 />
                 <Outlet />
             </div>

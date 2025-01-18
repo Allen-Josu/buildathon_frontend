@@ -5,100 +5,135 @@ import PageNotFound from "../pages/notFound";
 import Notes from "../pages/notes";
 
 import PreviousYear from "../pages/previousYearQuestions";
-import AdminHomePage from "../admin/pages/home";
 import DepartmentPage from "../admin/pages/department";
 import UsersPage from "../admin/pages/users";
 import AddUserDrawer from "../admin/drawer/add-user";
 import ViewDepartment from "../admin/drawer/view-department";
 import AddDepartment from "../admin/drawer/add-department";
 import EditDepartment from "../admin/drawer/edit-department";
-import About from "../pages/About/About"
+import About from "../pages/about";
 import GradePredictor from "../pages/gradePredictor/gradePredictor";
 
 import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
-import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
-import Signup from "../components/Auth/Signup/Signup";
-import Login from "../components/Auth/Login/Login";
+import Signup from "../pages/signup";
+import Login from "../pages/login/login";
+import ViewUser from "../admin/drawer/view-user";
+import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
+import AdminLogin from "../admin/pages/login";
+import ProtectedRoute from "../admin/components/protectedRoute";
+import UserProtectedRoute from "../components/protectedRoute";
 
 export const router = createBrowserRouter([
-  {
-    path: routePath.home,
-    element: <Home />,
-  },
-  {
-    path: routePath.notes,
-    element: <Notes />,
-  },
-  {
-    path: routePath.dummy,
-    element: <AdminHomePage />,
-  },
-  {
-    path: routePath.pyq,
-    element: <PreviousYear />,
-  },
-  {
-    path: routePath.gradePredictor,
-    element: <GradePredictor />,
-  },
-  {
-    path: routePath.attendanceRegulator,
-    element: <AttendanceRegulator />,
-  },
-  {
-    path: routePath.admin,
-    element: <AdminHomePage />,
-  },
-  {
-    path: routePath.login,
-    element: <Login />
-},
-{
-  path: routePath.signup,
-  element: <Signup />
-},
-  {
-    path: routePath.department,
-    element: <DepartmentPage />,
-    children: [
-      {
-        path: `${routePath.viewDepartment}/:entityId`,
-        element: <ViewDepartment />,
-      },
-      {
-        path: routePath.addDepartment,
-        element: <AddDepartment />,
-      },
-      {
-        path: `${routePath.editDepartment}/:entityId`,
-        element: <EditDepartment />,
-      },
-    ],
-  },
-  {
-    path: routePath.department,
-    element: <DepartmentPage />,
-  },
-  {
-    path: routePath.users,
-    element: <UsersPage />,
-    children: [
-      {
-        path: `${routePath.addUser}`,
-        element: <AddUserDrawer />,
-      },
-    ],
-  },
-  {
-    path: routePath.about,
-    element: <About />,
-  },
-  {
-    path: routePath.modelQuestionGenerator,
-    element: <QuestionPaperGenerator />,
-  },
-  {
-    path: "*",
-    element: <PageNotFound />,
-  },
+    {
+        path: routePath.home,
+        element: <Home />,
+    },
+    {
+        path: routePath.notes,
+        element: <Notes />,
+    },
+    {
+        path: routePath.pyq,
+        element: <PreviousYear />,
+    },
+    {
+        path: routePath.gradePredictor,
+        element: <GradePredictor />,
+    },
+    {
+        path: routePath.attendanceRegulator,
+        element: (
+            <UserProtectedRoute>
+                <AttendanceRegulator />
+            </UserProtectedRoute>
+        ),
+    },
+    {
+        path: routePath.adminLogin,
+        element: <AdminLogin />,
+    },
+    {
+        path: routePath.login,
+        element: <Login />,
+    },
+    {
+        path: routePath.signup,
+        element: <Signup />,
+    },
+    {
+        path: routePath.about,
+        element: <About />,
+    },
+    {
+        path: routePath.modelQuestionGenerator,
+        element: (
+            <UserProtectedRoute>
+                <QuestionPaperGenerator />
+            </UserProtectedRoute>
+        ),
+    },
+    {
+        path: routePath.department,
+        element: (
+            <ProtectedRoute>
+                <DepartmentPage />
+            </ProtectedRoute>
+        ),
+        children: [
+            {
+                path: `${routePath.viewDepartment}/:entityId`,
+                element: (
+                    <ProtectedRoute>
+                        <ViewDepartment />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: routePath.addDepartment,
+                element: (
+                    <ProtectedRoute>
+                        <AddDepartment />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: `${routePath.editDepartment}/:entityId`,
+                element: (
+                    <ProtectedRoute>
+                        <EditDepartment />
+                    </ProtectedRoute>
+                ),
+            },
+        ],
+    },
+    {
+        path: routePath.users,
+        element: (
+            <ProtectedRoute>
+                <UsersPage />
+            </ProtectedRoute>
+        ),
+        children: [
+            {
+                path: `${routePath.addUser}`,
+                element: (
+                    <ProtectedRoute>
+                        <AddUserDrawer />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: `${routePath.viewUser}/:entityId`,
+                element: (
+                    <ProtectedRoute>
+                        <ViewUser />
+                    </ProtectedRoute>
+                ),
+            },
+        ],
+    },
+    {
+        path: "*",
+        element: <PageNotFound />,
+    },
 ]);

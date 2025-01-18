@@ -1,7 +1,8 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../../Header/Header';
+import Header from '../../components/Header';
+import { useUserStore } from '../../store/userStore';
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -11,6 +12,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,19 +20,10 @@ function Login() {
     setError('');
 
     try {
-      console.log(studentId, password);
-
-      const response = await axios.get(`${BASE_URL}/users?entity=users`, {
-        params: {
-          studentId: studentId,
-          password: password,
-        },
-      });
-
-      console.log(response.status);
-
+      const response = await axios.post(`${BASE_URL}/users/login?role=user`, { studentId, password })
+      setUser(response.data.results)
       alert('Login successful!');
-      navigate('/');
+      navigate("/")
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -161,7 +154,7 @@ function Login() {
             }}
           >
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 to="/signup"
                 style={{

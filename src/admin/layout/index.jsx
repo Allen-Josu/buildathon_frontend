@@ -3,7 +3,10 @@ import { Flex, Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { ChevronRight } from "lucide-react";
 import { menuItems } from "../constants";
-
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { useAuthStore } from "../../store/userStore";
 
 const { Content } = Layout;
 const layoutStyle = {
@@ -12,51 +15,81 @@ const layoutStyle = {
     height: "100vh",
 };
 
+export default function AdminPageLayout({ title, actions, children }) {
+    const [active, setActive] = useState(title);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const clearAdmin = useAuthStore((state) => state.clearAdmin);
 
-export default function AdminPageLayout({ title, actions, setActive, active, children }) {
+    // Function to convert URL pathname to title format
+    const getFormattedTitle = (pathname) => {
+        // Remove leading slash and capitalize first letter
+        const formatted = pathname.substring(1).charAt(0).toUpperCase() +
+            pathname.slice(2).toLowerCase();
+        return formatted;
+    };
 
+    // Set active state based on URL on component mount and URL changes
+    useEffect(() => {
+        const currentTitle = getFormattedTitle(location.pathname);
+        setActive(currentTitle);
+    }, [location.pathname]);
 
-    const handleActive = (label) => {
-        setActive(label)
+    const handleClick = (label) => {
+        // Convert title to URL format (lowercase with leading slash)
+        const path = `/${label.toLowerCase()}`;
+        navigate(path);
+        setActive(label);
+    };
+
+    const handleLogout = () => {
+        clearAdmin()
+        navigate("/admin-login")
     }
-
-
 
     return (
         <Flex gap="middle" wrap="wrap" className="min-h-screen">
-
             <Layout style={layoutStyle}>
-                <Layout >
+                <div className="w-full lg:h-24 md:h-32 flex items-center justify-between bg-[#27272a] px-10 border-b-2 border-[#c1c3c8]">
+                    <p className="text-[#c1c3c8] text-xl font-bold ">Administrator</p>
+                    <Button type="primary" style={{ background: "#393939", border: "1px solid #6d28d9" }}
+                        onClick={handleLogout}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = '#6d28d9'; // Slightly darker on hover
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = '#393939'; // Revert to user-defined color
+                        }}>Logout</Button>
+                </div>
+                <Layout>
                     <Sider
                         width="25%"
-                        className="bg-[#27272a] border-r-2 border-[#c1c3c8] flex flex-col gap-28 h-full "
+                        className="bg-[#27272a] border-r-2 border-[#c1c3c8] flex flex-col gap-28 h-full"
                     >
                         <div className="p-4 flex flex-col w-full gap-6 border-r-2 h-full border-[#393939] overflow-y-auto">
-                            {
-                                menuItems.map((item, index) => (
-                                    <>
-                                        <div
-                                            onClick={() => handleActive(item.title)}
-                                            key={index}
-                                            className={`flex justify-between items-center w-full p-3  border-b-2 border-[#393939] hover:bg-[#6d28d9]  cursor-pointer transition duration-300 ease-in rounded-lg ${active === item.title ? "bg-[#6d28d9]" : ""}`}>
-                                            <h4 className="text-[#c1c3c8] text-sm md:text-base">{item.title}</h4>
-                                            <ChevronRight className="text-white" />
-                                        </div>
-                                    </>
-                                ))
-                            }
+                            {menuItems.map((item, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleClick(item.title)}
+                                    className={`flex justify-between items-center w-full p-3 border-b-2 border-[#393939] hover:bg-[#6d28d9] cursor-pointer transition duration-300 ease-in rounded-lg ${active === item.title ? "bg-[#6d28d9]" : ""
+                                        }`}
+                                >
+                                    <h4 className="text-[#c1c3c8] text-sm md:text-base">
+                                        {item.title}
+                                    </h4>
+                                    <ChevronRight className="text-white" />
+                                </div>
+                            ))}
                         </div>
                     </Sider>
                     <Content className="bg-[#27272a] min-h-screen w-full px-5 text-white flex flex-col gap-4">
-                        <div className="bg-[#393939] w-full h-24 mt-5 rounded-lg flex justify-between items-center px-3">
-                            <p className="font-bold text-xl ">{title}</p>
+                        <div className="bg-[#393939] w-full h-28 mt-5 rounded-lg flex justify-between items-center px-3">
+                            <p className="font-bold text-xl">{title}</p>
                             <div>
-                                {
-                                    actions && actions.map((item) => (item))
-                                }
+                                {actions && actions.map((item) => item)}
                             </div>
                         </div>
-                        <div className="bg-[#393939] w-full h-full mb-5 rounded-lg   p-4">
+                        <div className="bg-[#393939] w-full h-full mb-5 rounded-lg p-4">
                             {children}
                         </div>
                     </Content>

@@ -1,7 +1,7 @@
 import PageLayout from "../../layouts";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 
 export default function PreviousYear() {
     const [data, setData] = useState()
