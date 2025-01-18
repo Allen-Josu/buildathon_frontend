@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Button, Flex, Layout, Select, Spin } from "antd";
-import { Album, ChevronRight, Heart, User2 } from "lucide-react";
+import { Album, ChevronRight, User2 } from "lucide-react";
 import Sider from "antd/es/layout/Sider";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modals from "../modals/add-layoutdata";
 import { SemesterSelectOption } from "../admin/constants";
+import { useUserStore } from "../store/userStore";
 
 const { Content } = Layout;
 const layoutStyle = {
@@ -30,6 +31,8 @@ export default function PageLayout({ title, entity }) {
 	const [error, setError] = useState(null);
 	const [data, setData] = useState(null);
 	const [refresh, setRefresh] = useState(0);
+
+	const user = useUserStore((state) => state.user);
 
 	const handleSubjectClick = (subjectLabel) => {
 		setActive(subjectLabel);
@@ -95,7 +98,10 @@ export default function PageLayout({ title, entity }) {
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center w-full px-4 md:px-8 lg:px-20 py-4 md:h-20 text-white bg-[#27272a] border-b-2 border-[#393939] gap-4">
 						<h3 className="text-xl md:text-2xl lg:text-3xl font-bold">{title}</h3>
 						<div className="flex flex-col md:flex-row gap-4 md:w-auto w-full">
-							<Button type="primary" style={{ background: "#6d28d9", width: "200px", border: "none" }} onClick={() => (setIsModalOpen(true))}>Add {title == "PYQ" ? "Previous Questions" : title}</Button>
+							{
+								user && (<Button type="primary" style={{ background: "#6d28d9", width: "200px", border: "none" }} onClick={() => (setIsModalOpen(true))}>Add {title == "PYQ" ? "Previous Questions" : title}</Button>
+								)
+							}
 							<Select
 								className="w-full md:w-48"
 								value={menuData.course}

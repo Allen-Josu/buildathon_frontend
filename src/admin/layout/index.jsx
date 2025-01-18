@@ -5,6 +5,8 @@ import { ChevronRight } from "lucide-react";
 import { menuItems } from "../constants";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { useAuthStore } from "../../store/userStore";
 
 const { Content } = Layout;
 const layoutStyle = {
@@ -17,6 +19,7 @@ export default function AdminPageLayout({ title, actions, children }) {
     const [active, setActive] = useState(title);
     const location = useLocation();
     const navigate = useNavigate();
+    const clearAdmin = useAuthStore((state) => state.clearAdmin);
 
     // Function to convert URL pathname to title format
     const getFormattedTitle = (pathname) => {
@@ -39,11 +42,24 @@ export default function AdminPageLayout({ title, actions, children }) {
         setActive(label);
     };
 
+    const handleLogout = () => {
+        clearAdmin()
+        navigate("/admin-login")
+    }
+
     return (
         <Flex gap="middle" wrap="wrap" className="min-h-screen">
             <Layout style={layoutStyle}>
-                <div className="w-full lg:h-24 md:h-32 flex items-center bg-[#27272a] border-b-2 border-[#c1c3c8]">
-                    <p className="text-[#c1c3c8] text-xl font-bold pl-10">Administrator</p>
+                <div className="w-full lg:h-24 md:h-32 flex items-center justify-between bg-[#27272a] px-10 border-b-2 border-[#c1c3c8]">
+                    <p className="text-[#c1c3c8] text-xl font-bold ">Administrator</p>
+                    <Button type="primary" style={{ background: "#393939", border: "1px solid #6d28d9" }}
+                        onClick={handleLogout}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = '#6d28d9'; // Slightly darker on hover
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = '#393939'; // Revert to user-defined color
+                        }}>Logout</Button>
                 </div>
                 <Layout>
                     <Sider
