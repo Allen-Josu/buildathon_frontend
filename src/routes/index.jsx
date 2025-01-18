@@ -21,6 +21,7 @@ import ViewUser from "../admin/drawer/view-user";
 import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
 import AdminLogin from "../admin/pages/login";
 import ProtectedRoute from "../admin/components/protectedRoute";
+import UserProtectedRoute from "../components/protectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -41,7 +42,11 @@ export const router = createBrowserRouter([
     },
     {
         path: routePath.attendanceRegulator,
-        element: <AttendanceRegulator />,
+        element: (
+            <UserProtectedRoute>
+                <AttendanceRegulator />
+            </UserProtectedRoute>
+        ),
     },
     {
         path: routePath.adminLogin,
@@ -61,7 +66,11 @@ export const router = createBrowserRouter([
     },
     {
         path: routePath.modelQuestionGenerator,
-        element: <QuestionPaperGenerator />,
+        element: (
+            <UserProtectedRoute>
+                <QuestionPaperGenerator />
+            </UserProtectedRoute>
+        ),
     },
     {
         path: routePath.department,
