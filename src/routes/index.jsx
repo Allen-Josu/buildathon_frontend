@@ -19,6 +19,7 @@ import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
 import Signup from "../pages/signup";
 import Login from "../pages/login/login";
 import ViewUser from "../admin/drawer/view-user";
+import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
 
 export const router = createBrowserRouter([
   {
