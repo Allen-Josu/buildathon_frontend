@@ -1,9 +1,9 @@
 import { Button, Form, Input, Select } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuid } from "uuid";
-import Header from '../../Header/header';
+import Header from '../../components/Header';
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -24,7 +24,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const { confirmPassword, ...dataToSend } = values;
+      const { ...dataToSend } = values;
 
       await axios.post(`${BASE_URL}/users/`, {
         ...dataToSend,

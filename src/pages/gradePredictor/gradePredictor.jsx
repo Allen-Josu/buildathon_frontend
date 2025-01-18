@@ -1,6 +1,6 @@
-import  { useState } from 'react';
-import Header from '../../components/Header/header';
+import { useState } from 'react';
 import { Modal } from 'antd';
+import Header from '../../components/Header';
 
 export default function GradePredictor() {
   const [internalMarks1, setInternalMarks1] = useState('');
@@ -13,16 +13,16 @@ export default function GradePredictor() {
   const calculateTotalInternalMarks = () => {
     return parseFloat(internalMarks1 || 0) + parseFloat(internalMarks2 || 0) + parseFloat(assignment || 0);
   };
-  
+
 
   const calculateRequiredExternalMarks = (totalInternalMarks) => {
     const requiredMarks = {
-      S: 90 - totalInternalMarks, 
+      S: 90 - totalInternalMarks,
       A: 80 - totalInternalMarks,
-      B: 70 - totalInternalMarks, 
+      B: 70 - totalInternalMarks,
       C: 60 - totalInternalMarks,
       D: 50 - totalInternalMarks
-      
+
     };
 
     // Check if it's possible to achieve each grade
@@ -30,11 +30,11 @@ export default function GradePredictor() {
     Object.keys(requiredMarks).forEach((grade) => {
       const required = requiredMarks[grade];
       if (required <= 50 && required >= 0) {
-        prediction[grade] = Number.isInteger(required) 
-        ? required.toString() // No decimal for integers
-        : required.toFixed(1); 
+        prediction[grade] = Number.isInteger(required)
+          ? required.toString() // No decimal for integers
+          : required.toFixed(1);
       } else {
-        
+
         prediction[grade] = (
           <span className="text-red-500">Grade not achievable</span>
 
@@ -60,7 +60,7 @@ export default function GradePredictor() {
     }
 
     const totalInternalMarks = calculateTotalInternalMarks();
-    
+
     if (totalInternalMarks > 50) {
       setErrorMessage("Total internal marks cannot exceed 50.");
       return;
@@ -71,17 +71,12 @@ export default function GradePredictor() {
     setIsModalOpen(true); // Open the modal
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-  };
   const handleOk = () => {
     setIsModalOpen(false); // Close the modal
   };
   const handleCancel = () => {
     setIsModalOpen(false); // Close the modal
   };
-  
-  
 
   return (
     <>
@@ -158,27 +153,27 @@ export default function GradePredictor() {
           )}
         </div>
 
-       
+
       </div>
 
       {/* Modal for Grade Prediction */}
       <Modal
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          centered
-          footer={[
-            <button
-              key="close"
-              className="px-4 py-2 bg-[#6d28d9] text-white rounded-md hover:bg-[#6d28d9]"
-              onClick={handleCancel}
-            >
-              Close
-            </button>,
-          ]}
-        >
-          {/* Table Content */}
-          {gradePrediction ?(
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        centered
+        footer={[
+          <button
+            key="close"
+            className="px-4 py-2 bg-[#6d28d9] text-white rounded-md hover:bg-[#6d28d9]"
+            onClick={handleCancel}
+          >
+            Close
+          </button>,
+        ]}
+      >
+        {/* Table Content */}
+        {gradePrediction ? (
           <div >
             <h3 className="text-xl font-semibold text-center">Grade Calculation</h3>
             <table className="min-w-full table-auto">
@@ -201,15 +196,15 @@ export default function GradePredictor() {
               <p>Note: Student should receive a minimum of 23 marks in external.</p>
             </div>
           </div>
-          ) : (
-            <div className="text-center text-red-600">
-              <p>Grade Calculation Data is not available.</p>
-            </div>
-          )}
-        </Modal>
+        ) : (
+          <div className="text-center text-red-600">
+            <p>Grade Calculation Data is not available.</p>
+          </div>
+        )}
+      </Modal>
 
-        
-      
+
+
     </>
   );
 }

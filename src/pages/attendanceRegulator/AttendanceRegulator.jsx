@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import axios from "axios";
-import AttendanceModal from "../../modals/attendance";
-// import { v4 as uuid } from "uuid";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -101,7 +99,7 @@ const Calendar = ({ onDateSelect, markedDates }) => {
   );
 };
 
-const AttendanceRegulator = () => {
+export default function AttendanceRegulator() {
   const currentDate = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
   const [attendanceData, setAttendanceData] = useState({});
@@ -115,7 +113,7 @@ const AttendanceRegulator = () => {
         );
         const attendanceResults = response.data.results;
         console.log(attendanceResults);
-        
+
         const fetchedData = {};
         attendanceResults.forEach((item) => {
           const dateKey = item.leaveDate.split("T")[0];
@@ -124,23 +122,23 @@ const AttendanceRegulator = () => {
             fetchedData[dateKey][leave.time] = leave.reason;
           });
         });
-  
+
         setAttendanceData(fetchedData);
       } catch (error) {
         console.error("Error fetching attendance data:", error);
         alert("Failed to load attendance data.");
       }
     };
-  
+
     fetchAttendanceData();
   }, []);
-  
+
   useEffect(() => {
     if (attendanceData && Object.keys(attendanceData).length > 0) {
       handleCalculateAttendance();
     }
   }, [attendanceData]);
-  
+
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
@@ -207,8 +205,8 @@ const AttendanceRegulator = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold text-gray-900">
               Mark Attendance for {`${selectedDate.getFullYear()}-${String(
-      selectedDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`}
+                selectedDate.getMonth() + 1
+              ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`}
 
             </h2>
             <button
@@ -338,24 +336,24 @@ const AttendanceRegulator = () => {
     const start = new Date(startDate);
     const current = new Date(currentDate);
     const totalDays = Math.floor((current - start) / (1000 * 3600 * 24)) + 1;
-  
+
     if (totalDays <= 0) {
-      return { 
-        attendancePercentage: 0, 
+      return {
+        attendancePercentage: 0,
         attendanceWithoutDLPercentage: 0,
         attendancewithnoclass: 0,
         attendancewithnoclasswithdl: 0
       };
     }
-  
+
     let totalHoursPresent = 0;
     let totalHoursWithoutDL = 0;
     let totalWeekdays = 0;
     let totalHoursincluNoclass = 0;
-  
+
     // Create holidays array with all Saturdays and Sundays between start and current date
     const holidays = [];
-  
+
     for (let i = 0; i < totalDays; i++) {
       const currentDay = new Date(start);
       currentDay.setDate(currentDay.getDate() + i);
@@ -364,28 +362,28 @@ const AttendanceRegulator = () => {
         holidays.push(currentDay.toISOString().split("T")[0]);
       }
     }
-  
+
     for (let i = 0; i < totalDays; i++) {
       const currentDate = new Date(start);
       currentDate.setDate(currentDate.getDate() + i);
       const dateString = currentDate.toISOString().split("T")[0];
-  
+
       if (holidays.includes(dateString)) continue;
-  
+
       totalWeekdays++;
-  
+
       // If no attendance data, consider all 6 hours as present
       if (!attendance || !attendance[dateString]) {
         totalHoursPresent += 6;
         totalHoursWithoutDL += 6;
         continue;
       }
-  
+
       // Process each time slot for the day
       const dayAttendance = attendance[dateString];
       Object.keys(dayAttendance).forEach(timeSlot => {
         const status = dayAttendance[timeSlot].toLowerCase();
-        
+
         if (status === "present") {
           totalHoursPresent++;
           totalHoursWithoutDL++;
@@ -400,26 +398,26 @@ const AttendanceRegulator = () => {
         // 'absent' case doesn't increment any counters
       });
     }
-  
+
     const totalHolidays = holidays.length;
-    
+
     // Calculate total working hours excluding holidays
     const subtrahend1 = totalHoursPresent - totalHolidays * 6 - 6;
     const subtrahend2 = totalHoursWithoutDL - totalHolidays * 6 - 6;
     const subtrahend3 = totalHoursWithoutDL - totalHolidays * 6 - 6;
     const subtrahend4 = totalHoursPresent - totalHolidays * 6 - 6;
-    
+
     // Total possible hours (excluding holidays)
     const minuend = (totalWeekdays - totalHolidays) * 6 - 6;
     // Total possible hours excluding no-class hours
     const minuend2 = (totalWeekdays - totalHolidays) * 6 - totalHoursincluNoclass - 6;
-  
+
     // Calculate percentages
     const attendancePercentage = (subtrahend1 / minuend) * 100;
     const attendanceWithoutDLPercentage = (subtrahend2 / minuend) * 100;
     const attendancewithnoclass = (subtrahend3 / minuend2) * 100;
     const attendancewithnoclasswithdl = (subtrahend4 / minuend2) * 100;
-  
+
     return {
       attendancePercentage,
       attendanceWithoutDLPercentage,
@@ -428,7 +426,7 @@ const AttendanceRegulator = () => {
       minuend2,
     };
   };
-  
+
 
   const handleCalculateAttendance = () => {
     const {
@@ -443,95 +441,94 @@ const AttendanceRegulator = () => {
       withoutDutyLeave: attendanceWithoutDLPercentage,
       withnoclasswithoutdl: attendancewithnoclass,
       withnoclasswithdl: attendancewithnoclasswithdl,
-      totalnumberofclasses:minuend2,
+      totalnumberofclasses: minuend2,
     });
   };
 
   return (
     <>
-    <Header/>
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          📅 Attendance Regulator
-        </h1>
+      <Header />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            📅 Attendance Regulator
+          </h1>
 
-        <div className="flex flex-row-reverse gap-8">
-          {/* Right side - Calendar */}
-          <div className="w-1/3">
-            <Calendar
-              onDateSelect={handleDateSelect}
-              markedDates={markedDates}
-            />
-          </div>
+          <div className="flex flex-row-reverse gap-8">
+            {/* Right side - Calendar */}
+            <div className="w-1/3">
+              <Calendar
+                onDateSelect={handleDateSelect}
+                markedDates={markedDates}
+              />
+            </div>
 
-          {/* Left side - Results and Controls */}
-          <div className="w-2/3">
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <button
-                onClick={handleCalculateAttendance}
-                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6"
-              >
-                Calculate Attendance
-              </button>
+            {/* Left side - Results and Controls */}
+            <div className="w-2/3">
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <button
+                  onClick={handleCalculateAttendance}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors mb-6"
+                >
+                  Calculate Attendance
+                </button>
 
-              {attendancePercentage && (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                          Type
-                        </th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                          Percentage
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                         Total number of working hours
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.totalnumberofclasses} Hours
-                        </td>
-                      </tr>
-                     
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          Attendance Percentage including duty leave
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.withnoclasswithdl.toFixed(2)}%
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          Attendance Percentage excluding duty leave
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          {attendancePercentage.withnoclasswithoutdl.toFixed(2)}%
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                {attendancePercentage && (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                            Type
+                          </th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                            Percentage
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Total number of working hours
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.totalnumberofclasses} Hours
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Attendance Percentage including duty leave
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.withnoclasswithdl.toFixed(2)}%
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            Attendance Percentage excluding duty leave
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {attendancePercentage.withnoclasswithoutdl.toFixed(2)}%
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {showModal && (
-          <AttendanceForm
-            selectedDate={selectedDate}
-            onSubmit={handleAttendanceSubmit}
-          />
-        )}
+          {showModal && (
+            <AttendanceForm
+              selectedDate={selectedDate}
+              onSubmit={handleAttendanceSubmit}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };
 
-export default AttendanceRegulator;

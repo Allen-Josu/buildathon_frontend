@@ -1,5 +1,3 @@
-import React from 'react';
-import Header from "../../components/Header/header";
 // Import Font Awesome CSS - make sure this path matches your project structure
 import "@fortawesome/fontawesome-free/css/all.min.css";
 // Import team member images
@@ -7,6 +5,7 @@ import sid from "../../assets/sid.jpg"
 import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
+import Header from '../../components/Header';
 
 // Content object containing all the text content
 const content = {

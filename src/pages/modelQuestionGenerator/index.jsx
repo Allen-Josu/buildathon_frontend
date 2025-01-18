@@ -16,7 +16,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 
 export default function QuestionPaperGenerator() {
   const [files, setFiles] = useState({
