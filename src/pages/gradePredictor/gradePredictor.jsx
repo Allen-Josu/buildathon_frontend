@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from 'antd';
-import Header from '../../components/Header/Header';
+import Header from '../../components/Header';
 
 export default function GradePredictor() {
   const [internalMarks1, setInternalMarks1] = useState('');

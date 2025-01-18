@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../../components/Header/Header';
+import Header from '../../components/Header';
 
 const BASE_URL = import.meta.env.VITE_URL;
 

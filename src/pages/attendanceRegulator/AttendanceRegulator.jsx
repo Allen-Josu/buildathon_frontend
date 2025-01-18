@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_URL;

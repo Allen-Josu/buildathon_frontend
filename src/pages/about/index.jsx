@@ -5,7 +5,7 @@ import sid from "../../assets/sid.jpg"
 import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
-import Header from '../../components/Header/Header';
+import Header from '../../components/Header';
 
 // Content object containing all the text content
 const content = {
