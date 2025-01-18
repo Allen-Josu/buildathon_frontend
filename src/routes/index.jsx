@@ -12,13 +12,13 @@ import AddUserDrawer from "../admin/drawer/add-user";
 import ViewDepartment from "../admin/drawer/view-department";
 import AddDepartment from "../admin/drawer/add-department";
 import EditDepartment from "../admin/drawer/edit-department";
-import About from "../pages/About/About"
+import About from "../pages/about"
 import GradePredictor from "../pages/gradePredictor/gradePredictor";
 
 import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
 import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
-import Signup from "../components/Auth/Signup/Signup";
-import Login from "../components/Auth/Login/Login";
+import Signup from "../pages/signup";
+import Login from "../pages/login/login";
 import ViewUser from "../admin/drawer/view-user";
 
 export const router = createBrowserRouter([

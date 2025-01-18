@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../../Header/Header';
+import Header from '../../components/Header/Header';
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -161,7 +161,7 @@ function Login() {
             }}
           >
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 to="/signup"
                 style={{
