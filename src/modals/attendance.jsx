@@ -1,78 +1,169 @@
-import { Modal } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+import { Button, Modal, Select, Space } from "antd";
+import axios from "axios";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useUserStore } from "../store/userStore";
+import { v4 as uuid } from "uuid";
 
-export default function AttendanceModal({ selectedDate }) {
-  const timeSlots = [
-    "9 to 10",
-    "10 to 11",
-    "11 to 12",
-    "12 to 1",
-    "2 to 3",
-    "3 to 4",
-  ];
+const BASE_URL = import.meta.env.VITE_URL;
 
-  const dateKey = selectedDate.toISOString().split("T")[0];
+export default function AttendanceModal({ showModal, setShowModal, selectedDate, onSuccess }) {
+    const [data, setData] = useState()
+    const [leaveData, setLeaveData] = useState([])
+    const [isDataAvailable, setIsDataAvailable] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [attendance, setAttendance] = useState(() => {
-    if (attendanceData[dateKey]) {
-      return attendanceData[dateKey];
+    const user = useUserStore((state) => state.user);
+
+    const date = dayjs(selectedDate).format("YYYY-MM-DD")
+
+    const handleCancel = () => {
+        setIsDataAvailable(false)
+        setLeaveData([])
+        setShowModal(false)
     }
-    return timeSlots.reduce(
-      (acc, slot) => ({
-        ...acc,
-        [slot]: "present",
-      }),
-      {}
-    );
-  });
-  return (
-    <>
-      <Modal title="MArk Attendance" open={true}>
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Mark Attendance for {selectedDate.toDateString()}
-              </h2>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-gray-700 text-xl font-bold"
-              >
-                ×
-              </button>
-            </div>
-            <div className="space-y-4">
-              {timeSlots.map((slot) => (
-                <div key={slot} className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">
-                    {slot}
-                  </label>
-                  <select
-                    value={attendance[slot] || "present"}
-                    onChange={(e) =>
-                      setAttendance((prev) => ({
-                        ...prev,
-                        [slot]: e.target.value,
-                      }))
+
+    const fetchData = async () => {
+        const { studentId } = user;
+
+        try {
+            if (date) {
+                const response = await axios.get(`${BASE_URL}/attendance?studentId=${studentId}&leaveDate=${date}`);
+                setData(response.data.results[0]);
+                setLeaveData(response.data.results[0]?.leavePerDay || [])
+                setIsDataAvailable(response.data.results.length > 0)
+            }
+        } catch (error) {
+            console.error("Error fetching attendance:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (showModal) {
+            fetchData()
+        }
+    }, [showModal])
+
+    const SelectOptions = [
+        {
+            label: "Present",
+            value: "Present"
+        },
+        {
+            label: "Sick Leave",
+            value: "Sick Leave"
+        },
+        {
+            label: "Duty Leave",
+            value: "Duty Leave"
+        },
+        {
+            label: "No Class",
+            value: "No Class"
+        }
+    ]
+
+    const handleSelect = (value, time) => {
+        if (value === "Present") {
+            setLeaveData(prev => prev?.filter(item => item.time !== time) || []);
+            return;
+        }
+
+        const existingIndex = leaveData?.findIndex(item => item.time === time) ?? -1;
+
+        if (existingIndex !== -1) {
+            setLeaveData(prev => prev?.map((item, index) =>
+                index === existingIndex
+                    ? { ...item, reason: value }
+                    : item
+            ) || []);
+        } else {
+            setLeaveData(prev => [...(prev || []), {
+                time: time,
+                reason: value,
+            }]);
+        }
+    };
+
+    const handleSubmit = async () => {
+        setIsSubmitting(true)
+        try {
+            if (isDataAvailable) {
+                const attendancePayload = {
+                    entity: "attendance",
+                    entityId: data.entityId,
+                    leaveDate: date,
+                    attributesToUpdate: {
+                        leavePerDay: leaveData,
+                        totalLeavePerDay: leaveData.length
                     }
-                    className="ml-4 block w-48 rounded-md border-gray-300 shadow-sm focus:border-[#6d28d9] focus:ring-[#6d28d9]"
-                  >
-                    <option value="present">Present</option>
-                    <option value="absent">Absent</option>
-                    <option value="Duty Leave">Duty Leave</option>
-                    <option value="No Class">No Class</option>
-                  </select>
-                </div>
-              ))}
+                }
+                await axios.patch(`${BASE_URL}/update-entity`, attendancePayload)
+                onSuccess?.() // Call onSuccess after successful PATCH
+            }
+            else {
+                const attendancePayload = {
+                    entity: "attendance",
+                    entityId: uuid(),
+                    username: user.username,
+                    studentId: user.studentId,
+                    leaveDate: date,
+                    leavePerDay: leaveData,
+                    totalLeavePerDay: leaveData.length
+                }
+                await axios.post(`${BASE_URL}/attendance`, attendancePayload)
+                onSuccess?.() // Call onSuccess after successful POST
+            }
+            handleCancel() // Close modal and reset state
+        } catch (error) {
+            console.error("Error submitting attendance:", error);
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    const timeSlots = [
+        { time: "9:00", label: "9:00 am" },
+        { time: "10:00", label: "10:00 am" },
+        { time: "11:00", label: "11:00 am" },
+        { time: "12:00", label: "12:00 pm" },
+        { time: "2:00", label: "2:00 pm" },
+        { time: "3:00", label: "3:00 pm" }
+    ]
+
+    return (
+        <Modal
+            title={`Attendance Marker ${date}`}
+            open={showModal}
+            onCancel={handleCancel}
+            footer={
+                <Button
+                    type="primary"
+                    onClick={handleSubmit}
+                    style={{ background: "#6d28d9" }}
+                    loading={isSubmitting}
+                >
+                    Mark Attendance
+                </Button>
+            }
+        >
+            <div className="flex justify-between items-center">
+                <Space direction="vertical" className="w-full mt-3">
+                    {timeSlots.map(({ time, label }) => (
+                        <div key={time} className="w-full flex justify-between">
+                            <p className="font-semibold">{label}</p>
+                            <Select
+                                value={leaveData?.find(item => item.time === time)?.reason || "Present"}
+                                options={SelectOptions}
+                                onChange={(value) => handleSelect(value, time)}
+                                className="w-56"
+                            />
+                        </div>
+                    ))}
+                </Space>
             </div>
-            <button
-              onClick={() => onSubmit(attendance)}
-              className="mt-6 w-full bg-[#6d28d9] text-white px-4 py-2 rounded-md hover:bg-[#6d28d9] transition-colors"
-            >
-              Submit Attendance
-            </button>
-          </div>
-        </div>
-      </Modal>
-    </>
-  );
+        </Modal>
+    )
 }
