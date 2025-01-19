@@ -18,10 +18,11 @@ import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
 import Signup from "../pages/signup";
 import Login from "../pages/login/login";
 import ViewUser from "../admin/drawer/view-user";
-import AttendanceRegulator from "../pages/attendanceRegulator/AttendanceRegulator";
 import AdminLogin from "../admin/pages/login";
 import ProtectedRoute from "../admin/components/protectedRoute";
 import UserProtectedRoute from "../components/protectedRoute";
+// import AttendanceRegulator from "../pages/attendanceRegulator/index2";
+import AttendanceRegulator from "../pages/attendanceRegulator";
 
 export const router = createBrowserRouter([
     {
@@ -131,6 +132,10 @@ export const router = createBrowserRouter([
                 ),
             },
         ],
+    },
+    {
+        path: routePath.dummy,
+        element: <AttendanceRegulator />
     },
     {
         path: "*",
