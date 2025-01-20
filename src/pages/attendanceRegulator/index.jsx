@@ -1,3 +1,4 @@
+// AttendanceRegulator.js
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -8,10 +9,12 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-// Custom hook for attendance data
 const useAttendanceData = (studentId) => {
   const [data, setData] = useState(null);
+  const [markedDates, setMarkedDates] = useState([]);
+  const [successfullyMarkedDates, setSuccessfullyMarkedDates] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,19 +23,30 @@ const useAttendanceData = (studentId) => {
           `${BASE_URL}/attendance?entityType=all&studentId=${studentId}`
         );
         setData(response.data.results);
+        
+        // Set both types of dates
+        const dates = response.data.results || [];
+        const allMarkedDates = dates.map(d => d.leaveDate);
+        const successDates = dates
+          .filter(d => d.leavePerDay?.some(l => l.reason !== "No Class"))
+          .map(d => d.leaveDate);
+        
+        setMarkedDates(allMarkedDates);
+        setSuccessfullyMarkedDates(successDates);
       } catch (err) {
         setError(err);
         console.error("Error fetching attendance data:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [studentId]);
 
-  return { data, error };
+  return { data, markedDates, successfullyMarkedDates, error, isLoading };
 };
 
-// Custom hook for attendance calculations
 const useAttendanceCalculations = (attendanceData) => {
   const calculateAttendance = useCallback(() => {
     if (!attendanceData) return null;
@@ -84,7 +98,13 @@ const AttendanceRegulator = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const user = useUserStore((state) => state.user);
 
-  const { data: attendanceData, error, isLoading } = useAttendanceData(user.studentId, refreshTrigger);
+  const { 
+    data: attendanceData, 
+    markedDates, 
+    successfullyMarkedDates, 
+    error, 
+    isLoading 
+  } = useAttendanceData(user.studentId, refreshTrigger);
   const attendanceStats = useAttendanceCalculations(attendanceData);
 
   const handleDateSelect = useCallback((date) => {
@@ -123,7 +143,8 @@ const AttendanceRegulator = () => {
             <div className="w-full lg:w-1/3">
               <Calendar
                 onDateSelect={handleDateSelect}
-                markedDates={Object.keys(attendanceData || {})}
+                markedDates={markedDates}
+                successfullyMarkedDates={successfullyMarkedDates}
               />
             </div>
 

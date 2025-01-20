@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/userStore';
+import ToastNotification from '../../../modals/Toast';
+
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -9,12 +11,13 @@ export default function AdminLogin() {
     const [data, setData] = useState({
         username: "",
         password: ""
-    })
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [toastOpen, setToastOpen] = useState(false); // State for toast visibility
+    const [toastMessage, setToastMessage] = useState(''); // State for toast message
     const navigate = useNavigate();
     const setAdmin = useAuthStore((state) => state.setAdmin);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,10 +25,11 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const response = await axios.post(`${BASE_URL}/users/login?role=admin`, data)
+            const response = await axios.post(`${BASE_URL}/users/login?role=admin`, data);
             setAdmin(response.data.results);
-            alert('Login successful!');
-            navigate(`/department`)
+            setToastMessage('Login successful!'); // Set toast message
+            setToastOpen(true); // Show toast notification
+            setTimeout(() => navigate(`/department`), 2000); // Navigate after 2 seconds, the duration of the toast
         } catch (err) {
             setError(
                 err.response?.data?.message ||
@@ -94,7 +98,7 @@ export default function AdminLogin() {
                                 type="text"
                                 autoComplete="off"
                                 className="form-control"
-                                value={setData.username}
+                                value={data.username}
                                 onChange={(e) => setData({ ...data, username: e.target.value })}
                                 style={{
                                     backgroundColor: '#f9f9f9',
@@ -148,6 +152,9 @@ export default function AdminLogin() {
                     </form>
                 </div>
             </div>
+
+            {/* Toast Notification Component */}
+            <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
         </div>
     );
 }

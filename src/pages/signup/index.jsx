@@ -2,8 +2,10 @@ import { Button, Form, Input, Select } from 'antd';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 import Header from '../../components/Header';
+import ToastNotification from '../../modals/Toast';
+
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -12,6 +14,8 @@ function Signup() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [toastOpen, setToastOpen] = useState(false);  // State for toast visibility
+  const [toastMessage, setToastMessage] = useState('');  // State for toast message
 
   const courseOptions = [
     { value: 'MCA', label: 'MCA' },
@@ -34,8 +38,10 @@ function Signup() {
         department: 'DCA',
       });
 
-      alert('Registration successful! Please log in.');
-      navigate('/login');
+      // Show success toast and navigate to login page
+      setToastMessage('You have successfully registered! Please log in to continue.');
+      setToastOpen(true); // Show toast notification
+      setTimeout(() => navigate('/login'), 2000); // Navigate after 2 seconds (toast duration)
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -118,10 +124,7 @@ function Signup() {
             <Form.Item
               name="email"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Email</span>}
-              rules={[
-                { required: true, message: 'Please input your email!' },
-                { type: 'email', message: 'Please enter a valid email!' },
-              ]}
+              rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Please enter a valid email!' }]}
             >
               <Input
                 style={{
@@ -170,10 +173,7 @@ function Signup() {
             <Form.Item
               name="password"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Password</span>}
-              rules={[
-                { required: true, message: 'Please input your password!' },
-                { min: 6, message: 'Password must be at least 6 characters long!' },
-              ]}
+              rules={[{ required: true, message: 'Please input your password!' }, { min: 6, message: 'Password must be at least 6 characters long!' }]}
             >
               <Input.Password
                 style={{
@@ -190,17 +190,7 @@ function Signup() {
               name="confirmPassword"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Confirm Password</span>}
               dependencies={['password']}
-              rules={[
-                { required: true, message: 'Please confirm your password!' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('Passwords do not match!'));
-                  },
-                }),
-              ]}
+              rules={[{ required: true, message: 'Please confirm your password!' }, ({ getFieldValue }) => ({ validator(_, value) { if (!value || getFieldValue('password') === value) { return Promise.resolve(); } return Promise.reject(new Error('Passwords do not match!')); } })]}
             >
               <Input.Password
                 style={{
@@ -231,6 +221,7 @@ function Signup() {
               {loading ? 'Signing up...' : 'Sign Up'}
             </Button>
           </Form>
+
           <div
             className="text-center mt-4"
             style={{
@@ -254,6 +245,9 @@ function Signup() {
           </div>
         </div>
       </div>
+
+      {/* Toast Notification Component */}
+      <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
     </div>
   );
 }
