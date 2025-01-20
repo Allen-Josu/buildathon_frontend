@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import axios from "axios";
-import AttendanceModal from "../../modals/attendance";
 // import { v4 as uuid } from "uuid";
 
 const BASE_URL = import.meta.env.VITE_URL;

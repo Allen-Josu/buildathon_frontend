@@ -16,9 +16,9 @@ import About from "../pages/About/About"
 import GradePredictor from "../pages/gradePredictor/gradePredictor";
 
 import QuestionPaperGenerator from "../pages/modelQuestionGenerator";
-import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
 import Signup from "../components/Auth/Signup/Signup";
 import Login from "../components/Auth/Login/Login";
+import AttendanceRegulator from "../pages/attendanceRegulator/attendanceRegulator";
 
 export const router = createBrowserRouter([
   {
