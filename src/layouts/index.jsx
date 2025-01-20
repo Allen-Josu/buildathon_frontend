@@ -10,10 +10,10 @@ import { useUserStore } from "../store/userStore";
 
 const { Content } = Layout;
 const layoutStyle = {
-	overflow: "hidden",
 	width: "100%",
-	height: "100vh",
 };
+
+
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -90,6 +90,10 @@ export default function PageLayout({ title, entity }) {
 
 	const filteredData = data?.filter((item) => item.subjectName === active);
 
+	// const handleLikeClick = () => {
+	// 	console.log("Liked");
+	// }
+
 	return (
 		<>
 			<Flex gap="middle" wrap="wrap" className="min-h-screen">
@@ -165,8 +169,12 @@ export default function PageLayout({ title, entity }) {
 						</Sider>
 
 						{/* Main Content */}
-						<Content className="bg-[#27272a] min-h-screen w-full md:w-3/4">
-							<div className="flex flex-col p-4 md:p-8 lg:px-16">
+						<Content className="bg-[#27272a] w-full md:w-3/4 h-fit" >
+							<div className="flex flex-col p-4 md:p-8 lg:px-16" style={{
+								overflowY: "auto",
+								height: "calc(100vh - 80px)",
+								scrollbarWidth: "none",
+							}}>
 								<div className="flex justify-between items-center w-full font-bold px-10 text-lg md:text-xl mt-6 text-[#c1c3c8]">
 									<p>{title}</p>
 									<p>Shared By</p>
@@ -182,22 +190,27 @@ export default function PageLayout({ title, entity }) {
 								) : filteredData && filteredData.length > 0 ? (
 									<div className="space-y-4 mt-6 px-10 py-3">
 										{filteredData.map((item, index) => (
-											<div
-												key={index}
-												className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
+											<>
+												<div
+													key={index}
+													className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
 												border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
 												cursor-pointer duration-300 ease-in md:gap-0"
-												onClick={() => window.location.href = item.url}
-											>
-												<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
-													<Album className="flex-shrink-0" />
-													<span className="break-words">{item.description}</span>
+													onClick={() => window.location.href = item.url}
+												>
+													<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
+
+														<Album className="flex-shrink-0" />
+														<span className="break-words">{item.description}</span>
+													</div>
+													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
+														<User2 className="flex-shrink-0" />
+														<span>{item.uploadedBy}</span>
+													</div>
 												</div>
-												<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-													<User2 className="flex-shrink-0" />
-													<span>{item.uploadedBy}</span>
-												</div>
-											</div>
+												{/* <div className="flex justify-end text-[#c1c3c8] cursor-pointer align-center gap-3">{item.likes}<Heart onClick={handleLikeClick} /></div> */}
+											</>
+
 										))}
 									</div>
 								) : (

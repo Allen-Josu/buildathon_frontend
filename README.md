@@ -1,3 +1,7 @@
+# Backend Repository
+
+[https://github.com/Allen-Josu/buildathon_backend](https://github.com/Allen-Josu/buildathon_backend)
+
 # Follow this steps 
 
 1. Clone the project using this command `git clone [url]`
