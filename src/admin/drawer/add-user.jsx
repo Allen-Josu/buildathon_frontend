@@ -39,10 +39,9 @@ export default function AddUserDrawer() {
             title="Add Users"
             onClose={onClose}
             open
-            headerStyle={{ padding: "30px 24px" }}
             extra={
-                <Space className="h-24">
-                    <Button type="primary" onClick={onSubmit}>
+                <Space>
+                    <Button type="primary" onClick={onSubmit} style={{ background: "#6d28d9", border: "none" }}>
                         Submit
                     </Button>
                 </Space>

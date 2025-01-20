@@ -5,7 +5,7 @@ export const routePath = {
     pyq: "pyq",
     login: "login",
     signup: "signup",
-    admin: "admin",
+    adminLogin: "admin-login",
     department: "department",
     users: "users",
     addUser: 'add-users',
@@ -14,6 +14,8 @@ export const routePath = {
     editDepartment: "edit-department",
     about: "about",
     modelQuestionGenerator: "model-question-paper",
-    gradePredictor: "grade-predictor",
-    attendanceRegulator: "attendance-calculator"
+    gradePredictor: "grade-Calculator",
+    attendanceRegulator: "attendance-calculator",
+    viewUser: "view-user",
+    editUser: "edit-user"
 }

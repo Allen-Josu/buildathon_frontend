@@ -1,5 +1,3 @@
-import React from 'react';
-import Header from "../../components/Header/header";
 // Import Font Awesome CSS - make sure this path matches your project structure
 import "@fortawesome/fontawesome-free/css/all.min.css";
 // Import team member images
@@ -7,6 +5,7 @@ import sid from "../../assets/sid.jpg"
 import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
+import Header from '../../components/Header';
 
 // Content object containing all the text content
 const content = {
@@ -26,8 +25,8 @@ const content = {
           the best study materials. Share your own notes and contribute to the learning community!`
       },
       {
-          title: "Grade Predictor",
-          details: `Worried about your academic performance? Our grade predictor uses your 
+          title: "Grade Calculator",
+          details: `Worried about your academic performance? Our grade calculator uses your 
           inputs to estimate your potential grades. Identify areas of improvement and stay ahead in your studies.`
       },
       {
