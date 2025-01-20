@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -122,17 +121,13 @@ const AttendanceRegulator = () => {
           </h1>
 
           <div className="flex flex-col lg:flex-row-reverse gap-4 sm:gap-6 lg:gap-8">
-            {/* Calendar Section */}
             <div className="w-full lg:w-1/3">
-
               <Calendar
                 onDateSelect={handleDateSelect}
                 markedDates={Object.keys(attendanceData || {})}
               />
-
             </div>
 
-            {/* Stats Section */}
             <div className="w-full lg:w-2/3">
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
                 {isLoading ? (
@@ -141,7 +136,7 @@ const AttendanceRegulator = () => {
                   <div className="overflow-x-auto">
                     <table className="min-w-full">
                       <thead>
-                        <tr >
+                        <tr>
                           <th className="px-4 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
                             Type
                           </th>
