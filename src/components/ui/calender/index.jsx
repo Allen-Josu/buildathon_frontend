@@ -1,11 +1,9 @@
-/* eslint-disable react/prop-types */
 import { useCallback, useMemo, useState } from "react";
 
 export default function Calendar({ onDateSelect, markedDates }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
 
-    // Memoize these calculations
     const daysInMonth = useMemo(() =>
         new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate(),
         [currentDate]
@@ -32,6 +30,16 @@ export default function Calendar({ onDateSelect, markedDates }) {
         ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         return markedDates.includes(dateStr);
     }, [currentDate, markedDates]);
+
+    const isWeekend = useCallback((day) => {
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day
+        );
+        const dayOfWeek = date.getDay();
+        return dayOfWeek === 0 || dayOfWeek === 6;
+    }, [currentDate]);
 
     const changeMonth = useCallback((offset) => {
         setCurrentDate(prevDate =>
@@ -72,10 +80,12 @@ export default function Calendar({ onDateSelect, markedDates }) {
             </div>
             <div className="p-4">
                 <div className="grid grid-cols-7 gap-2">
-                    {weekDays.map((day) => (
+                    {weekDays.map((day, index) => (
                         <div
                             key={day}
-                            className="text-center text-sm font-medium text-gray-600"
+                            className={`text-center text-sm font-medium ${
+                                index === 0 || index === 6 ? 'text-red-500' : 'text-gray-600'
+                            }`}
                         >
                             {day}
                         </div>
@@ -89,9 +99,10 @@ export default function Calendar({ onDateSelect, markedDates }) {
                         <button
                             key={day}
                             onClick={() => handleDateClick(day)}
-                            className={`w-full aspect-square flex items-center justify-center rounded hover:bg-gray-100
-                ${selectedDate?.getDate() === day ? "bg-blue-100" : ""}
-                ${isDateMarked(day) ? "border-2 border-red-500" : ""}`}
+                            className={`w-full aspect-square flex items-center justify-center rounded
+                                ${isWeekend(day) ? 'text-red-500' : ''}
+                                ${selectedDate?.getDate() === day ? "bg-blue-100" : "hover:bg-gray-100"}
+                                ${isDateMarked(day) ? "border-2 border-red-500" : ""}`}
                         >
                             {day}
                         </button>
@@ -100,4 +111,4 @@ export default function Calendar({ onDateSelect, markedDates }) {
             </div>
         </div>
     );
-};
+}
