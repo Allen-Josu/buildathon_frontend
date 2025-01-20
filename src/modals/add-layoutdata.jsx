@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-export default function Modals({ isModalOpen, setIsModalOpen, title, setRefresh }) {
+export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh }) {
   const [responseData, setResponseData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -20,7 +20,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, setRefresh 
     course: "",
     semester: "",
     subjectName: "",
-    subjectCode: "", // Added subjectCode to the state
+    subjectCode: "",
     description: "",
     url: ""
   });
@@ -132,7 +132,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, setRefresh 
   const handleSubmit = async () => {
     const submissionData = {
       ...data,
-      entity: title,
+      entity: entity,
       entityId: uuid(),
       likes: 0,
       uploadedBy: "Test123",
@@ -140,6 +140,8 @@ export default function Modals({ isModalOpen, setIsModalOpen, title, setRefresh 
     };
 
     try {
+      console.log(submissionData);
+
       const response = await axios.post(`${BASE_URL}/newEntity`, submissionData);
       if (response.status === 200) {
         setIsModalOpen(false);
