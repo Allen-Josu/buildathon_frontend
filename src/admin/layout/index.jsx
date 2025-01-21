@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Flex, Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { ChevronRight } from "lucide-react";
@@ -7,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useAuthStore } from "../../store/userStore";
+import ToastNotification from "../../modals/Toast"; // Assuming this is the correct path to the Toast component
 
 const { Content } = Layout;
 const layoutStyle = {
@@ -21,9 +21,12 @@ export default function AdminPageLayout({ title, actions, children }) {
     const navigate = useNavigate();
     const clearAdmin = useAuthStore((state) => state.clearAdmin);
 
+    // State for toast notification
+    const [toastOpen, setToastOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
     // Function to convert URL pathname to title format
     const getFormattedTitle = (pathname) => {
-        // Remove leading slash and capitalize first letter
         const formatted = pathname.substring(1).charAt(0).toUpperCase() +
             pathname.slice(2).toLowerCase();
         return formatted;
@@ -36,16 +39,17 @@ export default function AdminPageLayout({ title, actions, children }) {
     }, [location.pathname]);
 
     const handleClick = (label) => {
-        // Convert title to URL format (lowercase with leading slash)
         const path = `/${label.toLowerCase()}`;
         navigate(path);
         setActive(label);
     };
 
     const handleLogout = () => {
-        clearAdmin()
-        navigate("/admin-login")
-    }
+        clearAdmin();
+        setToastMessage('Logout successful!');
+        setToastOpen(true);
+        setTimeout(() => navigate("/admin-login"), 2000); // Navigate after 2 seconds, the duration of the toast
+    };
 
     return (
         <Flex gap="middle" wrap="wrap" className="min-h-screen">
@@ -55,10 +59,10 @@ export default function AdminPageLayout({ title, actions, children }) {
                     <Button type="primary" style={{ background: "#393939", border: "1px solid #6d28d9" }}
                         onClick={handleLogout}
                         onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#6d28d9'; // Slightly darker on hover
+                            e.target.style.backgroundColor = '#6d28d9';
                         }}
                         onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = '#393939'; // Revert to user-defined color
+                            e.target.style.backgroundColor = '#393939';
                         }}>Logout</Button>
                 </div>
                 <Layout>
@@ -95,6 +99,9 @@ export default function AdminPageLayout({ title, actions, children }) {
                     </Content>
                 </Layout>
             </Layout>
+
+            {/* Toast Notification Component */}
+            <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
         </Flex>
     );
 }
