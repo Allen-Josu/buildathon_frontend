@@ -91,8 +91,8 @@ const useAttendanceCalculations = (attendanceData) => {
     const totalHours = totalWorkingDays * 6;
     const adjustedTotalHours = totalHours - noClassDays;
 
-    const attendedHoursWithDuty = adjustedTotalHours - (absentDays + dutyLeaveDays);
-    const attendedHoursWithoutDuty = adjustedTotalHours - absentDays;
+    const attendedHoursWithDuty = adjustedTotalHours - absentDays ;
+    const attendedHoursWithoutDuty = adjustedTotalHours - absentDays-dutyLeaveDays;
 
     const totalPercent = (attendedHoursWithDuty / adjustedTotalHours) * 100;
     const totalPercentExcludeDuty = (attendedHoursWithoutDuty / adjustedTotalHours) * 100;
@@ -185,7 +185,8 @@ const AttendanceRegulator = () => {
                             Attendance Percentage (with duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                          {attendanceStats.totalPercentExcludeDuty}%
+              
+                          {attendanceStats.totalPercent}%
                     
                           </td>
                         </tr>
@@ -195,7 +196,9 @@ const AttendanceRegulator = () => {
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
                            
-                            {attendanceStats.totalPercent}%
+                           
+                          {attendanceStats.totalPercentExcludeDuty}%
+
                           </td>
                         </tr>
                       </tbody>
