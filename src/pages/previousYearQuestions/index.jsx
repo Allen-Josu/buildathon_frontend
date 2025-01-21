@@ -17,7 +17,7 @@ export default function PreviousYear() {
     return (
         <>
             <Header />
-            <PageLayout title="PYQ" data={data} />
+            <PageLayout title="PYQ" data={data} entity="pyq" />
         </>
     )
 }

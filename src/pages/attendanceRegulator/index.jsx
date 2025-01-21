@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -10,7 +9,7 @@ import Calendar from "../../components/ui/calender";
 const BASE_URL = import.meta.env.VITE_URL;
 
 // Custom hook for attendance data
-const useAttendanceData = (studentId) => {
+const useAttendanceData = (studentId, refreshTrigger) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -28,7 +27,7 @@ const useAttendanceData = (studentId) => {
     };
 
     fetchData();
-  }, [studentId]);
+  }, [studentId, refreshTrigger]); // Add refreshTrigger to dependencies
 
   return { data, error };
 };
@@ -71,8 +70,9 @@ const useAttendanceCalculations = (attendanceData) => {
     const attendanceWithoutDuty = totalHours - count;
 
     return {
-      totalPercent: (attendanceWithDuty / totalHours).toFixed(2),
-      totalPercentExcludeDuty: (attendanceWithoutDuty / totalHours).toFixed(2)
+      totalPercent: (attendanceWithDuty / totalHours).toFixed(4) * 100,
+      totalPercentExcludeDuty: (attendanceWithoutDuty / totalHours).toFixed(4) * 100,
+      totalHours: totalHours
     };
   }, [attendanceData]);
 
@@ -114,24 +114,20 @@ const AttendanceRegulator = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#27272a]">
+      <div className=" bg-[#27272a]" style={{ minHeight: "93vh" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#c1c3c8] mb-4 sm:mb-6 lg:mb-8">
             📅 Attendance Regulator
           </h1>
 
           <div className="flex flex-col lg:flex-row-reverse gap-4 sm:gap-6 lg:gap-8">
-            {/* Calendar Section */}
             <div className="w-full lg:w-1/3">
-
-                <Calendar
-                  onDateSelect={handleDateSelect}
-                  markedDates={Object.keys(attendanceData || {})}
-                />
-
+              <Calendar
+                onDateSelect={handleDateSelect}
+                markedDates={Object.keys(attendanceData || {})}
+              />
             </div>
 
-            {/* Stats Section */}
             <div className="w-full lg:w-2/3">
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
                 {isLoading ? (
@@ -140,7 +136,7 @@ const AttendanceRegulator = () => {
                   <div className="overflow-x-auto">
                     <table className="min-w-full">
                       <thead>
-                        <tr >
+                        <tr>
                           <th className="px-4 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
                             Type
                           </th>
@@ -150,6 +146,14 @@ const AttendanceRegulator = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
+                            Total Hours (hrs)
+                          </td>
+                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
+                            {attendanceStats.totalHours} hrs
+                          </td>
+                        </tr>
                         <tr>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
                             Attendance Percentage (with duty leave)
