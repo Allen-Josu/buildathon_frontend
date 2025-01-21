@@ -224,7 +224,7 @@ export default function PageLayout({ title, entity }) {
 				</Layout>
 			</Flex>
 
-			<Modals title="notes" isModalOpen={isModalOpen} setRefresh={setRefresh} setIsModalOpen={setIsModalOpen} />
+			<Modals entity={entity} isModalOpen={isModalOpen} setRefresh={setRefresh} setIsModalOpen={setIsModalOpen} />
 		</>
 	);
 }

@@ -8,7 +8,7 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-const useAttendanceData = (studentId, refreshTrigger) => {
+const useAttendanceData = (studentId, refreshTrigger, refreshTrigger) => {
   const [data, setData] = useState(null);
   const [markedDates, setMarkedDates] = useState([]);
   const [successfullyMarkedDates, setSuccessfullyMarkedDates] = useState([]);
@@ -135,7 +135,7 @@ const AttendanceRegulator = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#27272a]">
+      <div className=" bg-[#27272a]" style={{ minHeight: "93vh" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#c1c3c8] mb-4 sm:mb-6 lg:mb-8">
             📅 Attendance Regulator
@@ -168,6 +168,14 @@ const AttendanceRegulator = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
+                            Total Hours (hrs)
+                          </td>
+                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
+                            {attendanceStats.totalHours} hrs
+                          </td>
+                        </tr>
                         <tr>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
                             Attendance Percentage (with duty leave)
