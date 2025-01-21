@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export default function Calendar({ onDateSelect, markedDates }) {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -26,6 +26,10 @@ export default function Calendar({ onDateSelect, markedDates }) {
             currentDate.getMonth(),
             day
         );
+
+        // Prevent selecting future dates
+        if (clickedDate > today) return;
+
         setSelectedDate(clickedDate);
         onDateSelect(clickedDate);
 
@@ -40,11 +44,7 @@ export default function Calendar({ onDateSelect, markedDates }) {
             localStorage.setItem("editedDates", JSON.stringify(updatedDates));
             return updatedDates;
         });
-    }, [currentDate, onDateSelect]);
-
-    
-
-   
+    }, [currentDate, onDateSelect, today]);
 
     const isToday = useCallback((day) => {
         return (
@@ -63,6 +63,15 @@ export default function Calendar({ onDateSelect, markedDates }) {
         const dayOfWeek = date.getDay();
         return dayOfWeek === 0 || dayOfWeek === 6;
     }, [currentDate]);
+
+    const isFutureDate = useCallback((day) => {
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day
+        );
+        return date > today;
+    }, [currentDate, today]);
 
     const changeMonth = useCallback((offset) => {
         setCurrentDate((prevDate) =>
@@ -122,12 +131,12 @@ export default function Calendar({ onDateSelect, markedDates }) {
                         <button
                             key={day}
                             onClick={() => handleDateClick(day)}
+                            disabled={isFutureDate(day)}
                             className={`w-full aspect-square flex items-center justify-center rounded
                                 ${isWeekend(day) ? "text-red-500" : ""}
-                                
-                                
                                 ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
-                               `}
+                                ${isFutureDate(day) ? "cursor-not-allowed opacity-50" : ""}
+                            `}
                         >
                             {day}
                         </button>

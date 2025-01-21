@@ -1,3 +1,4 @@
+// AttendanceRegulator.js
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -8,7 +9,7 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-const useAttendanceData = (studentId, refreshTrigger, refreshTrigger) => {
+const useAttendanceData = (studentId) => {
   const [data, setData] = useState(null);
   const [markedDates, setMarkedDates] = useState([]);
   const [successfullyMarkedDates, setSuccessfullyMarkedDates] = useState([]);
@@ -40,7 +41,7 @@ const useAttendanceData = (studentId, refreshTrigger, refreshTrigger) => {
     };
 
     fetchData();
-  }, [studentId, refreshTrigger]);
+  }, [studentId]);
 
   return { data, markedDates, successfullyMarkedDates, error, isLoading };
 };
@@ -51,7 +52,8 @@ const useAttendanceCalculations = (attendanceData) => {
 
     const startDate = dayjs("2025-01-01");
     const currentDate = dayjs();
-    let totalDays = currentDate.diff(startDate, "day") + 1;
+
+    const totalDays = currentDate.diff(startDate, "day") + 1;
 
     const countWeekends = (start, end) => {
       let count = 0;
@@ -66,28 +68,38 @@ const useAttendanceCalculations = (attendanceData) => {
       return count;
     };
 
-    const weekendCount = countWeekends(startDate, currentDate);
-    totalDays -= weekendCount;
+    const totalWeekends = countWeekends(startDate, currentDate);
 
-    let no_class = 0;
-    let duty_leave = 0;
-    let count = 0;
+    const totalWorkingDays = totalDays - totalWeekends;
 
-    attendanceData?.forEach((item) => {
-      item.leavePerDay.forEach((leave) => {
-        if (leave.reason === "No Class") no_class++;
-        else if (leave.reason === "Duty Leave") duty_leave++;
-        else count++;
+    let noClassDays = 0;
+    let dutyLeaveDays = 0;
+    let absentDays = 0;
+
+    attendanceData.forEach((record) => {
+      record.leavePerDay.forEach((leave) => {
+        if (leave.reason === "No Class") {
+          noClassDays++;
+        } else if (leave.reason === "Duty Leave") {
+          dutyLeaveDays++;
+        } else {
+          absentDays++;
+        }
       });
     });
 
-    const totalHours = totalDays * 6 - no_class;
-    const attendanceWithDuty = totalHours - (count + duty_leave);
-    const attendanceWithoutDuty = totalHours - count;
+    const totalHours = totalWorkingDays * 6;
+    const adjustedTotalHours = totalHours - noClassDays;
+
+    const attendedHoursWithDuty = adjustedTotalHours - (absentDays + dutyLeaveDays);
+    const attendedHoursWithoutDuty = adjustedTotalHours - absentDays;
+
+    const totalPercent = (attendedHoursWithDuty / adjustedTotalHours) * 100;
+    const totalPercentExcludeDuty = (attendedHoursWithoutDuty / adjustedTotalHours) * 100;
 
     return {
-      totalPercent: ((attendanceWithDuty / totalHours) * 100).toFixed(2),
-      totalPercentExcludeDuty: ((attendanceWithoutDuty / totalHours) * 100).toFixed(2),
+      totalPercent: totalPercent.toFixed(2),
+      totalPercentExcludeDuty: totalPercentExcludeDuty.toFixed(2),
     };
   }, [attendanceData]);
 
@@ -135,7 +147,7 @@ const AttendanceRegulator = () => {
   return (
     <>
       <Header />
-      <div className=" bg-[#27272a]" style={{ minHeight: "93vh" }}>
+      <div className="min-h-screen bg-[#27272a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#c1c3c8] mb-4 sm:mb-6 lg:mb-8">
             📅 Attendance Regulator
@@ -170,18 +182,11 @@ const AttendanceRegulator = () => {
                       <tbody className="divide-y divide-gray-200">
                         <tr>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            Total Hours (hrs)
-                          </td>
-                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalHours} hrs
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
                             Attendance Percentage (with duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercent}%
+                          {attendanceStats.totalPercentExcludeDuty}%
+                    
                           </td>
                         </tr>
                         <tr>
@@ -189,7 +194,8 @@ const AttendanceRegulator = () => {
                             Attendance Percentage (without duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercentExcludeDuty}%
+                           
+                            {attendanceStats.totalPercent}%
                           </td>
                         </tr>
                       </tbody>
