@@ -4,6 +4,9 @@ export default function Calendar({ onDateSelect, markedDates }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
 
+    console.log(markedDates);
+    
+
     const daysInMonth = useMemo(() =>
         new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate(),
         [currentDate]
