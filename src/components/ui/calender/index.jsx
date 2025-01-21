@@ -126,8 +126,8 @@ export default function Calendar({ onDateSelect, markedDates }) {
                                 ${isWeekend(day) ? "text-red-500" : ""}
                                 
                                 
-                                ${isToday(day) ? "bg-blue-500 text-white" : ""}
-                                ${selectedDate?.getDate() === day ? "bg-blue-100" : "hover:bg-gray-100"}`}
+                                ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
+                               `}
                         >
                             {day}
                         </button>

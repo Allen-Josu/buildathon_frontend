@@ -1,4 +1,3 @@
-// AttendanceRegulator.js
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -9,7 +8,7 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-const useAttendanceData = (studentId) => {
+const useAttendanceData = (studentId, refreshTrigger) => {
   const [data, setData] = useState(null);
   const [markedDates, setMarkedDates] = useState([]);
   const [successfullyMarkedDates, setSuccessfullyMarkedDates] = useState([]);
@@ -23,14 +22,13 @@ const useAttendanceData = (studentId) => {
           `${BASE_URL}/attendance?entityType=all&studentId=${studentId}`
         );
         setData(response.data.results);
-        
-        // Set both types of dates
+
         const dates = response.data.results || [];
-        const allMarkedDates = dates.map(d => d.leaveDate);
+        const allMarkedDates = dates.map((d) => d.leaveDate);
         const successDates = dates
-          .filter(d => d.leavePerDay?.some(l => l.reason !== "No Class"))
-          .map(d => d.leaveDate);
-        
+          .filter((d) => d.leavePerDay?.some((l) => l.reason !== "No Class"))
+          .map((d) => d.leaveDate);
+
         setMarkedDates(allMarkedDates);
         setSuccessfullyMarkedDates(successDates);
       } catch (err) {
@@ -42,7 +40,7 @@ const useAttendanceData = (studentId) => {
     };
 
     fetchData();
-  }, [studentId]);
+  }, [studentId, refreshTrigger]);
 
   return { data, markedDates, successfullyMarkedDates, error, isLoading };
 };
@@ -57,7 +55,11 @@ const useAttendanceCalculations = (attendanceData) => {
 
     const countWeekends = (start, end) => {
       let count = 0;
-      for (let date = start; date.isBefore(end) || date.isSame(end, 'day'); date = date.add(1, 'day')) {
+      for (
+        let date = start;
+        date.isBefore(end) || date.isSame(end, "day");
+        date = date.add(1, "day")
+      ) {
         const dayOfWeek = date.day();
         if (dayOfWeek === 0 || dayOfWeek === 6) count++;
       }
@@ -84,8 +86,8 @@ const useAttendanceCalculations = (attendanceData) => {
     const attendanceWithoutDuty = totalHours - count;
 
     return {
-      totalPercent: (attendanceWithDuty / totalHours).toFixed(2),
-      totalPercentExcludeDuty: (attendanceWithoutDuty / totalHours).toFixed(2)
+      totalPercent: ((attendanceWithDuty / totalHours) * 100).toFixed(2),
+      totalPercentExcludeDuty: ((attendanceWithoutDuty / totalHours) * 100).toFixed(2),
     };
   }, [attendanceData]);
 
@@ -98,12 +100,12 @@ const AttendanceRegulator = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const user = useUserStore((state) => state.user);
 
-  const { 
-    data: attendanceData, 
-    markedDates, 
-    successfullyMarkedDates, 
-    error, 
-    isLoading 
+  const {
+    data: attendanceData,
+    markedDates,
+    successfullyMarkedDates,
+    error,
+    isLoading,
   } = useAttendanceData(user.studentId, refreshTrigger);
   const attendanceStats = useAttendanceCalculations(attendanceData);
 
@@ -122,7 +124,7 @@ const AttendanceRegulator = () => {
   }, []);
 
   const handleOperationSuccess = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
     setShowModal(false);
   }, []);
 
