@@ -3,6 +3,10 @@ import { useCallback, useMemo, useState } from "react";
 export default function Calendar({ onDateSelect, markedDates }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
+    const [editedDates, setEditedDates] = useState(() => {
+        const savedDates = localStorage.getItem("editedDates");
+        return savedDates ? JSON.parse(savedDates) : [];
+    });
 
     console.log(markedDates);
     
@@ -17,22 +21,41 @@ export default function Calendar({ onDateSelect, markedDates }) {
         [currentDate]
     );
 
+    const today = useMemo(() => new Date(), []);
+
     const handleDateClick = useCallback((day) => {
         const clickedDate = new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
             day
         );
+
+        // Prevent selecting future dates
+        if (clickedDate > today) return;
+
         setSelectedDate(clickedDate);
         onDateSelect(clickedDate);
-    }, [currentDate, onDateSelect]);
 
-    const isDateMarked = useCallback((day) => {
-        const dateStr = `${currentDate.getFullYear()}-${String(
-            currentDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        return markedDates.includes(dateStr);
-    }, [currentDate, markedDates]);
+        const dateStr = `${clickedDate.getFullYear()}-${String(
+            clickedDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(clickedDate.getDate()).padStart(2, "0")}`;
+
+        setEditedDates((prevEditedDates) => {
+            const updatedDates = prevEditedDates.includes(dateStr)
+                ? prevEditedDates
+                : [...prevEditedDates, dateStr];
+            localStorage.setItem("editedDates", JSON.stringify(updatedDates));
+            return updatedDates;
+        });
+    }, [currentDate, onDateSelect, today]);
+
+    const isToday = useCallback((day) => {
+        return (
+            today.getDate() === day &&
+            today.getMonth() === currentDate.getMonth() &&
+            today.getFullYear() === currentDate.getFullYear()
+        );
+    }, [today, currentDate]);
 
     const isWeekend = useCallback((day) => {
         const date = new Date(
@@ -44,8 +67,17 @@ export default function Calendar({ onDateSelect, markedDates }) {
         return dayOfWeek === 0 || dayOfWeek === 6;
     }, [currentDate]);
 
+    const isFutureDate = useCallback((day) => {
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day
+        );
+        return date > today;
+    }, [currentDate, today]);
+
     const changeMonth = useCallback((offset) => {
-        setCurrentDate(prevDate =>
+        setCurrentDate((prevDate) =>
             new Date(prevDate.getFullYear(), prevDate.getMonth() + offset, 1)
         );
     }, []);
@@ -87,7 +119,7 @@ export default function Calendar({ onDateSelect, markedDates }) {
                         <div
                             key={day}
                             className={`text-center text-sm font-medium ${
-                                index === 0 || index === 6 ? 'text-red-500' : 'text-gray-600'
+                                index === 0 || index === 6 ? "text-red-500" : "text-gray-600"
                             }`}
                         >
                             {day}
@@ -102,10 +134,12 @@ export default function Calendar({ onDateSelect, markedDates }) {
                         <button
                             key={day}
                             onClick={() => handleDateClick(day)}
+                            disabled={isFutureDate(day)}
                             className={`w-full aspect-square flex items-center justify-center rounded
-                                ${isWeekend(day) ? 'text-red-500' : ''}
-                                ${selectedDate?.getDate() === day ? "bg-blue-100" : "hover:bg-gray-100"}
-                                ${isDateMarked(day) ? "border-2 border-red-500" : ""}`}
+                                ${isWeekend(day) ? "text-red-500" : ""}
+                                ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
+                                ${isFutureDate(day) ? "cursor-not-allowed opacity-50" : ""}
+                            `}
                         >
                             {day}
                         </button>

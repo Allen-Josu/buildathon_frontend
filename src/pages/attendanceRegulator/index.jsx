@@ -1,3 +1,4 @@
+// AttendanceRegulator.js
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "../../components/Header";
 import axios from "axios";
@@ -8,8 +9,7 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
-// Custom hook for attendance data
-const useAttendanceData = (studentId, refreshTrigger) => {
+const useAttendanceData = (studentId) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +39,6 @@ const useAttendanceData = (studentId, refreshTrigger) => {
   return { data, error, isLoading };
 };
 
-// Custom hook for attendance calculations
 const useAttendanceCalculations = (attendanceData) => {
   const calculateAttendance = useCallback(() => {
     if (!attendanceData) return {
@@ -50,23 +49,29 @@ const useAttendanceCalculations = (attendanceData) => {
 
     const startDate = dayjs("2025-01-01");
     const currentDate = dayjs();
-    let totalDays = currentDate.diff(startDate, "day") + 1;
+
+    const totalDays = currentDate.diff(startDate, "day") + 1;
 
     const countWeekends = (start, end) => {
       let count = 0;
-      for (let date = start; date.isBefore(end) || date.isSame(end, 'day'); date = date.add(1, 'day')) {
+      for (
+        let date = start;
+        date.isBefore(end) || date.isSame(end, "day");
+        date = date.add(1, "day")
+      ) {
         const dayOfWeek = date.day();
         if (dayOfWeek === 0 || dayOfWeek === 6) count++;
       }
       return count;
     };
 
-    const weekendCount = countWeekends(startDate, currentDate);
-    totalDays -= weekendCount;
+    const totalWeekends = countWeekends(startDate, currentDate);
 
-    let no_class = 0;
-    let duty_leave = 0;
-    let count = 0;
+    const totalWorkingDays = totalDays - totalWeekends;
+
+    let noClassDays = 0;
+    let dutyLeaveDays = 0;
+    let absentDays = 0;
 
     attendanceData.forEach((item) => {
       item.leavePerDay?.forEach((leave) => {
@@ -76,9 +81,14 @@ const useAttendanceCalculations = (attendanceData) => {
       });
     });
 
-    const totalHours = totalDays * 6 - no_class;
-    const attendanceWithDuty = totalHours - (count + duty_leave);
-    const attendanceWithoutDuty = totalHours - count;
+    const totalHours = totalWorkingDays * 6;
+    const adjustedTotalHours = totalHours - noClassDays;
+
+    const attendedHoursWithDuty = adjustedTotalHours - (absentDays + dutyLeaveDays);
+    const attendedHoursWithoutDuty = adjustedTotalHours - absentDays;
+
+    const totalPercent = (attendedHoursWithDuty / adjustedTotalHours) * 100;
+    const totalPercentExcludeDuty = (attendedHoursWithoutDuty / adjustedTotalHours) * 100;
 
     return {
       totalPercent: Number(((attendanceWithDuty / totalHours) * 100).toFixed(2)),
@@ -117,7 +127,7 @@ const AttendanceRegulator = () => {
   }, []);
 
   const handleOperationSuccess = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
     setShowModal(false);
   }, []);
 
@@ -188,7 +198,8 @@ const AttendanceRegulator = () => {
                             Attendance (with duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercent}%
+                          {attendanceStats.totalPercentExcludeDuty}%
+                    
                           </td>
                         </tr>
                         <tr>
@@ -196,7 +207,8 @@ const AttendanceRegulator = () => {
                             Attendance (without duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercentExcludeDuty}%
+                           
+                            {attendanceStats.totalPercent}%
                           </td>
                         </tr>
                       </tbody>
