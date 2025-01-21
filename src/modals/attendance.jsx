@@ -48,6 +48,7 @@ export default function AttendanceModal({ showModal, setShowModal, selectedDate,
     const SelectOptions = [
         { label: "Present", value: "Present" },
         { label: "Sick Leave", value: "Sick Leave" },
+        { label: "Absent", value: "Absent" },
         { label: "Duty Leave", value: "Duty Leave" },
         { label: "No Class", value: "No Class" }
     ];
@@ -153,7 +154,7 @@ export default function AttendanceModal({ showModal, setShowModal, selectedDate,
                 </div>
             </Modal>
             <ToastNotification
-                open={toastOpen} 
+                open={toastOpen}
                 setOpen={setToastOpen}
                 message="Attendance marked successfully!"
             />

@@ -1,15 +1,16 @@
+/* eslint-disable react/prop-types */
 import { useCallback, useMemo, useState } from "react";
 
 export default function Calendar({ onDateSelect, markedDates }) {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [editedDates, setEditedDates] = useState(() => {
-        const savedDates = localStorage.getItem("editedDates");
-        return savedDates ? JSON.parse(savedDates) : [];
-    });
 
-    console.log(markedDates);
-    
+
+    const isDateMarked = useCallback((day) => {
+        const dateStr = `${currentDate.getFullYear()}-${String(
+            currentDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        return markedDates.includes(dateStr);
+    }, [currentDate, markedDates]);
 
     const daysInMonth = useMemo(() =>
         new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate(),
@@ -33,20 +34,10 @@ export default function Calendar({ onDateSelect, markedDates }) {
         // Prevent selecting future dates
         if (clickedDate > today) return;
 
-        setSelectedDate(clickedDate);
         onDateSelect(clickedDate);
 
-        const dateStr = `${clickedDate.getFullYear()}-${String(
-            clickedDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(clickedDate.getDate()).padStart(2, "0")}`;
 
-        setEditedDates((prevEditedDates) => {
-            const updatedDates = prevEditedDates.includes(dateStr)
-                ? prevEditedDates
-                : [...prevEditedDates, dateStr];
-            localStorage.setItem("editedDates", JSON.stringify(updatedDates));
-            return updatedDates;
-        });
+
     }, [currentDate, onDateSelect, today]);
 
     const isToday = useCallback((day) => {
@@ -118,9 +109,8 @@ export default function Calendar({ onDateSelect, markedDates }) {
                     {weekDays.map((day, index) => (
                         <div
                             key={day}
-                            className={`text-center text-sm font-medium ${
-                                index === 0 || index === 6 ? "text-red-500" : "text-gray-600"
-                            }`}
+                            className={`text-center text-sm font-medium ${index === 0 || index === 6 ? "text-red-500" : "text-gray-600"
+                                }`}
                         >
                             {day}
                         </div>
@@ -139,6 +129,7 @@ export default function Calendar({ onDateSelect, markedDates }) {
                                 ${isWeekend(day) ? "text-red-500" : ""}
                                 ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
                                 ${isFutureDate(day) ? "cursor-not-allowed opacity-50" : ""}
+                                ${isDateMarked(day) ? "border-2 border-red-500" : ""}
                             `}
                         >
                             {day}
