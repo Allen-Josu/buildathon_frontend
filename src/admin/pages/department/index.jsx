@@ -13,6 +13,8 @@ const BASE_URL = import.meta.env.VITE_URL;
 export default function DepartmentPage() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(0)
+
     const navigate = useNavigate();
     const location = useLocation()
 
@@ -30,7 +32,7 @@ export default function DepartmentPage() {
 
     useEffect(() => {
         fetchData();
-    }, [location.pathname]);
+    }, [location.pathname, refresh]);
 
     const columns = [
         {
@@ -60,6 +62,20 @@ export default function DepartmentPage() {
                                 key: '2',
                                 label: 'Edit',
                                 onClick: () => navigate(`${routePath.editDepartment}/${record.entityId}`)
+                            },
+                            {
+                                key: '3',
+                                label: "Delete",
+                                onClick: async () => {
+                                    try {
+                                        const response = await axios.delete(`${BASE_URL}/delete-entity?entity=departments&entityId=${record.entityId}`,)
+                                        console.log(response);
+                                        setRefresh(prev => prev + 1);
+                                    }
+                                    catch (error) {
+                                        console.log(error);
+                                    }
+                                }
                             }
                         ],
                         style: { width: "100px", textAlign: "center" }

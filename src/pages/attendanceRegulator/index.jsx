@@ -8,6 +8,8 @@ import Calendar from "../../components/ui/calender";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
+const startDate = dayjs("2025-01-01");
+
 // Custom hook for attendance data
 const useAttendanceData = (studentId, refreshTrigger) => {
   const [data, setData] = useState(null);
@@ -37,7 +39,6 @@ const useAttendanceCalculations = (attendanceData) => {
   const calculateAttendance = useCallback(() => {
     if (!attendanceData) return null;
 
-    const startDate = dayjs("2025-01-01");
     const currentDate = dayjs();
     let totalDays = currentDate.diff(startDate, "day") + 1;
 
@@ -138,6 +139,7 @@ const AttendanceRegulator = () => {
               <Calendar
                 onDateSelect={handleDateSelect}
                 markedDates={markedDates}
+                startDate={startDate}
               />
             </div>
 
@@ -172,7 +174,7 @@ const AttendanceRegulator = () => {
                             Attendance Percentage (with duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercent}%
+                            {attendanceStats.totalPercent.toFixed(2)}%
                           </td>
                         </tr>
                         <tr>
@@ -180,7 +182,7 @@ const AttendanceRegulator = () => {
                             Attendance Percentage (without duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercentExcludeDuty}%
+                            {attendanceStats.totalPercentExcludeDuty.toFixed(2)}%
                           </td>
                         </tr>
                       </tbody>
