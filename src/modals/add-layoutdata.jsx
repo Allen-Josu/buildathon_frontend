@@ -2,11 +2,12 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
+import {  useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SemesterSelectOption } from "../admin/constants";
 import { v4 as uuid } from "uuid";
-import { useUserStore } from "../store/userStore";
+import ToastNotification from "./Toast";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -15,10 +16,9 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
-
-  const user = useUserStore((state) => state.user);
-
-
+  const navigate = useNavigate();
+  const [toastOpen, setToastOpen] = useState(false); // State for toast visibility
+  const [toastMessage, setToastMessage] = useState(''); // State for toast message
   const [data, setData] = useState({
     department: "",
     course: "",
@@ -52,7 +52,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
     try {
       const response = await axios.get(`${BASE_URL}/departments?entity=departments`);
       setResponseData(response.data.results);
-
+      
       const uniqueDepartments = [...new Set(response.data.results.map(item => item.department))];
       const formattedDepartments = uniqueDepartments.map(dept => ({
         label: dept,
@@ -142,21 +142,50 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
       uploadedBy: user.username,
       studentId: user.studentId
     };
-
+  
+    
+    setToastMessage("Uploading...");
+    setToastOpen(true);
+  
     try {
-
+      console.log("Submission Data:", submissionData);
+  
       const response = await axios.post(`${BASE_URL}/newEntity`, submissionData);
-
+  
       if (response.status === 200) {
-        setIsModalOpen(false);
-        resetDependentFields();
-        handleRefresh()
+        console.log("Successfully uploaded");
+  
+        
+        setToastMessage("Uploaded successfully");
+  
+        
+        setTimeout(() => {
+          setIsModalOpen(false);
+          resetDependentFields(); 
+          handleRefresh(); // Optionally refresh data
+        }, 1500); 
       }
     } catch (error) {
-      console.log(error);
-
+      console.error("Error submitting document:", error);
+  
+      let errorMessage = "Unexpected server error.";
+      if (error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        errorMessage = "No response from the server. Please try again later.";
+      } else {
+        errorMessage = error.message;
+      }
+  
+      setToastMessage(`Error: ${errorMessage}`);
+      setTimeout(() => {
+        setIsModalOpen(false); // Close the modal after showing the error
+        resetDependentFields(); // Reset fields even after error
+      }, 1500);
     }
   };
+  
+
 
   return (
     <>
@@ -234,6 +263,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
             >
               Submit
             </Button>
+            <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
           </div>
         </Form>
       </Modal>

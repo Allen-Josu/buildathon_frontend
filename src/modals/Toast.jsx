@@ -17,7 +17,7 @@ const ToastNotification = ({ open, setOpen, message }) => {
         </Toast.Title>
       </Toast.Root>
       <Toast.Viewport
-        className="fixed bottom-0 right-0 flex flex-col gap-2 p-2 max-w-[390px] w-full z-[9999] outline-none" // Increased z-index to 9999
+        className="fixed top-16 right-0 flex flex-col gap-2 p-2 max-w-[390px] w-full z-[9999] outline-none" // Increased z-index to 9999
       />
     </Toast.Provider>
   );
