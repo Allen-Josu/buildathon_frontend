@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { SemesterSelectOption } from "../admin/constants";
 import { v4 as uuid } from "uuid";
+import { useUserStore } from "../store/userStore";
 
 const BASE_URL = import.meta.env.VITE_URL;
 
@@ -14,6 +15,9 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
+
+  const user = useUserStore((state) => state.user);
+
 
   const [data, setData] = useState({
     department: "",
@@ -135,21 +139,22 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
       entity: entity,
       entityId: uuid(),
       likes: 0,
-      uploadedBy: "Test123",
-      userId: "test1234"
+      uploadedBy: user.username,
+      userId: user.studentId
     };
 
     try {
-      console.log(submissionData);
 
       const response = await axios.post(`${BASE_URL}/newEntity`, submissionData);
+
       if (response.status === 200) {
         setIsModalOpen(false);
         resetDependentFields();
         handleRefresh()
       }
     } catch (error) {
-      console.error("Error submitting document:", error);
+      console.log(error);
+
     }
   };
 
