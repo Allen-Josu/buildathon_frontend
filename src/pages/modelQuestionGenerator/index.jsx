@@ -15,12 +15,12 @@ import Header from "../../components/Header";
 
 
 export default function QuestionPaperGenerator() {
-  const [files, setFiles] = useState({ syllabus: null, pyq: null });
-  const [fileNames, setFileNames] = useState({ syllabus: "", pyq: "" });
+  const [files, setFiles] = useState({ syllabus: null});
+  const [fileNames, setFileNames] = useState({ syllabus: ""});
   const [isGenerated, setIsGenerated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [extractedText, setExtractedText] = useState({ syllabus: "", pyq: "" });
+  const [extractedText, setExtractedText] = useState({ syllabus: ""});
   const [questionPaper, setQuestionPaper] = useState(null);
 
   const handleFileChange = (event, fileKey) => {
@@ -39,16 +39,16 @@ export default function QuestionPaperGenerator() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (files.syllabus && files.pyq) {
+    if (files.syllabus) {
       setLoading(true);
       setMessage("");
-      setExtractedText({ syllabus: "", pyq: "" });
+      setExtractedText({ syllabus: ""});
       setQuestionPaper(null);
 
       try {
         const formData = new FormData();
         formData.append("syllabus_pdf", files.syllabus);
-        formData.append("pyq_pdf", files.pyq);
+        
 
         const response = await fetch("http://127.0.0.1:5000/upload", {
           method: "POST",
@@ -74,15 +74,15 @@ export default function QuestionPaperGenerator() {
         setLoading(false);
       }
     } else {
-      setMessage("Please select both PDF files before submitting");
+      setMessage("Please select the file before submitting");
     }
   };
 
   const handleReset = () => {
-    setFiles({ syllabus: null, pyq: null });
-    setFileNames({ syllabus: "", pyq: "" });
+    setFiles({ syllabus: null });
+    setFileNames({ syllabus: "" });
     setMessage("");
-    setExtractedText({ syllabus: "", pyq: "" });
+    setExtractedText({ syllabus: "" });
     setQuestionPaper(null);
     document.querySelectorAll('input[type="file"]').forEach((input) => (input.value = ""));
   };
@@ -214,28 +214,7 @@ export default function QuestionPaperGenerator() {
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-medium mb-2">
-                          <div className="flex items-center gap-2">
-                            <FileText className="h-4 w-4" />
-                            <span>Previous Question Paper PDF</span>
-                          </div>
-                        </label>
-                        <div className="flex flex-col gap-2">
-                          <input
-                            type="file"
-                            accept=".pdf"
-                            onChange={(e) => handleFileChange(e, "pyq")}
-                            disabled={loading}
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#020617] hover:file:bg-blue-100"
-                          />
-                          {fileNames.pyq && (
-                            <span className="text-sm text-[#020617]">
-                              Selected: {fileNames.pyq}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                      
                     </div>
 
                     {message && (
@@ -296,56 +275,53 @@ export default function QuestionPaperGenerator() {
                 </div>
               </CardHeader>
               <CardContent>
-    <div className="space-y-6">
-      {/* Title, Duration, and Maximum Marks */}
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">{questionPaper.title}</h2>
-        <p className="text-gray-600">Duration: {questionPaper.duration}</p>
-        <p className="text-gray-600">Maximum Marks: {questionPaper.max_marks}</p>
-      </div>
+                <div className="space-y-6">
+                  {/* Title, Duration, and Maximum Marks */}
+                  <div className="text-center space-y-2">
+                    <h2 className="text-2xl font-bold">{questionPaper.title}</h2>
+                    <p className="text-gray-600">Duration: {questionPaper.duration}</p>
+                    <p className="text-gray-600">Maximum Marks: {questionPaper.max_marks}</p>
+                  </div>
 
-      {/* Instructions */}
-      <div className="text-center">
-        <p className="text-gray-600">
-          Answer any 5 questions. Each question carries {questionPaper.sections[0].marks_per_question} marks.
-        </p>
-      </div>
+                  {/* Instructions */}
+                  <div className="text-center">
+                    <p className="text-gray-600">
+                      Answer any 5 questions. Each question carries {questionPaper.sections[0].marks_per_question} marks.
+                    </p>
+                  </div>
 
-      {/* Questions */}
-      <div className="space-y-4">
-        {questionPaper.sections[0].questions.map((questionText, index) => {
-          // Remove the original question number and split into parts
-          const withoutNumber = questionText.replace(/^\d+\.\s*/, '');
-          const parts = withoutNumber.split(/(?=\([a-z]\))/);
-          const mainQuestion = parts[0].trim();
-          const subParts = parts.slice(1);
+                  {/* Questions */}
+                  <div className="space-y-4">
+                    {questionPaper.sections[0].questions.map((questionText, index) => {
+                      // Remove the original question number and split into parts
+                      const withoutNumber = questionText.replace(/^\d+\.\s*/, '');
+                      const parts = withoutNumber.split(/(?=\([a-z]\))/);
+                      const mainQuestion = parts[0].trim();
+                      const subParts = parts.slice(1);
 
-          return (
-            <div key={index} className="space-y-2">
-              {/* Main Question */}
-              <div className="text-gray-800 font-medium">
-                {`${index + 1}. ${mainQuestion}`}
-              </div>
-              
-              {/* Sub-Parts */}
-              {subParts.length > 0 && (
-                <div className="pl-4 space-y-1">
-                  {subParts.map((part, partIndex) => (
-                    <div key={partIndex} className="text-gray-800">
-                      {part.trim()}
-                    </div>
-                  ))}
+                      return (
+                        <div key={index} className="space-y-2">
+                          {/* Main Question */}
+                          <div className="text-gray-800">
+                            <span className="font-medium">{`${index + 1}.`}</span> {mainQuestion}
+                          </div>
+                          
+                          {/* Sub-Parts */}
+                          {subParts.length > 0 && (
+                            <div className="pl-4 space-y-1">
+                              {subParts.map((part, partIndex) => (
+                                <div key={partIndex} className="text-gray-800">
+                                  {part.trim()}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </CardContent>
-
-
-
+              </CardContent>
             </Card>
           )}
         </div>

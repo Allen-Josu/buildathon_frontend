@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Button, Flex, Layout, Select, Spin } from "antd";
-import { Album, ChevronRight, User2 } from "lucide-react";
+import { Album, ChevronRight, Heart, User2 } from "lucide-react";
 import Sider from "antd/es/layout/Sider";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -208,7 +208,7 @@ export default function PageLayout({ title, entity }) {
 														<span>{item.uploadedBy}</span>
 													</div>
 												</div>
-												{/* <div className="flex justify-end text-[#c1c3c8] cursor-pointer align-center gap-3">{item.likes}<Heart onClick={handleLikeClick} /></div> */}
+												<div className="flex justify-end text-[#c1c3c8] cursor-pointer align-center gap-3">{item.likes}<Heart  /></div>
 											</>
 
 										))}
