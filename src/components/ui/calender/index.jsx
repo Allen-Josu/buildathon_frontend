@@ -130,6 +130,7 @@ export default function Calendar({ onDateSelect, markedDates }) {
                                 ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
                                 ${isFutureDate(day) ? "cursor-not-allowed opacity-50" : ""}
                                 ${isDateMarked(day) ? "border-2 border-red-500" : ""}
+                                ${!isWeekend(day) && !isDateMarked(day) && !isToday(day) && !isFutureDate(day) ? "border-2 border-green-500" : ""}
                             `}
                         >
                             {day}
