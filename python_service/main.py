@@ -49,41 +49,39 @@ def extract_text_from_pdf(pdf_path):
         logging.error(f"Error extracting text from PDF '{pdf_path}': {str(e)}")
         raise Exception(f"Failed to extract text from the PDF: {str(e)}")
 
-def generate_questions_with_groq(syllabus_text, pyq_text):
+def generate_questions_with_groq(syllabus_text):
     try:
         # Create a payload for the Groq API
         prompt_content = f"""
-            You are an expert question paper setter. Based on the following syllabus and previous question papers, generate a question paper with:
-            - 6 short questions (5 marks each)
-            - 5 long questions (10 marks each)
+            You are an expert question paper setter. Based on the following syllabus generate a question paper with:
+            - 10 questions, each having one or more parts.
+            - Each question carries 10 marks in total.
 
             Syllabus:
             {syllabus_text[:2000]}
-
-            Previous Questions:
-            {pyq_text[:2000]}
 
             Format the response as a JSON object:
             {{
                 "title": "Model Question Paper",
                 "duration": "3 Hours",
-                "max_marks": 100,
+                "max_marks": 50,
                 "sections": [
                     {{
-                        "name": "Section A - Short Questions",
-                        "questions": ["1. Question text (5 marks)", "2. Question text (5 marks)", ...],
-                        "marks_per_question": 5
-                    }},
-                    {{
-                        "name": "Section B - Long Questions",
-                        "questions": ["1. Question text (10 marks)", "2. Question text (10 marks)", ...],
+                        "name": "Section A - Comprehensive Questions Answer any 5 ",
+                        "questions": [
+                            "1. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "2. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            ...
+                        ],
                         "marks_per_question": 10
                     }}
                 ]
             }}
 
-            Important: Format each question as a string with the question number and marks included in parentheses.
+            Important: Ensure each question is broken into one or more sub-parts, clearly labeled as (a), (b), etc., to make the total worth 10 marks.
         """
+
+
 
         payload = {
             "model": "mixtral-8x7b-32768",
@@ -162,41 +160,35 @@ def generate_questions_with_groq(syllabus_text, pyq_text):
 def upload_files():
     try:
         # Check if files are in the request
-        if 'syllabus_pdf' not in request.files or 'pyq_pdf' not in request.files:
-            return jsonify({'message': 'Both syllabus and PYQ PDF files are required.'}), 400
+        if 'syllabus_pdf' not in request.files :
+            return jsonify({'message': 'Syllabus file is required.'}), 400
 
         syllabus_pdf = request.files['syllabus_pdf']
-        pyq_pdf = request.files['pyq_pdf']
 
         # Check if files are selected
-        if syllabus_pdf.filename == '' or pyq_pdf.filename == '':
-            return jsonify({'message': 'No files were selected. Please upload both files.'}), 400
+        if syllabus_pdf.filename == '' :
+            return jsonify({'message': 'No files were selected. Please upload the file.'}), 400
 
         # Validate file types
-        if not (allowed_file(syllabus_pdf.filename) and allowed_file(pyq_pdf.filename)):
+        if not (allowed_file(syllabus_pdf.filename)):
             return jsonify({'message': 'Invalid file format. Only PDF files are allowed.'}), 400
 
         # Save files
         syllabus_filename = secure_filename(syllabus_pdf.filename)
-        pyq_filename = secure_filename(pyq_pdf.filename)
         syllabus_path = os.path.join(app.config['UPLOAD_FOLDER'], syllabus_filename)
-        pyq_path = os.path.join(app.config['UPLOAD_FOLDER'], pyq_filename)
         syllabus_pdf.save(syllabus_path)
-        pyq_pdf.save(pyq_path)
 
         # Extract text
         syllabus_text = extract_text_from_pdf(syllabus_path)
-        pyq_text = extract_text_from_pdf(pyq_path)
 
         # Generate question paper
-        question_paper = generate_questions_with_groq(syllabus_text, pyq_text)
+        question_paper = generate_questions_with_groq(syllabus_text)
         logging.info(f"Generated Question Paper: {question_paper}")
 
         return jsonify({
             'message': 'Files processed and question paper generated successfully!',
             'extracted_text': {
                 'syllabus': syllabus_text,
-                'pyq': pyq_text
             },
             'question_paper': question_paper
         }), 200

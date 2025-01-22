@@ -139,8 +139,8 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
       entity: entity,
       entityId: uuid(),
       likes: 0,
-      uploadedBy: "Test123",
-      userId: "test1234"
+      uploadedBy: user.username,
+      studentId: user.studentId
     };
   
     

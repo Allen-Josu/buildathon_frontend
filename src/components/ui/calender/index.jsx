@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useCallback, useMemo, useState } from "react";
 
-export default function Calendar({ onDateSelect, markedDates }) {
+export default function Calendar({ onDateSelect, markedDates, startDate }) {
     const [currentDate, setCurrentDate] = useState(new Date());
 
 
@@ -87,6 +87,20 @@ export default function Calendar({ onDateSelect, markedDates }) {
         [currentDate]
     );
 
+    const isDateInRange = useCallback((day) => {
+        const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day
+        );
+
+        // Convert startDate string to Date object if it's a string
+        const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
+
+        // Return true if date is between start date and today
+        return date >= start && date <= today;
+    }, [currentDate, today, startDate]);
+
     return (
         <div className="bg-white rounded-lg shadow">
             <div className="flex justify-between items-center p-4 border-b">
@@ -130,7 +144,7 @@ export default function Calendar({ onDateSelect, markedDates }) {
                                 ${isToday(day) ? "bg-blue-500 text-white" : "bg-white-50 hover:bg-blue-100"}
                                 ${isFutureDate(day) ? "cursor-not-allowed opacity-50" : ""}
                                 ${isDateMarked(day) ? "border-2 border-red-500" : ""}
-                                ${!isWeekend(day) && !isDateMarked(day) && !isToday(day) && !isFutureDate(day) ? "border-2 border-green-500" : ""}
+                                ${isDateInRange(day) && !isWeekend(day) ? "border-2 border-green-300" : ""}
                             `}
                         >
                             {day}
