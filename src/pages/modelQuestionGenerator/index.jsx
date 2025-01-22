@@ -92,62 +92,85 @@ export default function QuestionPaperGenerator() {
       const doc = new jsPDF({ unit: "pt", format: "a4" });
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 50; // Increased margin for better appearance
+      const margin = 50;
       const contentWidth = pageWidth - margin * 2;
-      let yPosition = 70; // Start position for content
+      let yPosition = 70;
   
       // Title
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.text(questionPaper.title, pageWidth / 2, yPosition, {
-        maxWidth: contentWidth,
         align: "center",
       });
       yPosition += 40;
   
-      // Duration and Max Marks on the same line (left and right alignment)
+      // Duration and Max Marks
       doc.setFont("helvetica", "normal");
       doc.setFontSize(12);
       doc.text(`Duration: ${questionPaper.duration}`, margin, yPosition);
       doc.text(`Maximum Marks: ${questionPaper.max_marks}`, pageWidth - margin, yPosition, { align: "right" });
       yPosition += 40;
-
-      // Sections and Questions
-      questionPaper.sections.forEach((section) => {
+  
+      // Instructions
+      doc.setFont("helvetica", "italic");
+      doc.text(
+        `Answer any 5 questions. Each question carries ${questionPaper.sections[0].marks_per_question} marks.`,
+        margin,
+        yPosition
+      );
+      yPosition += 40;
+  
+      // Questions
+      questionPaper.sections[0].questions.forEach((question, index) => {
         if (yPosition + 60 > pageHeight) {
           doc.addPage();
           yPosition = 70;
         }
   
-        // Section Name and Marks Per Question on the same line
+        // Extract question parts using regex
+        const parts = question.match(/^(\d+\.\s*[^(]+)(.*)$/);
+        
+        if (!parts) return;
+  
+        // Main question
+        const questionNumber = `${index + 1}.`; // Ensure correct numbering
+        const mainQuestionText = parts[1].replace(/^\d+\./, '').trim(); // Remove original number
+        const fullMainQuestion = `${questionNumber} ${mainQuestionText}`;
+        
+        const mainLines = doc.splitTextToSize(fullMainQuestion, contentWidth);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.text(section.name, margin, yPosition);
-        doc.text(`(${section.marks_per_question} marks each)`, pageWidth - margin, yPosition, { align: "right" });
-        yPosition += 20;
+        doc.text(mainLines, margin, yPosition);
+        yPosition += mainLines.length * 15 + 10;
   
-        // Questions
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        section.questions.forEach((question) => {
-          const lines = doc.splitTextToSize(question, contentWidth);
-  
-          if (yPosition + lines.length * 15 > pageHeight) {
-            doc.addPage();
-            yPosition = 70;
-          }
-  
-          doc.text(lines, margin, yPosition);
-          yPosition += lines.length * 15 + 10; // Line height + spacing
-        });
-
-        yPosition += 20; // Space between sections
+        // Sub-parts
+        if (parts[2]) {
+          doc.setFont("helvetica", "normal");
+          const subParts = parts[2].trim().split(/\(\w\)/);
+          subParts.shift(); // Remove empty first element
+          
+          subParts.forEach((subPart, subIndex) => {
+            const subPartText = `(${String.fromCharCode(97 + subIndex)}) ${subPart.trim()}`;
+            const subPartLines = doc.splitTextToSize(subPartText, contentWidth - 20);
+            
+            if (yPosition + subPartLines.length * 15 > pageHeight) {
+              doc.addPage();
+              yPosition = 70;
+            }
+            
+            doc.text(subPartLines, margin + 20, yPosition);
+            yPosition += subPartLines.length * 15 + 5;
+          });
+        }
+        
+        yPosition += 20; // Space between questions
       });
   
       // Save PDF
       doc.save(`${questionPaper.title}.pdf`);
     }
   };
+  
+  
   
   
 
@@ -273,28 +296,56 @@ export default function QuestionPaperGenerator() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  <div className="text-center space-y-2">
-                    <h2 className="text-2xl font-bold">{questionPaper.title}</h2>
-                    <p className="text-gray-600">Duration: {questionPaper.duration}</p>
-                    <p className="text-gray-600">Maximum Marks: {questionPaper.max_marks}</p>
-                  </div>
+    <div className="space-y-6">
+      {/* Title, Duration, and Maximum Marks */}
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-bold">{questionPaper.title}</h2>
+        <p className="text-gray-600">Duration: {questionPaper.duration}</p>
+        <p className="text-gray-600">Maximum Marks: {questionPaper.max_marks}</p>
+      </div>
 
-                  {questionPaper.sections.map((section, sectionIndex) => (
-                    <div key={sectionIndex} className="space-y-4">
-                      <h3 className="text-lg font-semibold">{section.name}</h3>
-                      <p className="text-sm text-gray-600">({section.marks_per_question} marks each)</p>
-                      <div className="space-y-2">
-                        {section.questions.map((question, questionIndex) => (
-                          <div key={questionIndex} className="text-gray-800">
-                            {question}
-                          </div>
-                        ))}
-                      </div>
+      {/* Instructions */}
+      <div className="text-center">
+        <p className="text-gray-600">
+          Answer any 5 questions. Each question carries {questionPaper.sections[0].marks_per_question} marks.
+        </p>
+      </div>
+
+      {/* Questions */}
+      <div className="space-y-4">
+        {questionPaper.sections[0].questions.map((questionText, index) => {
+          // Remove the original question number and split into parts
+          const withoutNumber = questionText.replace(/^\d+\.\s*/, '');
+          const parts = withoutNumber.split(/(?=\([a-z]\))/);
+          const mainQuestion = parts[0].trim();
+          const subParts = parts.slice(1);
+
+          return (
+            <div key={index} className="space-y-2">
+              {/* Main Question */}
+              <div className="text-gray-800 font-medium">
+                {`${index + 1}. ${mainQuestion}`}
+              </div>
+              
+              {/* Sub-Parts */}
+              {subParts.length > 0 && (
+                <div className="pl-4 space-y-1">
+                  {subParts.map((part, partIndex) => (
+                    <div key={partIndex} className="text-gray-800">
+                      {part.trim()}
                     </div>
                   ))}
                 </div>
-              </CardContent>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </CardContent>
+
+
+
             </Card>
           )}
         </div>

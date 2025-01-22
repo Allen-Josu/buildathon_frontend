@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Button, Flex, Layout, Select, Spin } from "antd";
-import { Album, ChevronRight, User2, Heart } from "lucide-react";
+import { Album, ChevronRight, User2 } from "lucide-react";
 import Sider from "antd/es/layout/Sider";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -30,7 +30,6 @@ export default function PageLayout({ title, entity }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [data, setData] = useState(null);
-	const [likedItems, setLikedItems] = useState({});
 	const [refresh, setRefresh] = useState(0);
 
 	const user = useUserStore((state) => state.user);
@@ -54,23 +53,18 @@ export default function PageLayout({ title, entity }) {
 
 	useEffect(() => {
 		const fetchData = async () => {
-		  try {
-			setLoading(true);
-			const response = await axios.get(`${BASE_URL}/newEntity?entity=${entity}&entityType=all`);
-			// Initialize likes if they don't exist
-			const dataWithLikes = response.data.results.map(item => ({
-			  ...item,
-			  likes: item.likes || 0
-			}));
-			setData(dataWithLikes);
-		  } catch (error) {
-			console.log(error);
-		  } finally {
-			setLoading(false);
-		  }
+			try {
+				setLoading(true);
+				const response = await axios.get(`${BASE_URL}/newEntity?entity=${entity}&entityType=all`);
+				setData(response.data.results);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
 		};
 		fetchData();
-	  }, [refresh, entity]);
+	}, [refresh, entity]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -95,40 +89,6 @@ export default function PageLayout({ title, entity }) {
 	}, [menuData.course, menuData.semester, responseData]);
 
 	const filteredData = data?.filter((item) => item.subjectName === active);
-
-	const handleLikeClick = async (item) => {
-		// Prevent multiple likes for same item
-		if (likedItems[item._id]) return;
-	  
-		try {
-		  // First update in the database
-		  await axios.patch(`${BASE_URL}/update-entity`, {
-			entity: entity.toLowerCase(),
-			entityId: item._id,
-			attributesToUpdate: {
-			  likes: (item.likes || 0) + 1,
-			},
-		  });
-	  
-		  // Then update only the specific item in local state
-		  setData(prevData => 
-			prevData.map(dataItem => 
-			  dataItem.id === item.id
-				? { ...dataItem, likes: (dataItem.likes || 0) + 1 }
-				: dataItem
-			)
-		  );
-	  
-		  // Mark this specific item as liked
-		  setLikedItems(prev => ({
-			...prev,
-			[item.id]: true
-		  }));
-	  
-		} catch (error) {
-		  console.log("Failed to update likes:", error);
-		}
-	  };
 
 	// const handleLikeClick = () => {
 	// 	console.log("Liked");
@@ -230,46 +190,28 @@ export default function PageLayout({ title, entity }) {
 								) : filteredData && filteredData.length > 0 ? (
 									<div className="space-y-4 mt-6 px-10 py-3">
 										{filteredData.map((item, index) => (
-											<div key={item.id || index} className="space-y-4">
-												<div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
-													border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
-													duration-300 ease-in md:gap-0">
-												{/* Left side with description - clickable for opening note */}
-												<div 
-													className="flex-1 flex items-center gap-3 text-sm md:text-base text-[#c1c3c8] cursor-pointer"
+											<>
+												<div
+													key={index}
+													className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 
+												border rounded-md hover:bg-[#6d28d9] hover:scale-[1.02] transition-transform 
+												cursor-pointer duration-300 ease-in md:gap-0"
 													onClick={() => window.location.href = item.url}
 												>
-													<Album className="flex-shrink-0" />
-													<span className="break-words">{item.description}</span>
-												</div>
-												
-												{/* Right side with user and like button */}
-												<div className="flex items-center gap-6">
+													<div className="flex items-center gap-3 text-sm md:text-base text-[#c1c3c8]">
+
+														<Album className="flex-shrink-0" />
+														<span className="break-words">{item.description}</span>
+													</div>
 													<div className="text-[#c1c3c8] text-sm md:text-base font-semibold flex items-center gap-3">
-													<User2 className="flex-shrink-0" />
-													<span>{item.uploadedBy}</span>
-													</div>
-													
-													{/* Like button and count */}
-													<div className="flex items-center gap-2" onClick={(e) => {
-													e.stopPropagation(); // Prevent note from opening when clicking like
-													}}>
-													<Heart
-														onClick={(e) => {
-															e.preventDefault(); // Add this
-															e.stopPropagation(); // Keep this
-															handleLikeClick(item);
-														}}
-														className={`text-[#c1c3c8] ${
-															likedItems[item.id] ? "text-red-500" : "hover:text-red-500"
-														} cursor-pointer`}
-														/>
-													<span className="text-[#c1c3c8]">{item.likes || 0}</span>
+														<User2 className="flex-shrink-0" />
+														<span>{item.uploadedBy}</span>
 													</div>
 												</div>
-												</div>
-											</div>
-											))}
+												{/* <div className="flex justify-end text-[#c1c3c8] cursor-pointer align-center gap-3">{item.likes}<Heart onClick={handleLikeClick} /></div> */}
+											</>
+
+										))}
 									</div>
 								) : (
 									<div className="flex justify-center items-center h-64 text-red-900 font-bold text-xl">
@@ -282,7 +224,7 @@ export default function PageLayout({ title, entity }) {
 				</Layout>
 			</Flex>
 
-			<Modals entity={entity} isModalOpen={isModalOpen} setRefresh={setRefresh} setIsModalOpen={setIsModalOpen} />
+			<Modals title="notes" isModalOpen={isModalOpen} setRefresh={setRefresh} setIsModalOpen={setIsModalOpen} />
 		</>
 	);
 }

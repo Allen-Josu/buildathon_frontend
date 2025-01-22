@@ -54,8 +54,9 @@ def generate_questions_with_groq(syllabus_text, pyq_text):
         # Create a payload for the Groq API
         prompt_content = f"""
             You are an expert question paper setter. Based on the following syllabus and previous question papers, generate a question paper with:
-            - 6 short questions (5 marks each)
-            - 5 long questions (10 marks each)
+            - 10 questions, each having one or more parts (sub-parts).
+            - Students must attempt any 5 questions.
+            - Each question carries 10 marks in total.
 
             Syllabus:
             {syllabus_text[:2000]}
@@ -67,24 +68,32 @@ def generate_questions_with_groq(syllabus_text, pyq_text):
             {{
                 "title": "Model Question Paper",
                 "duration": "3 Hours",
-                "max_marks": 100,
+                "max_marks": 50,
                 "sections": [
                     {{
-                        "name": "Section A - Short Questions",
-                        "questions": ["1. Question text (5 marks)", "2. Question text (5 marks)", ...],
-                        "marks_per_question": 5
-                    }},
-                    {{
-                        "name": "Section B - Long Questions",
-                        "questions": ["1. Question text (10 marks)", "2. Question text (10 marks)", ...],
+                        "name": "Section A - Answer Any 5 Questions",
+                        "questions": [
+                            "1. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "2. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "3. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "4. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "5. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "6. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "7. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "8. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "9. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)",
+                            "10. Question text (a) Sub-part 1, (b) Sub-part 2 (10 marks)"
+                        ],
                         "marks_per_question": 10
                     }}
                 ]
             }}
 
-            Important: Format each question as a string with the question number and marks included in parentheses.
+            Important:
+            - Clearly label each question as "1.", "2.", etc.
+            - Include sub-parts labeled as (a), (b), etc., ensuring the total marks for each question equal 10.
+            - Include instructions at the top of the section: "Answer any 5 questions out of 10."
         """
-
         payload = {
             "model": "mixtral-8x7b-32768",
             "messages": [
