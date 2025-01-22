@@ -180,7 +180,7 @@ const AttendanceRegulator = () => {
                             Attendance Percentage (without duty leave)
                           </td>
                           <td className="px-4 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm text-gray-700">
-                            {attendanceStats.totalPercentExcludeDuty}%
+                            {attendanceStats.totalPercentExcludeDuty.toFixed(2)}%
                           </td>
                         </tr>
                       </tbody>
