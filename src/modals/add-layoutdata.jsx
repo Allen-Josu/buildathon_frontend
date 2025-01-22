@@ -140,7 +140,7 @@ export default function Modals({ isModalOpen, setIsModalOpen, entity, setRefresh
       entityId: uuid(),
       likes: 0,
       uploadedBy: user.username,
-      userId: user.studentId
+      studentId: user.studentId
     };
 
     try {
