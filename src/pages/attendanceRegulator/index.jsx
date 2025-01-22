@@ -66,8 +66,8 @@ const useAttendanceCalculations = (attendanceData) => {
     });
 
     const totalHours = totalDays * 6 - no_class;
-    const attendanceWithDuty = totalHours - (count + duty_leave);
-    const attendanceWithoutDuty = totalHours - count;
+    const attendanceWithDuty = totalHours - (count);
+    const attendanceWithoutDuty = totalHours - (count + duty_leave);
 
     return {
       totalPercent: (attendanceWithDuty / totalHours).toFixed(4) * 100,
@@ -111,6 +111,19 @@ const AttendanceRegulator = () => {
     return <div className="text-red-500">Error loading attendance data</div>;
   }
 
+  const markedDates =
+    attendanceData
+      ?.map((data) => {
+        // Check if leavePerDay is non-empty
+        if (!data.leavePerDay || data.leavePerDay.length === 0) {
+          return null; // Skip this entry if leavePerDay is empty
+        }
+
+        const date = dayjs(data.leaveDate || null);
+        return date.isValid() ? date.format("YYYY-MM-DD") : null; // Format valid dates
+      })
+      .filter(Boolean) || [];
+
   return (
     <>
       <Header />
@@ -124,7 +137,7 @@ const AttendanceRegulator = () => {
             <div className="w-full lg:w-1/3">
               <Calendar
                 onDateSelect={handleDateSelect}
-                markedDates={Object.keys(attendanceData || {})}
+                markedDates={markedDates}
               />
             </div>
 
