@@ -10,7 +10,7 @@ import { useUserStore } from "../store/userStore";
 
 const { Content } = Layout;
 const layoutStyle = {
-    width: "100%",
+    width: "100vh",
 };
 
 const BASE_URL = import.meta.env.VITE_URL;
@@ -301,7 +301,7 @@ export default function PageLayout({ title, entity }) {
                         </Sider>
 
                         {/* Main Content */}
-                        <Content className="bg-[#27272a] w-full md:w-3/4 h-fit">
+                        <Content className="bg-[#27272a] w-full md:w-3/4 h-min-full">
                             <div
                                 className="flex flex-col p-4 md:p-8 lg:px-16"
                                 style={{
