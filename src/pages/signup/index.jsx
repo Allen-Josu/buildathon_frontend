@@ -165,7 +165,7 @@ function Signup() {
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
                   height: '40px', // Dropdown height
-                  paddingLeft: '0.8rem', // Consistent padding
+                   // Consistent padding
                 }}
               />
             </Form.Item>
@@ -181,7 +181,8 @@ function Signup() {
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
                   padding: '0.8rem',
-                  height: '40px', // Matches dropdown height
+                  height: '40px',
+                  fontSize: '14px', // Matches dropdown height
                 }}
               />
             </Form.Item>
@@ -198,7 +199,8 @@ function Signup() {
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
                   padding: '0.8rem',
-                  height: '40px', // Matches dropdown height
+                  height: '40px',
+                  fontSize: '14px', // Matches dropdown height
                 }}
               />
             </Form.Item>
