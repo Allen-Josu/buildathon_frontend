@@ -165,7 +165,7 @@ function Signup() {
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
                   height: '40px', // Dropdown height
-                  paddingLeft: '0.8rem', // Consistent padding
+                   // Consistent padding
                 }}
               />
             </Form.Item>
