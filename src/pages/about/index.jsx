@@ -62,7 +62,7 @@ export default function About() {
   const teamMembers = [
     {
       name: "Allen Joseph Joy",
-      role: "Developer",
+      role: "Backend Developer",
       image: allen,
       email: "allenalackaparambil@gmail.com",
       linkedin: "http://www.linkedin.com/in/allen-joseph-joy",
@@ -70,7 +70,7 @@ export default function About() {
     },
     {
       name: "Roshin Sleeba C",
-      role: "Developer",
+      role: "Frontend Developer",
       image: roshin,
       email: "roshinsleebac2002@gmail.com",
       linkedin: "https://www.linkedin.com/in/roshin-sleeba-c-112466320",
@@ -78,7 +78,7 @@ export default function About() {
     },
     {
       name: "Sidharth P R",
-      role: "Developer",
+      role: "AI Specialist",
       image: sid,
       email: "sidharthprsidhu@gmail.com",
       linkedin: "https://www.linkedin.com/in/sidharth-p-r-8088a0327",
@@ -86,7 +86,7 @@ export default function About() {
     },
     {
       name: "Pavi Sankar N P",
-      role: "Developer",
+      role: "UI/UX Designer",
       image: pavi,
       email: "pavisankarneelamana@gmail.com",
       linkedin: "https://www.linkedin.com/in/pavi-sankar-n-p-492518290",
