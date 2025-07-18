@@ -6,7 +6,6 @@ import { v4 as uuid } from 'uuid';
 import Header from '../../components/Header';
 import ToastNotification from '../../modals/Toast';
 
-
 const BASE_URL = import.meta.env.VITE_URL;
 
 function Signup() {
@@ -14,8 +13,8 @@ function Signup() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [toastOpen, setToastOpen] = useState(false);  // State for toast visibility
-  const [toastMessage, setToastMessage] = useState('');  // State for toast message
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const courseOptions = [
     { value: 'MCA', label: 'MCA' },
@@ -38,10 +37,9 @@ function Signup() {
         department: 'DCA',
       });
 
-      // Show success toast and navigate to login page
       setToastMessage('You have successfully registered! Please log in to continue.');
-      setToastOpen(true); // Show toast notification
-      setTimeout(() => navigate('/login'), 2000); // Navigate after 2 seconds (toast duration)
+      setToastOpen(true);
+      setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -108,39 +106,10 @@ function Signup() {
             <Form.Item
               name="username"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Username</span>}
-              rules={[{ required: true, message: 'Please input your username!' }]}
-            >
-              <Input
-                style={{
-                  backgroundColor: '#f9f9f9',
-                  border: '2px solid #6d28d9',
-                  borderRadius: '8px',
-                  padding: '0.8rem', // Matches dropdown padding
-                  height: '40px', // Matches dropdown height
-                }}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="email"
-              label={<span style={{ fontWeight: '500', color: '#333' }}>Email</span>}
-              rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Please enter a valid email!' }]}
-            >
-              <Input
-                style={{
-                  backgroundColor: '#f9f9f9',
-                  border: '2px solid #6d28d9',
-                  borderRadius: '8px',
-                  padding: '0.8rem', // Matches dropdown padding
-                  height: '40px', // Matches dropdown height
-                }}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="studentId"
-              label={<span style={{ fontWeight: '500', color: '#333' }}>Student ID</span>}
-              rules={[{ required: true, message: 'Please input your student ID!' }]}
+              rules={[
+                { required: true, message: 'Please input your username!' },
+                { pattern: /^[A-Za-z\s]+$/, message: 'Username must contain only letters!' }
+              ]}
             >
               <Input
                 style={{
@@ -148,10 +117,48 @@ function Signup() {
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
                   padding: '0.8rem',
-                  height: '40px', // Matches dropdown height
+                  height: '40px',
                 }}
               />
             </Form.Item>
+
+            <Form.Item
+              name="email"
+              label={<span style={{ fontWeight: '500', color: '#333' }}>Email</span>}
+              rules={[
+                { required: true, message: 'Please input your email!' },
+                { type: 'email', message: 'Please enter a valid email!' }
+              ]}
+            >
+              <Input
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  border: '2px solid #6d28d9',
+                  borderRadius: '8px',
+                  padding: '0.8rem',
+                  height: '40px',
+                }}
+              />
+            </Form.Item>
+
+            {/* <Form.Item
+              name="studentId"
+              label={<span style={{ fontWeight: '500', color: '#333' }}>Student ID</span>}
+              rules={[
+                { required: true, message: 'Please input your student ID!' },
+                { pattern: /^\d{8}$/, message: 'Student ID must be exactly 8 digits!' }
+              ]}
+            >
+              <Input
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  border: '2px solid #6d28d9',
+                  borderRadius: '8px',
+                  padding: '0.8rem',
+                  height: '40px',
+                }}
+              />
+            </Form.Item> */}
 
             <Form.Item
               name="course"
@@ -164,8 +171,7 @@ function Signup() {
                   backgroundColor: '#f9f9f9',
                   border: '2px solid #6d28d9',
                   borderRadius: '8px',
-                  height: '40px', // Dropdown height
-                   // Consistent padding
+                  height: '40px',
                 }}
               />
             </Form.Item>
@@ -173,7 +179,14 @@ function Signup() {
             <Form.Item
               name="password"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Password</span>}
-              rules={[{ required: true, message: 'Please input your password!' }, { min: 6, message: 'Password must be at least 6 characters long!' }]}
+              rules={[
+                { required: true, message: 'Please input your password!' },
+                { min: 6, message: 'Password must be at least 6 characters long!' },
+                {
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                  message: 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character!'
+                }
+              ]}
             >
               <Input.Password
                 style={{
@@ -182,7 +195,7 @@ function Signup() {
                   borderRadius: '8px',
                   padding: '0.8rem',
                   height: '40px',
-                  fontSize: '14px', // Matches dropdown height
+                  fontSize: '14px',
                 }}
               />
             </Form.Item>
@@ -191,7 +204,17 @@ function Signup() {
               name="confirmPassword"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Confirm Password</span>}
               dependencies={['password']}
-              rules={[{ required: true, message: 'Please confirm your password!' }, ({ getFieldValue }) => ({ validator(_, value) { if (!value || getFieldValue('password') === value) { return Promise.resolve(); } return Promise.reject(new Error('Passwords do not match!')); } })]}
+              rules={[
+                { required: true, message: 'Please confirm your password!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Passwords do not match!'));
+                  }
+                })
+              ]}
             >
               <Input.Password
                 style={{
@@ -200,7 +223,7 @@ function Signup() {
                   borderRadius: '8px',
                   padding: '0.8rem',
                   height: '40px',
-                  fontSize: '14px', // Matches dropdown height
+                  fontSize: '14px',
                 }}
               />
             </Form.Item>
@@ -216,7 +239,7 @@ function Signup() {
                 border: 'none',
                 fontWeight: 'bold',
                 fontSize: '1rem',
-                padding: '0.85rem 1.5rem', // Increased button padding
+                padding: '0.85rem 1.5rem',
                 borderRadius: '8px',
               }}
             >
@@ -248,7 +271,6 @@ function Signup() {
         </div>
       </div>
 
-      {/* Toast Notification Component */}
       <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
     </div>
   );

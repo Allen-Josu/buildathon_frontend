@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/userStore';
 import ToastNotification from '../../../modals/Toast';
 
@@ -149,6 +149,20 @@ export default function AdminLogin() {
                         >
                             {loading ? 'Logging in...' : 'Login'}
                         </button>
+
+                        <div className="mt-6 text-center text-sm">
+                            <p>
+                                Don&apos;t have a user account?{' '}
+                                <Link to="/signup" className="text-violet-700 font-bold hover:underline">
+                                    Register here
+                                </Link>
+                            </p>
+                            <p className="mt-2">
+                                <Link to="/login" className="text-violet-700 font-bold hover:underline">
+                                    Sign in as User
+                                </Link>
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -93,9 +93,8 @@ function Login() {
               <input
                 type="text"
                 autoComplete="off"
-                className={`w-full px-4 py-2 bg-gray-50 border-2 border-violet-700 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-violet-500 ${
-                  errors.studentId ? 'border-red-500' : ''
-                }`}
+                className={`w-full px-4 py-2 bg-gray-50 border-2 border-violet-700 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-violet-500 ${errors.studentId ? 'border-red-500' : ''
+                  }`}
                 id="studentId"
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
@@ -111,9 +110,8 @@ function Login() {
               <input
                 type="password"
                 autoComplete="current-password"
-                className={`w-full px-4 py-2 bg-gray-50 border-2 border-violet-700 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-violet-500 ${
-                  errors.password ? 'border-red-500' : ''
-                }`}
+                className={`w-full px-4 py-2 bg-gray-50 border-2 border-violet-700 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-violet-500 ${errors.password ? 'border-red-500' : ''
+                  }`}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -137,7 +135,13 @@ function Login() {
                 Register here
               </Link>
             </p>
+            <p className="mt-2">
+              <Link to="/admin-login" className="text-violet-700 font-bold hover:underline">
+                Sign in as Admin
+              </Link>
+            </p>
           </div>
+
         </div>
       </div>
       <ToastNotification open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
