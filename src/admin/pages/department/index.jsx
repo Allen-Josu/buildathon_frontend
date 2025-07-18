@@ -117,7 +117,7 @@ export default function DepartmentPage() {
                 </Button>
             ]}
         >
-            <div className="h-full flex flex-col">
+            <div className="h-90 flex flex-col">
                 <EduBuddyTable
                     data={data}
                     columns={columns}

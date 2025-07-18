@@ -11,7 +11,7 @@ export default function EduBuddyTable({ data, columns, loading }) {
                 loading={loading}
                 pagination={false}
                 scroll={{
-                    y: 650
+                    y: 600
                 }}
             />
         </>
