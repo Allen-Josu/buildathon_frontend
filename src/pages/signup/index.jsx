@@ -141,7 +141,7 @@ function Signup() {
               />
             </Form.Item>
 
-            {/* <Form.Item
+            <Form.Item
               name="studentId"
               label={<span style={{ fontWeight: '500', color: '#333' }}>Student ID</span>}
               rules={[
@@ -158,7 +158,7 @@ function Signup() {
                   height: '40px',
                 }}
               />
-            </Form.Item> */}
+            </Form.Item>
 
             <Form.Item
               name="course"
