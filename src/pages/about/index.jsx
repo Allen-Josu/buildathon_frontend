@@ -1,12 +1,9 @@
-// Import Font Awesome CSS - make sure this path matches your project structure
-import "@fortawesome/fontawesome-free/css/all.min.css";
-// Import team member images
-import sid from "../../assets/sid.jpg" 
+import { useState } from 'react';
+import { Mail, Linkedin, Github, Users, Target, Sparkles, Award } from 'lucide-react';
 import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
-import Header from '../../components/Header';
-
+import sidharth from "../../assets/sid.jpg"
 // Content object containing all the text content
 const content = {
   title: "EduBuddy",
@@ -22,27 +19,32 @@ const content = {
           title: "A Repository of User-Uploaded Notes",
           details: `Access a vast collection of notes uploaded by fellow students.
           Notes are ranked by community votes for credibility and quality, ensuring you get 
-          the best study materials. Share your own notes and contribute to the learning community!`
+          the best study materials. Share your own notes and contribute to the learning community!`,
+          icon: <Users className="w-6 h-6" />
       },
       {
           title: "Grade Calculator",
           details: `Worried about your academic performance? Our grade calculator uses your 
-          inputs to estimate your potential grades. Identify areas of improvement and stay ahead in your studies.`
+          inputs to estimate your potential grades. Identify areas of improvement and stay ahead in your studies.`,
+          icon: <Target className="w-6 h-6" />
       },
       {
           title: "Model Question Paper Generator",
           details: `Create tailored question papers from your syllabus and previous year questions (PYQ).
-          Perfect for exam preparation and practice.`
+          Perfect for exam preparation and practice.`,
+          icon: <Sparkles className="w-6 h-6" />
       },
       {
           title: "Attendance Calculator",
           details: `Keep track of your attendance effortlessly. Calculate your total attendance and ensure 
-          you maintain the required minimum to stay compliant with your institution's policies.`
+          you maintain the required minimum to stay compliant with your institution's policies.`,
+          icon: <Award className="w-6 h-6" />
       },
       {
           title: "Access to Previous Year Question Papers",
           details: `Browse a collection of past question papers to understand exam patterns and frequently 
-          asked questions. Use these as a guide to prepare effectively for your exams.`
+          asked questions. Use these as a guide to prepare effectively for your exams.`,
+          icon: <Users className="w-6 h-6" />
       }
   ],
   benefits: [
@@ -58,6 +60,8 @@ const content = {
 };
 
 export default function About() {
+  const [hoveredMember, setHoveredMember] = useState(null);
+
   // Team members data array
   const teamMembers = [
     {
@@ -67,6 +71,7 @@ export default function About() {
       email: "allenalackaparambil@gmail.com",
       linkedin: "http://www.linkedin.com/in/allen-joseph-joy",
       github: "https://github.com/Allen-Josu",
+      gradient: "from-blue-400 to-purple-600"
     },
     {
       name: "Roshin Sleeba C",
@@ -75,14 +80,16 @@ export default function About() {
       email: "roshinsleebac2002@gmail.com",
       linkedin: "https://www.linkedin.com/in/roshin-sleeba-c-112466320",
       github: "https://github.com/Roshinsleeba",
+      gradient: "from-green-400 to-blue-600"
     },
     {
       name: "Sidharth P R",
       role: "AI Specialist",
-      image: sid,
+      image: sidharth,
       email: "sidharthprsidhu@gmail.com",
       linkedin: "https://www.linkedin.com/in/sidharth-p-r-8088a0327",
       github: "https://github.com/Sidharthpr",
+      gradient: "from-purple-400 to-pink-600"
     },
     {
       name: "Pavi Sankar N P",
@@ -91,147 +98,176 @@ export default function About() {
       email: "pavisankarneelamana@gmail.com",
       linkedin: "https://www.linkedin.com/in/pavi-sankar-n-p-492518290",
       github: "https://github.com/pavi-sankar",
+      gradient: "from-orange-400 to-red-600"
     },
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-800 font-montserrat">
-      <Header />
-      {/* Main container */}
-      <div className="container mx-auto px-4 mt-5">
-        {/* Team section */}
-        <h3 className="mb-4 text-white text-2xl">Core Team</h3>
-        <hr className="border-gray-600 mb-5" />
-        
-{/* Team members grid */}
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-  {teamMembers.map((member, index) => (
-    <div key={index} className="flex justify-center">
-      {/* Team member card */}
-      <div 
-        className="w-[17rem] h-[17.5rem] rounded-lg bg-zinc-800 
-        transition-all duration-500 hover:bg-gradient-to-br hover:from-purple-700 
-        hover:to-purple-900 flex flex-col items-center p-3 transform hover:scale-105"
-      >
-        <div className="w-[10rem] h-[10rem] rounded-full overflow-hidden border-3 border-white shadow-lg mb-3">
-  <img
-    src={member.image}
-    alt={`${member.name}'s profile`}
-    className="w-full h-full object-cover"
-  />
-</div>
-        {/* Member details */}
-        <div className="flex flex-col items-center flex-grow">
-          <h5 className="text-white text-lg font-semibold">{member.name}</h5>
-          <p className="text-white text-sm mb-2">{member.role}</p>
-          {/* Social links */}
-          <div className="flex justify-center gap-5 mt-auto">
-            <a 
-              href={`mailto:${member.email}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-white hover:text-gray-300 transition-colors duration-300"
-            >
-              <i className="fas fa-envelope text-2xl"></i>
-            </a>
-            <a 
-              href={member.linkedin} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-white hover:text-gray-300 transition-colors duration-300"
-            >
-              <i className="fab fa-linkedin text-2xl"></i>
-            </a>
-            <a 
-              href={member.github} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-white hover:text-gray-300 transition-colors duration-300"
-            >
-              <i className="fab fa-github text-2xl"></i>
-            </a>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20"></div>
+        <div className="relative max-w-7xl mx-auto px-6 py-20 text-center">
+          <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-6">
+            {content.title}
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+            Your ultimate companion in academic success
+          </p>
+          <div className="mt-8 flex justify-center">
+            <div className="w-32 h-1 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full"></div>
           </div>
         </div>
       </div>
-    </div>
-  ))}
-</div>
 
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        
+        {/* Team Section */}
+        <section className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">Meet Our Core Team</h2>
+            <p className="text-xl text-gray-400">The brilliant minds behind EduBuddy</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {teamMembers.map((member, index) => (
+              <div 
+                key={index} 
+                className="group relative"
+                onMouseEnter={() => setHoveredMember(index)}
+                onMouseLeave={() => setHoveredMember(null)}
+              >
+                <div className={`relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${hoveredMember === index ? 'shadow-xl' : ''}`}>
+                  {/* Gradient overlay on hover */}
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${member.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                  
+                  {/* Profile Image */}
+                  <div className="relative mb-4">
+                    <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-gray-600 group-hover:border-purple-400 transition-colors duration-300">
+                      <img
+                        src={member.image}
+                        alt={`${member.name}'s profile`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${member.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+                  </div>
+                  
+                  {/* Member Info */}
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
+                    <p className="text-purple-400 text-sm font-medium mb-4">{member.role}</p>
+                    
+                    {/* Social Links */}
+                    <div className="flex justify-center gap-4">
+                      <a 
+                        href={`mailto:${member.email}`} 
+                        className="p-2 rounded-full bg-gray-700/50 hover:bg-purple-600 transition-colors duration-300 group/icon"
+                      >
+                        <Mail className="w-4 h-4 text-gray-300 group-hover/icon:text-white" />
+                      </a>
+                      <a 
+                        href={member.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full bg-gray-700/50 hover:bg-blue-600 transition-colors duration-300 group/icon"
+                      >
+                        <Linkedin className="w-4 h-4 text-gray-300 group-hover/icon:text-white" />
+                      </a>
+                      <a 
+                        href={member.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full bg-gray-700/50 hover:bg-gray-600 transition-colors duration-300 group/icon"
+                      >
+                        <Github className="w-4 h-4 text-gray-300 group-hover/icon:text-white" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-
-
-        {/* About content section */}
-        <div className="mt-20 mx-auto max-w-6xl bg-gradient-to-br from-neutral-700 
-        to-zinc-800 rounded-lg shadow-2xl p-8 text-white">
-          {/* Title */}
-          <h2 className="mb-8 text-4xl text-center font-bold animate-fade-in">
-            {content.title}
-          </h2>
+        {/* About Content */}
+        <section className="space-y-20">
           
           {/* Introduction */}
-          <p className="leading-relaxed mb-6 text-lg text-center animate-fade-in 
-          whitespace-pre-line">
-            {content.introduction}
-          </p>
+          <div className="text-center max-w-4xl mx-auto">
+            <p className="text-xl text-gray-300 leading-relaxed">
+              {content.introduction}
+            </p>
+          </div>
 
-          {/* Features section */}
-          <h2 className="mb-6 text-3xl text-center text-white animate-fade-in">
-            What We Offer
-          </h2>
-          
-          {/* Features list */}
-          <ul className="mb-6 space-y-4">
-            {content.features.map((feature, index) => (
-              <li 
-                key={index}
-                className="text-lg transition-transform duration-200 hover:scale-102 
-                cursor-pointer animate-fade-in"
-              >
-                <strong className="text-white">{feature.title}:</strong>{' '}
-                <span className="whitespace-pre-line">{feature.details}</span>
-              </li>
-            ))}
-          </ul>
+          {/* Features */}
+          <div>
+            <h2 className="text-4xl font-bold text-center text-white mb-4">What We Offer</h2>
+            <p className="text-xl text-gray-400 text-center mb-12">Comprehensive tools for your academic success</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {content.features.map((feature, index) => (
+                <div 
+                  key={index}
+                  className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-500 hover:scale-105 hover:shadow-xl"
+                >
+                  <div className="flex items-center mb-4">
+                    <div className="p-3 rounded-full bg-purple-600/20 text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-white ml-4">{feature.title}</h3>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">{feature.details}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Benefits section */}
-          <h2 className="mb-6 text-3xl text-center text-white animate-fade-in">
-            Why Choose EduBuddy?
-          </h2>
-          
-          {/* Benefits list */}
-          <ul className="mb-6 space-y-4">
-            {content.benefits.map((benefit, index) => (
-              <li
-                key={index}
-                className="text-lg transition-transform duration-200 hover:scale-102 
-                cursor-pointer animate-fade-in"
-              >
-                <strong className="text-white">{benefit}</strong>
-              </li>
-            ))}
-          </ul>
+          {/* Benefits */}
+          <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-3xl p-12 border border-purple-500/20">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">Why Choose EduBuddy?</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {content.benefits.map((benefit, index) => (
+                <div 
+                  key={index}
+                  className="flex items-start space-x-4 group"
+                >
+                  <div className="p-2 rounded-full bg-purple-600/20 text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 flex-shrink-0">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <p className="text-lg text-gray-300 leading-relaxed">{benefit}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Call to action section */}
-          <h2 className="mb-6 text-3xl text-center animate-fade-in">
-            Join Us Today!
-          </h2>
-          
-          <p className="leading-relaxed mb-6 text-lg text-center animate-fade-in 
-          whitespace-pre-line">
-            {content.callToAction}
-          </p>
-          
-          {/* Slogan */}
-          <p className="italic text-lg text-center animate-fade-in">
-            <em>{content.slogan}</em>
-          </p>
-          
-          {/* Footer */}
-          <div className="mt-8 text-center text-gray-400 text-sm animate-fade-in">
+          {/* Call to Action */}
+          <div className="text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 text-white">
+            <h2 className="text-4xl font-bold mb-6">Join Us Today!</h2>
+            <p className="text-xl leading-relaxed mb-8 max-w-3xl mx-auto">
+              {content.callToAction}
+            </p>
+            <p className="text-2xl font-semibold italic mb-8">
+              &quot;{content.slogan}&quot;
+            </p>
+            <button className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
+              Get Started Now
+            </button>
+          </div>
+
+        </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-6 py-8 text-center">
+          <div className="text-gray-400">
             &copy; 2025 EduBuddy. All rights reserved.
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

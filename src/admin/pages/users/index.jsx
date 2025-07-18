@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { Button, Dropdown } from "antd";
+import { Dropdown } from "antd";
 import AdminPageLayout from "../../layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -131,11 +131,11 @@ export default function UsersPage() {
     return (
         <AdminPageLayout
             title="Users"
-            // actions={[
-            //     <Button onClick={() => navigate(routePath.addUser)} style={{ background: "#6d28d9", border: "none" }} type="primary">
-            //         Add User
-            //     </Button>
-            // ]}
+        // actions={[
+        //     <Button onClick={() => navigate(routePath.addUser)} style={{ background: "#6d28d9", border: "none" }} type="primary">
+        //         Add User
+        //     </Button>
+        // ]}
         >
             <div className="h-full flex flex-col">
                 <EduBuddyTable
