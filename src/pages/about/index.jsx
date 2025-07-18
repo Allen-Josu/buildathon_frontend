@@ -4,6 +4,7 @@ import pavi from "../../assets/pavi.jpg"
 import roshin from "../../assets/roshin.jpg"
 import allen from "../../assets/allen.jpg"
 import sidharth from "../../assets/sid.jpg"
+import { useNavigate } from 'react-router-dom';
 // Content object containing all the text content
 const content = {
   title: "EduBuddy",
@@ -15,43 +16,43 @@ const content = {
   That's why we've built a platform that combines essential features to streamline your study 
   routine, improve productivity, and ensure you're always on track.`,
   features: [
-      {
-          title: "A Repository of User-Uploaded Notes",
-          details: `Access a vast collection of notes uploaded by fellow students.
+    {
+      title: "A Repository of User-Uploaded Notes",
+      details: `Access a vast collection of notes uploaded by fellow students.
           Notes are ranked by community votes for credibility and quality, ensuring you get 
           the best study materials. Share your own notes and contribute to the learning community!`,
-          icon: <Users className="w-6 h-6" />
-      },
-      {
-          title: "Grade Calculator",
-          details: `Worried about your academic performance? Our grade calculator uses your 
+      icon: <Users className="w-6 h-6" />
+    },
+    {
+      title: "Grade Calculator",
+      details: `Worried about your academic performance? Our grade calculator uses your 
           inputs to estimate your potential grades. Identify areas of improvement and stay ahead in your studies.`,
-          icon: <Target className="w-6 h-6" />
-      },
-      {
-          title: "Model Question Paper Generator",
-          details: `Create tailored question papers from your syllabus and previous year questions (PYQ).
+      icon: <Target className="w-6 h-6" />
+    },
+    {
+      title: "Model Question Paper Generator",
+      details: `Create tailored question papers from your syllabus and previous year questions (PYQ).
           Perfect for exam preparation and practice.`,
-          icon: <Sparkles className="w-6 h-6" />
-      },
-      {
-          title: "Attendance Calculator",
-          details: `Keep track of your attendance effortlessly. Calculate your total attendance and ensure 
+      icon: <Sparkles className="w-6 h-6" />
+    },
+    {
+      title: "Attendance Calculator",
+      details: `Keep track of your attendance effortlessly. Calculate your total attendance and ensure 
           you maintain the required minimum to stay compliant with your institution's policies.`,
-          icon: <Award className="w-6 h-6" />
-      },
-      {
-          title: "Access to Previous Year Question Papers",
-          details: `Browse a collection of past question papers to understand exam patterns and frequently 
+      icon: <Award className="w-6 h-6" />
+    },
+    {
+      title: "Access to Previous Year Question Papers",
+      details: `Browse a collection of past question papers to understand exam patterns and frequently 
           asked questions. Use these as a guide to prepare effectively for your exams.`,
-          icon: <Users className="w-6 h-6" />
-      }
+      icon: <Users className="w-6 h-6" />
+    }
   ],
   benefits: [
-      "Student-Centric Design: Every feature is built with students' needs in mind.",
-      "Community-Driven: Contribute, collaborate, and learn from a thriving community of students.",
-      "Efficiency at Its Best: From predicting grades to managing attendance, EduBuddy saves you time and helps you focus on what truly matters—learning.",
-      "Reliable Resources: All content is vetted by community voting to ensure quality and relevance."
+    "Student-Centric Design: Every feature is built with students' needs in mind.",
+    "Community-Driven: Contribute, collaborate, and learn from a thriving community of students.",
+    "Efficiency at Its Best: From predicting grades to managing attendance, EduBuddy saves you time and helps you focus on what truly matters—learning.",
+    "Reliable Resources: All content is vetted by community voting to ensure quality and relevance."
   ],
   callToAction: `Whether you're looking to ace your exams, stay on top of your attendance, or share 
   and discover valuable notes, EduBuddy is here to support your academic journey. Together, let's 
@@ -61,6 +62,7 @@ const content = {
 
 export default function About() {
   const [hoveredMember, setHoveredMember] = useState(null);
+  const navigate = useNavigate()
 
   // Team members data array
   const teamMembers = [
@@ -122,18 +124,18 @@ export default function About() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        
+
         {/* Team Section */}
         <section className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">Meet Our Core Team</h2>
             <p className="text-xl text-gray-400">The brilliant minds behind EduBuddy</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {teamMembers.map((member, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="group relative"
                 onMouseEnter={() => setHoveredMember(index)}
                 onMouseLeave={() => setHoveredMember(null)}
@@ -141,7 +143,7 @@ export default function About() {
                 <div className={`relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${hoveredMember === index ? 'shadow-xl' : ''}`}>
                   {/* Gradient overlay on hover */}
                   <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${member.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                  
+
                   {/* Profile Image */}
                   <div className="relative mb-4">
                     <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-gray-600 group-hover:border-purple-400 transition-colors duration-300">
@@ -153,31 +155,31 @@ export default function About() {
                     </div>
                     <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${member.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
                   </div>
-                  
+
                   {/* Member Info */}
                   <div className="text-center">
                     <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
                     <p className="text-purple-400 text-sm font-medium mb-4">{member.role}</p>
-                    
+
                     {/* Social Links */}
                     <div className="flex justify-center gap-4">
-                      <a 
-                        href={`mailto:${member.email}`} 
+                      <a
+                        href={`mailto:${member.email}`}
                         className="p-2 rounded-full bg-gray-700/50 hover:bg-purple-600 transition-colors duration-300 group/icon"
                       >
                         <Mail className="w-4 h-4 text-gray-300 group-hover/icon:text-white" />
                       </a>
-                      <a 
-                        href={member.linkedin} 
-                        target="_blank" 
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full bg-gray-700/50 hover:bg-blue-600 transition-colors duration-300 group/icon"
                       >
                         <Linkedin className="w-4 h-4 text-gray-300 group-hover/icon:text-white" />
                       </a>
-                      <a 
-                        href={member.github} 
-                        target="_blank" 
+                      <a
+                        href={member.github}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full bg-gray-700/50 hover:bg-gray-600 transition-colors duration-300 group/icon"
                       >
@@ -193,7 +195,7 @@ export default function About() {
 
         {/* About Content */}
         <section className="space-y-20">
-          
+
           {/* Introduction */}
           <div className="text-center max-w-4xl mx-auto">
             <p className="text-xl text-gray-300 leading-relaxed">
@@ -205,10 +207,10 @@ export default function About() {
           <div>
             <h2 className="text-4xl font-bold text-center text-white mb-4">What We Offer</h2>
             <p className="text-xl text-gray-400 text-center mb-12">Comprehensive tools for your academic success</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {content.features.map((feature, index) => (
-                <div 
+                <div
                   key={index}
                   className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-500 hover:scale-105 hover:shadow-xl"
                 >
@@ -227,10 +229,10 @@ export default function About() {
           {/* Benefits */}
           <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-3xl p-12 border border-purple-500/20">
             <h2 className="text-4xl font-bold text-center text-white mb-12">Why Choose EduBuddy?</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {content.benefits.map((benefit, index) => (
-                <div 
+                <div
                   key={index}
                   className="flex items-start space-x-4 group"
                 >
@@ -252,9 +254,13 @@ export default function About() {
             <p className="text-2xl font-semibold italic mb-8">
               &quot;{content.slogan}&quot;
             </p>
-            <button className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl"
+            >
               Get Started Now
             </button>
+
           </div>
 
         </section>
