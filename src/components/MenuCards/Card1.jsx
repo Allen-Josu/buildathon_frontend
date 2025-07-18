@@ -33,7 +33,7 @@ export default function Card1() {
     {
       title: "Attendance",
       icon: BookCheckIcon,
-      path: "/attendance",
+      path: "/attendance-calculator",
     },
   ];
 
